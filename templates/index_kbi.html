@@ -3,6 +3,7 @@
 <head>
     {% include 'logo.html' %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_kbi.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='hero_redesign.css') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KBI</title>
@@ -12,22 +13,55 @@
         {% include 'navigation.html' %}
 
     <section class="hero">
+
+        <!-- ── Background image slider ── -->
         <div class="slider">
             <div class="slide">
-                <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="Image 1">
+                <img src="{{ url_for('static', filename='pics/real_front_2.png') }}"
+                     alt="KBI manufacturing plant exterior">
             </div>
             <div class="slide">
-                <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Image 2">
+                <img src="{{ url_for('static', filename='pics/real_shop_floor.png') }}"
+                     alt="KBI shop floor operations">
             </div>
             <div class="slide">
-                <img src="{{ url_for('static', filename='pics/real_leadership.png') }}" alt="Image 3">
+                <img src="{{ url_for('static', filename='pics/real_quality.png') }}"
+                     alt="KBI quality control process">
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='pics/real_leadership.png') }}"
+                     alt="KBI leadership team">
             </div>
         </div>
+
+        <!-- ── Hero text content ── -->
         <div class="hero-content">
-            <h1>Welcome to Khandelwal Busar Industries</h1>
-            <p>Building the Future of Manufacturing</p>
-            <a href="/processes" class="btn">Our Technology</a>
+            <span class="hero-eyebrow">Established 1981 &mdash; Faridabad &amp; Alwar</span>
+            <h1>Welcome to<br><span class="hero-accent">Khandelwal Busar</span><br>Industries</h1>
+            <p>Precision sheet metal &amp; fabrication components<br>
+               for the automobile and cable industries.</p>
+            <div class="hero-ctas">
+                <a href="/processes" class="btn hero-btn-primary">Our Technology</a>
+                <a href="/contact_us" class="btn hero-btn-outline">Get In Touch</a>
+            </div>
         </div>
+
+        <!-- ── Bottom bar: slide counter + progress bar ── -->
+        <div class="hero-bottom-bar">
+            <div class="hero-counter">
+                <span class="counter-current">01</span>
+                <span class="counter-sep">/</span>
+                <span class="counter-total">04</span>
+            </div>
+            <div class="hero-progress">
+                <div class="hero-progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- ── Prev / Next arrow navigation ── -->
+        <button class="hero-arrow hero-arrow-prev" aria-label="Previous slide">&#8249;</button>
+        <button class="hero-arrow hero-arrow-next" aria-label="Next slide">&#8250;</button>
+
     </section>
 
     <section class="about">
@@ -53,5 +87,6 @@
 
     {% include 'footer.html' %}
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script src="{{ url_for('static', filename='hero_redesign.js') }}"></script>
 </body>
 </html>

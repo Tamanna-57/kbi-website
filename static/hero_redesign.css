@@ -1,0 +1,306 @@
+/* ============================================================
+   Hero Section Redesign — hero_redesign.css
+   Scope: .hero and its direct children ONLY.
+   Does NOT touch navigation, about, footer, or other sections.
+   ============================================================ */
+
+/* ── Directional gradient overlay (darker on left where text sits) ── */
+.hero::before {
+    background: linear-gradient(
+        100deg,
+        rgba(8, 8, 35, 0.88) 0%,
+        rgba(8, 8, 35, 0.68) 35%,
+        rgba(8, 8, 35, 0.28) 65%,
+        rgba(8, 8, 35, 0.06) 100%
+    );
+}
+
+/* ── Align content to the left ── */
+.hero {
+    justify-content: flex-start;
+}
+
+/* ── Hero content block — left-aligned ── */
+.hero .hero-content {
+    text-align: left;
+    padding: 0 5rem;
+    max-width: 700px;
+    margin: 0;
+}
+
+/* ── Eyebrow / tagline above headline ── */
+.hero-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #f5c518;
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease 0.15s forwards;
+    border-left: 3px solid #f5c518;
+    padding-left: 0.75rem;
+}
+
+/* ── Headline ── */
+.hero .hero-content h1 {
+    font-size: 3.8rem;
+    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* Gold accent word in headline */
+.hero-accent {
+    color: #f5c518;
+}
+
+/* ── Sub-headline paragraph ── */
+.hero .hero-content > p {
+    font-size: 1.12rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+    margin-bottom: 2.2rem;
+}
+
+/* ── CTA container ── */
+.hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.85s forwards;
+}
+
+/* Reset the global .btn stagger animation inside hero-ctas */
+.hero-ctas .btn {
+    animation: none;
+    opacity: 1;
+    padding: 0.88rem 2rem;
+    font-size: 0.88rem;
+    letter-spacing: 1.5px;
+    border-radius: 6px;
+}
+
+/* Primary CTA — dark fill */
+.hero-btn-primary {
+    background-color: #1a1a4f !important;
+    color: #fff !important;
+    border: 2px solid #1a1a4f !important;
+}
+
+.hero-btn-primary:hover {
+    background-color: transparent !important;
+    color: #fff !important;
+    border-color: #fff !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Outline CTA — ghost */
+.hero-btn-outline {
+    background-color: transparent !important;
+    color: #fff !important;
+    border: 2px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+.hero-btn-outline:hover {
+    background-color: rgba(255, 255, 255, 0.14) !important;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.95) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* ── Ken Burns zoom on active slide image ── */
+.slide img {
+    transform-origin: center center;
+}
+
+.slide.active img {
+    animation: kenBurns 5.5s ease-out forwards;
+}
+
+@keyframes kenBurns {
+    from { transform: scale(1.0); }
+    to   { transform: scale(1.08); }
+}
+
+/* ── Hide original slider dots (replaced by counter + arrows) ── */
+/* They remain in the DOM so JS arrow clicks still work */
+.hero .slider-controls {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ── Bottom bar: counter left + progress centre ── */
+.hero-bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding: 0 5rem 1.8rem;
+    gap: 1.5rem;
+}
+
+/* Slide counter  e.g. "01 / 03" */
+.hero-counter {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.75);
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.counter-current {
+    font-size: 1.4rem;
+    color: #fff;
+    font-weight: 700;
+}
+
+.counter-sep {
+    margin: 0 0.3rem;
+    opacity: 0.5;
+}
+
+/* Progress bar — gold fill, grows over 5 s */
+.hero-progress {
+    flex: 1;
+    max-width: 260px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.hero-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #f5c518;
+    border-radius: 2px;
+    /* JS drives the transition */
+}
+
+/* ── Prev / Next arrow buttons ── */
+.hero-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.9rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.28s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.hero-arrow:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.hero-arrow-prev { left: 1.8rem; }
+.hero-arrow-next { right: 1.8rem; }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .hero .hero-content {
+        padding: 0 3rem;
+        max-width: 600px;
+    }
+
+    .hero .hero-content h1 {
+        font-size: 3rem;
+    }
+
+    .hero-bottom-bar {
+        padding: 0 3rem 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Centre on small screens */
+    .hero {
+        justify-content: center;
+    }
+
+    .hero .hero-content {
+        text-align: center;
+        padding: 0 1.5rem;
+        max-width: 100%;
+    }
+
+    .hero-eyebrow {
+        border-left: none;
+        padding-left: 0;
+    }
+
+    .hero .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-ctas {
+        justify-content: center;
+    }
+
+    /* Hide arrows on touch devices (swipe works via scripts.js) */
+    .hero-arrow {
+        display: none;
+    }
+
+    .hero-bottom-bar {
+        padding: 0 1.5rem 1.2rem;
+        justify-content: center;
+    }
+
+    .hero-progress {
+        max-width: 150px;
+    }
+
+    .counter-current {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero .hero-content h1 {
+        font-size: 1.75rem;
+    }
+
+    .hero .hero-content > p {
+        font-size: 0.98rem;
+    }
+
+    .hero-ctas .btn {
+        padding: 0.72rem 1.4rem;
+        font-size: 0.82rem;
+    }
+
+    .hero-progress {
+        display: none;
+    }
+
+    .hero-bottom-bar {
+        justify-content: center;
+    }
+}
