@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined ISO Certificates</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .certificates-grid {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            max-height: 400px;
+            overflow: hidden;
+        }
+        
+        .certificate {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #fff 0%, #f8f8f8 100%);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.8s ease-in-out;
+            box-sizing: border-box;
+        }
+        
+        .certificate.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .certificate.prev {
+            opacity: 0;
+            transform: translateX(-100%);
+        }
+        
+        .slide-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        
+        .indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: 2px solid #333;
+        }
+        
+        .indicator.active {
+            background: #4a90e2;
+        }
+        
+        .slide-controls {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            z-index: 10;
+        }
+        
+        .slide-controls:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .prev-btn {
+            left: 10px;
+        }
+        
+        .next-btn {
+            right: 10px;
+        }
+        
+        .auto-play-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+        
+        .play-pause-btn {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+        
+        .play-pause-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: #4a90e2;
+            width: 0%;
+            transition: width linear;
+            z-index: 10;
+        }
+        
+        .certificate-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .ccpl-logo {
+            background: #4a90e2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .certificate-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .address {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .standard {
+            font-size: 36px;
+            font-weight: bold;
+            color: #e74c3c;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff;
+            border: 2px solid #e74c3c;
+            border-radius: 10px;
+        }
+        
+        .scope {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+        }
+        
+        .certificate-details {
+            font-size: 11px;
+            color: #555;
+            line-height: 1.4;
+        }
+        
+        .cert-number {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .dates {
+            margin: 10px 0;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 10px;
+            color: #777;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+        
+        .signature-area {
+            text-align: right;
+            margin: 15px 0;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .left-border {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            background: linear-gradient(45deg, #ff6b6b, #ffa500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-weight: bold;
+            color: white;
+            font-size: 18px;
+            letter-spacing: 8px;
+        }
+        
+        .certificate-content {
+            padding-left: 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        
+        .iso-9001 .left-border { background: linear-gradient(45deg, #4ecdc4, #44a08d); }
+        .iso-14001 .left-border { background: linear-gradient(45deg, #56ab2f, #a8e6cf); }
+        
+        .iaf-code {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin: 5px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .certificates-grid {
+                aspect-ratio: 2/3;
+                min-height: 500px;
+            }
+            
+            .certificate-content {
+                padding-left: 30px;
+            }
+            
+            .left-border {
+                width: 30px;
+                font-size: 14px;
+                letter-spacing: 4px;
+            }
+            
+            .company-name {
+                font-size: 14px;
+            }
+            
+            .standard {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="certificates-grid">
+            <!-- Slide Controls -->
+            <button class="slide-controls prev-btn" onclick="prevSlide()">‹</button>
+            <button class="slide-controls next-btn" onclick="nextSlide()">›</button>
+            
+            <!-- Auto-play Controls -->
+            <div class="auto-play-controls">
+                <button class="play-pause-btn" id="playPauseBtn" onclick="toggleAutoPlay()">⏸️ Pause</button>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar" id="progressBar"></div>
+            
+            <!-- ISO 45001 Certificate -->
+            <div class="certificate iso-45001 active" data-index="0">
+                <div class="left-border">CERTIFICATE</div>
+                <div class="certificate-content">
+                    <div class="certificate-header">
+                        <div class="ccpl-logo">Registered CCPL</div>
+                        <div class="certificate-title">Registration Certificate</div>
+                        <div style="font-size: 12px; color: #666;">This is to certify that</div>
+                        <div style="font-size: 12px; color: #666;">The Management Systems of</div>
+                    </div>
+                    
+                    <div class="company-name">KHANDELWAL BUSAR INDUSTRIES PRIVATE LIMITED</div>
+                    
+                    <div class="address">
+                        Carried out at following site:<br>
+                        PLOT NO- 112, HSIIDC INDUSTRIAL ESTATE, SECTOR - 59,<br>
+                        FARIDABAD - 121 004 (HARYANA) (INDIA)
+                    </div>
+                    
+                    <div style="font-size: 12px; text-align: center; margin: 10px 0;">
+                        Has been found to conform to the occupational health and safety management systems Standard:
+                    </div>
+                    
+                    <div class="standard">ISO 45001:2018</div>
+                    
+                    <div style="font-size: 11px; text-align: center; margin: 10px 0;">
+                        This certificate is valid for the following Product or Service ranges:
+                    </div>
+                    
+                    <div class="scope">
+                        MANUFACTURE OF SHEET METAL COMPONENTS AND<br>
+                        WELDED SUB - ASSEMBLIES
+                    </div>
+                    
+                    <div class="iaf-code">IAF CODE - 17</div>
+                    
+                    <div class="certificate-details">
+                        <div class="cert-number">CERTIFICATE NO. : CCPL/OH&S/B1053</div>
+                        <div class="dates">
+                            ISSUED ON : 21/08/2024 &nbsp;&nbsp; 1ST SURVEILLANCE DUE ON: 21/07/2025<br>
+                            VALIDITY DATE : 20/08/2027 &nbsp;&nbsp; 2ND SURVEILLANCE DUE ON: 21/07/2026
+                        </div>
+                    </div>
+                    
+                    <div class="signature-area">
+                        <div style="margin-bottom: 30px;"></div>
+                        <div>CHAIRMAN</div>
+                    </div>
+                    
+                    <div class="footer">
+                        Care Certification Private Limited<br>
+                        134A, 2nd Floor, Taimoor Nagar,<br>
+                        New Friends Colony, New Delhi-110065 (India)<br>
+                        www.carecertification.com
+                    </div>
+                </div>
+            </div>
+
+            <!-- ISO 9001 Certificate -->
+            <div class="certificate iso-9001" data-index="1">
+                <div class="left-border">CERTIFICATE</div>
+                <div class="certificate-content">
+                    <div class="certificate-header">
+                        <div class="ccpl-logo">Registered CCPL</div>
+                        <div class="certificate-title">Registration Certificate</div>
+                        <div style="font-size: 12px; color: #666;">This is to certify that</div>
+                        <div style="font-size: 12px; color: #666;">The Quality Management Systems of</div>
+                    </div>
+                    
+                    <div class="company-name">KHANDELWAL BUSAR INDUSTRIES PRIVATE LIMITED</div>
+                    
+                    <div class="address">
+                        Carried out at following site:<br>
+                        PLOT NO- 112, HSIIDC INDUSTRIAL ESTATE, SECTOR - 59,<br>
+                        FARIDABAD - 121 004 (HARYANA) (INDIA)
+                    </div>
+                    
+                    <div style="font-size: 12px; text-align: center; margin: 10px 0;">
+                        Has been found to conform to the Quality Management System Standard:
+                    </div>
+                    
+                    <div class="standard">ISO 9001:2015</div>
+                    
+                    <div style="font-size: 11px; text-align: center; margin: 10px 0;">
+                        This certificate is valid for the following Product or Service ranges:
+                    </div>
+                    
+                    <div class="scope">
+                        MANUFACTURE OF SHEET METAL COMPONENTS AND<br>
+                        WELDED SUB - ASSEMBLIES
+                    </div>
+                    
+                    <div class="iaf-code">IAF CODE - 17</div>
+                    
+                    <div class="certificate-details">
+                        <div class="cert-number">CERTIFICATE NO. : CCPL/QMS/B1283</div>
+                        <div class="dates">
+                            ISSUED ON : 21/08/2024 &nbsp;&nbsp; 1ST SURVEILLANCE DUE ON: 21/07/2025<br>
+                            VALIDITY DATE : 20/08/2027 &nbsp;&nbsp; 2ND SURVEILLANCE DUE ON: 21/07/2026
+                        </div>
+                    </div>
+                    
+                    <div class="signature-area">
+                        <div style="margin-bottom: 30px;"></div>
+                        <div>CHAIRMAN</div>
+                    </div>
+                    
+                    <div class="footer">
+                        Care Certification Private Limited<br>
+                        134A, 2nd Floor, Taimoor Nagar,<br>
+                        New Friends Colony, New Delhi-110065 (India)<br>
+                        www.carecertification.com
+                    </div>
+                </div>
+            </div>
+
+            <!-- ISO 14001 Certificate -->
+            <div class="certificate iso-14001" data-index="2">
+                <div class="left-border">CERTIFICATE</div>
+                <div class="certificate-content">
+                    <div class="certificate-header">
+                        <div class="ccpl-logo">Registered CCPL</div>
+                        <div class="certificate-title">Registration Certificate</div>
+                        <div style="font-size: 12px; color: #666;">This is to certify that</div>
+                        <div style="font-size: 12px; color: #666;">The Management Systems of</div>
+                    </div>
+                    
+                    <div class="company-name">KHANDELWAL BUSAR INDUSTRIES PRIVATE LIMITED</div>
+                    
+                    <div class="address">
+                        Carried out at following site:<br>
+                        PLOT NO- 112, HSIIDC INDUSTRIAL ESTATE, SECTOR - 59,<br>
+                        FARIDABAD - 121 004 (HARYANA) (INDIA)
+                    </div>
+                    
+                    <div style="font-size: 12px; text-align: center; margin: 10px 0;">
+                        Has been found to conform to the environmental management system Standard:
+                    </div>
+                    
+                    <div class="standard">ISO 14001:2015</div>
+                    
+                    <div style="font-size: 11px; text-align: center; margin: 10px 0;">
+                        This certificate is valid for the following Product or Service ranges:
+                    </div>
+                    
+                    <div class="scope">
+                        MANUFACTURE OF SHEET METAL COMPONENTS AND<br>
+                        WELDED SUB - ASSEMBLIES
+                    </div>
+                    
+                    <div class="iaf-code">IAF CODE - 17</div>
+                    
+                    <div class="certificate-details">
+                        <div class="cert-number">CERTIFICATE NO. : CCPL/EMS/B1053</div>
+                        <div class="dates">
+                            ISSUED ON : 21/08/2024 &nbsp;&nbsp; 1ST SURVEILLANCE DUE ON: 21/07/2025<br>
+                            VALIDITY DATE : 20/08/2027 &nbsp;&nbsp; 2ND SURVEILLANCE DUE ON: 21/07/2026
+                        </div>
+                    </div>
+                    
+                    <div class="signature-area">
+                        <div style="margin-bottom: 30px;"></div>
+                        <div>CHAIRMAN</div>
+                    </div>
+                    
+                    <div class="footer">
+                        Care Certification Private Limited<br>
+                        134A, 2nd Floor, Taimoor Nagar,<br>
+                        New Friends Colony, New Delhi-110065 (India)<br>
+                        www.carecertification.com
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide Indicators -->
+            <div class="slide-indicators">
+                <div class="indicator active" onclick="goToSlide(0)"></div>
+                <div class="indicator" onclick="goToSlide(1)"></div>
+                <div class="indicator" onclick="goToSlide(2)"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        let autoPlayInterval;
+        let isAutoPlaying = true;
+        const slideInterval = 5000; // 5 seconds
+        const certificates = document.querySelectorAll('.certificate');
+        const indicators = document.querySelectorAll('.indicator');
+        const progressBar = document.getElementById('progressBar');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        
+        function showSlide(index) {
+            // Remove active class from all certificates and indicators
+            certificates.forEach(cert => {
+                cert.classList.remove('active', 'prev');
+            });
+            indicators.forEach(ind => ind.classList.remove('active'));
+            
+            // Add prev class to current slide
+            if (certificates[currentSlide]) {
+                certificates[currentSlide].classList.add('prev');
+            }
+            
+            // Update current slide
+            currentSlide = index;
+            
+            // Show new slide
+            setTimeout(() => {
+                certificates[currentSlide].classList.add('active');
+                certificates[currentSlide].classList.remove('prev');
+            }, 100);
+            
+            indicators[currentSlide].classList.add('active');
+            
+            // Reset progress bar
+            progressBar.style.width = '0%';
+            progressBar.style.transition = 'none';
+            
+            setTimeout(() => {
+                progressBar.style.transition = `width ${slideInterval}ms linear`;
+                progressBar.style.width = '100%';
+            }, 100);
+        }
+        
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % certificates.length;
+            showSlide(nextIndex);
+        }
+        
+        function prevSlide() {
+            const prevIndex = (currentSlide - 1 + certificates.length) % certificates.length;
+            showSlide(prevIndex);
+        }
+        
+        function goToSlide(index) {
+            showSlide(index);
+            if (isAutoPlaying) {
+                resetAutoPlay();
+            }
+        }
+        
+        function startAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = setInterval(nextSlide, slideInterval);
+            isAutoPlaying = true;
+            playPauseBtn.innerHTML = '⏸️ Pause';
+        }
+        
+        function stopAutoPlay() {
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            isAutoPlaying = false;
+            playPauseBtn.innerHTML = '▶️ Play';
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '0%';
+        }
+        
+        function resetAutoPlay() {
+            stopAutoPlay();
+            startAutoPlay();
+        }
+        
+        function toggleAutoPlay() {
+            if (isAutoPlaying) {
+                stopAutoPlay();
+            } else {
+                startAutoPlay();
+            }
+        }
+        
+        // Initialize
+        showSlide(0);
+        startAutoPlay();
+        
+        // Pause on hover
+        const container = document.querySelector('.certificates-grid');
+        container.addEventListener('mouseenter', () => {
+            if (isAutoPlaying) {
+                progressBar.style.animationPlayState = 'paused';
+            }
+        });
+        
+        container.addEventListener('mouseleave', () => {
+            if (isAutoPlaying) {
+                progressBar.style.animationPlayState = 'running';
+            }
+        });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+                resetAutoPlay();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+                resetAutoPlay();
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                toggleAutoPlay();
+            }
+        });
+    </script>
+</body>
+</html>

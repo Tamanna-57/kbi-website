@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'logo.html' %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - KBI</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='about_us.css') }}">
+</head>
+<body>
+    <header>{% include 'navigation.html' %}</header>
+        
+    
+    <!-- <div class="hero-img"><img src="{{ url_for('static', filename='pics/About_us.png') }}" alt="Image 1"></div> -->
+    <!-- Hero Section -->
+    <section class="hero" style="background-image: url('{{ url_for('static', filename='pics/real_training_room.png') }}');">
+        <div class="hero-content">
+            <h1>About KBI</h1>
+            <p>Innovating for tomorrow, delivering excellence today</p>
+            <a href="#story" class="btn">Discover Our Story</a>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section id="story" class="story-section">
+        <div class="container">
+            <h2>Our Story</h2>
+            <div class="story-content">
+                <div class="story-text">
+                    <p>KBI got established in <b>1981</b> in </b>Faridabad,Haryana</b>. It is a key manufacturer of  <b>Sheet metal & Fabrication components</b> for automobile industry. Another Unit of the Company manufactures <b>power and telecom cable inputs</b> in <b>Alwar,Rajasthan</b>.</p>
+                    <p>Today, we stand as a testament to dedication, growth, and the relentless pursuit of perfection. Every challenge we've faced has strengthened our resolve to deliver exceptional value to our clients and partners.</p>
+                </div>
+                <div class="story-image">
+                    <div class="image-placeholder"><img src="{{ url_for('static', filename='pics/Our Journey.png') }}" alt="journey"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Values Section -->
+    <section class="mission-values">
+        <div class="container">
+            <h2>Our Mission & Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">🎯</div>
+                    <h3>Mission</h3>
+                    <p>To provide innovative solutions that empower businesses to achieve their full potential through cutting-edge technology and exceptional service.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💎</div>
+                    <h3>Quality</h3>
+                    <p>We maintain the highest standards in everything we do, ensuring our products and services exceed expectations consistently.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🚀</div>
+                    <h3>Innovation</h3>
+                    <p>We embrace change and continuously seek new ways to improve, staying ahead of industry trends and technological advances.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3>Partnership</h3>
+                    <p>We build lasting relationships with our clients, understanding their unique needs and providing tailored solutions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline-section">
+        <div class="container">
+            <h2>Our Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>1981 - Established</h3>
+                        <p>As Kochar Agro Industries, got associated with MSIL</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>1995 - Major Milestone</h3>
+                        <p>Associated with VECV and ESCORTS</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>2005 - Takeover</h3>
+                        <p>Khandelwals bought the company</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>2007 - Growth</h3>
+                        <p>Got Associated with CNH</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>2008 - Expansion</h3>
+                        <p>Started manufacturing galvanized strips and steel tapes in a new unit at Alwar</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>2022 - Bold Expansion</h3>
+                        <p>Associated with Kobelco India Limited</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>2023 - Rising Growth</h3>
+                        <p>Associated with Mahindra Defence</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>2024 - Bracing for the Future</h3>
+                        <p>Associated with Euler Motors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <h2>Meet Our Team</h2>
+            <div class="team-stats">
+                <div class="stat-card">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Team Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Verticals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">Companies Served</div>
+                </div>
+            </div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image"><img src="{{ url_for('static', filename='pics/Amit.jpg') }}" alt="Amit"></div>
+                    <h3>Amit Kapoor</h3>
+                    <p>Chief Executive Officer (Autocomponents)</p>
+                    <div class="member-bio">Mr. Amit Kapoor, is a Mechanical Engineering Graduate with MBA in Operations Management.
+                        He is a result oriented professional with over 26 years of work experience in Business
+                        Development, Green Field Projects, Plant Operations and has a diverse professional
+                        background and expertise in the fields of Construction / Material Handling Equipment’s, Cement
+                        and Mining Industry, Pre Engineered Buildings and Heavy Steel Fabrication for Railway
+                        Bridges, Flyovers, Metro Stations and Power Plant Structures. Having contributed significantly
+                        to companies like Action Construction Equipment Limited, FLSmidth Private Limited, Kirby
+                        Building Systems India Limited's Lloyds Group, he possesses a wealth of experience in the
+                        industry and is known for his strategic leadership. Mr. Kapoor has played an instrumental role in
+                        the success of these renowned companies. His career journey showcases a commitment to
+                        excellence, innovative problem-solving, and effective team management. With a focus on
+                        construction equipment, building systems, and broader industrial solutions, he has left a lasting
+                        impact on each organization he has been associated with. Mr. Amit Kapoor's career reflects a
+                        dedication to driving growth and achieving results in the dynamic sectors he has been a part of.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image"><img src="{{ url_for('static', filename='pics/Vipin.jpg') }}" alt="Vipin"></div>
+               
+                    <h3>Vipin Dixit</h3>
+                    <p>Business Manager (Autocomponents)</p>
+                    <div class="member-bio">Mr. Vipin Dixit has a total experience of 15
+                        Years. He is Head of Department for Quality Function and emphasizes growth, creativity and
+                        analytical thinking. With his analytical skills and experience he brings on board Excellent Quality
+                        products by ensuring that all manufacturing processes and products meet quality standards.
+                        This includes developing and implementing quality control procedures, conducting audits and
+                        inspections, analyzing data to identify areas of improvement and collaborating with other
+                        departments to address quality related issues. During his work tenure he has worked with some
+                        renowned companies like JBM Industries, JS Industries, Sheetkraft India Private Limited. He
+                        has been awarded for the best Kaizen Improvement from M/S Escorts Kubota India Limited in
+                        the Year 2022. His exposure is into Sheet Metal and Fabrication components for Earth Moving
+                        Equipment’s, Tractor Components, Mining Industry and Wheel Suspension for Indian Railways.</div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image"><img src="{{ url_for('static', filename='pics/Narender.jpeg') }}" alt="Narender"></div>
+                    <h3>Narender Garg</h3>
+                    <p>Business Manager (GST and GWS)</p>
+                    <div class="member-bio">Narender Parkash has done MBA marketing from Guru Jambeshwar University, Hissar(Haryana).
+                        He has been associate with KBI company for more than 23 years. Doing marketing of Galvanised Steel Tape/wire/Strip.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='about_us.js') }}"></script>
+</body>
+</html>

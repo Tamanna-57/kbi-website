@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'logo.html' %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Customers - KBI</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='customers.css') }}">
+</head>
+<body>
+    <header>
+        {% include 'navigation.html' %}
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" style="background-image: url('static/pics/real_customers.webp');">
+        <div class="hero-content">
+            <h1>Our Valued Customers</h1>
+            <p>Trusted by industry leaders to deliver exceptional solutions</p>
+        </div>
+    </section>
+
+    <!-- Customers Section -->
+    <section class="customers-section">
+        <div class="container">
+            <h2>Companies That Trust KBI</h2>
+            <div class="customers-grid" id="customersGrid">
+                
+                <!-- Customer 1 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/maruti_suzuki_img.jpg') }}" alt="Microsoft">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Maruti Suzuki</h3>
+                                <p>Its a way of life!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer 2 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/volvo_eicher.webp') }}" alt="Eicher">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Volvo Eicher</h3>
+                                <p>Driving Prosperity</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer 3 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/havells_img.png') }}" alt="Havells">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Havells</h3>
+                                <p>Wires that don't catch fire</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer 4 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/kobelco_img.png') }}" alt="Kobelco">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Kobelco</h3>
+                                <p>Innovation for the Future</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer 5 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/carraro_img.png') }}" alt="carraro">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Carraro</h3>
+                                <p>The Driveline Experts</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer 6 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/New_Holland_img.png') }}" alt="New Holland">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>New Holland</h3>
+                                <p>Leaders in Agriculture</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- Customer 7 -->
+            <div class="customer-card">
+                <div class="customer-logo">
+                    <img src="{{ url_for('static', filename='pics/kubota_img.png') }}" alt="kubota">
+                    <div class="customer-overlay">
+                        <div class="customer-info">
+                            <h3>Escorts Kubota</h3>
+                            <p>Committed to Progress</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- Customer 8 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/Mahindra_Defence_img.jpg') }}" alt="mahindra">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Mahindra Defence</h3>
+                                <p>Forging the Future of Defence</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Customer 9 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/caparo_img.png') }}" alt="caparo">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Caparo Maruti</h3>
+                                <p>Global Automotive supplier</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Customer 10 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/eulermotors_img.jpg') }}" alt="caparo">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Euler Motors</h3>
+                                <p>Building the Future of Electric Mobility</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Customer 11 -->
+                <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/Delton Cables.png') }}" alt="Delton Cables">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Delton Cables</h3>
+                                <p>We Connect We Protect</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Customer 12 -->
+                 <div class="customer-card">
+                    <div class="customer-logo">
+                        <img src="{{ url_for('static', filename='pics/cords_cables.webp') }}" alt="Delton Cables">
+                        <div class="customer-overlay">
+                            <div class="customer-info">
+                                <h3>Cords Cables</h3>
+                                <p>We Connect We Protect</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- /customers-grid -->
+        </div> <!-- /container -->
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>20+</h3>
+                    <p>Active Customers</p>
+                </div>
+                <div class="stat-card">
+                    <h3>99%</h3>
+                    <p>Customer Satisfaction</p>
+                </div>
+                <div class="stat-card">
+                    <h3>5+</h3>
+                    <p>Certifications</p>
+                </div>
+                <div class="stat-card">
+                    <h3>360</h3>
+                    <p>Support</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='customers.js') }}"></script>
+</body>
+</html>

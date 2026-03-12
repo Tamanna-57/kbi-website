@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{product_name}} - Product Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/product-template.css') }}">
+</head>
+<body>
+    <div class="container">
+        {% include 'navigation.html' %}
+
+        <!-- Product Header -->
+        <div class="product-header">
+            <div class="product-hero">
+                <div class="product-info">
+                    <h1 id="product-name">{{product_name}}</h1>
+                    <p id="product-description">{{product_description}}</p>
+                    <div class="product-category">
+                        <span id="product-category">{{product_category}}</span>
+                    </div>
+                </div>
+                <div class="product-image">
+                    <img id="product-img" src="{{product_image}}" alt="{{product_name}}">
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="product-details">
+            <div class="details-grid">
+                <!-- Applications -->
+                <div class="detail-section">
+                    <h3>Applications</h3>
+                    <div class="applications-list" id="applications">
+                        <!-- Applications will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="detail-section">
+                    <h3>Key Features</h3>
+                    <div class="features-list" id="features">
+                        <!-- Features will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Specifications -->
+                <div class="detail-section">
+                    <h3>Specifications</h3>
+                    <div class="spec-grid" id="specifications">
+                        <!-- Specifications will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manufacturing Process -->
+        <div class="process-section">
+            <h3>Manufacturing Process</h3>
+            <div class="process-flow" id="manufacturing-process">
+                <!-- Process steps will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Related Machines -->
+        <div class="related-section">
+            <h3>Machines Used for This Product</h3>
+            <div class="related-grid" id="related-machines">
+                <!-- Related machines will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Quality Standards -->
+        <div class="quality-section">
+            <h3>Quality Standards</h3>
+            <div class="quality-grid" id="quality-standards">
+                <!-- Quality standards will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h3>Interested in This Product?</h3>
+            <p>Contact us for pricing, customization, and delivery information.</p>
+            <button class="contact-btn" onclick="window.location.href='/contact'">
+                Request Quote
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading product details...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/product-template.js') }}"></script>
+    <script>
+        // Get product ID from URL or pass from backend
+        const productId = "{{ product_id }}";
+        
+        // Load product data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProductData(productId);
+        });
+    </script>
+</body>
+</html>

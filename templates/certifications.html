@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'logo.html' %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_kbi.css', v=1.1) }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='certifications.css', v=1.1) }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certifications - KBI</title>
+</head>
+<body>
+    <header>
+        {% include 'navigation.html' %}
+    </header>
+
+    <section class="hero" style="background-image: url('static/pics/iso_cert.png'); background-size: cover;">
+        <div class="hero-content">
+            <h1 id="typing-text">Our Certifications & Awards</h1>
+            <p class="fade-in-delay-1">Excellence in Quality, Environment, and Safety Standards</p>
+            <a href="#certifications" class="btn fade-in-delay-2">View Certificates</a>
+        </div>
+    </section>
+
+    <section class="about">
+        <div class="about-content">
+            <h2 class="fade-in-on-scroll">Quality Commitment</h2>
+            <p class="fade-in-on-scroll">At <b>Khandelwal Busar Industries</b>, we are committed to maintaining the highest standards of quality, environmental responsibility, and workplace safety. Our certifications reflect our dedication to continuous improvement and customer satisfaction.</p>
+        </div>
+    </section>
+
+    <section id="certifications" class="section section-light">
+        <div class="container">
+            <h2 class="section-title fade-in-on-scroll">ISO Certifications</h2>
+            
+            <div class="grid grid-3">
+                <div class="cert-card fade-in-on-scroll" data-delay="0">
+                    <div class="cert-icon">
+                        <div class="cert-badge">ISO</div>
+                        <div class="cert-number">9001:2015</div>
+                    </div>
+                    <h3>Quality Management Systems</h3>
+                    <p>International standard for Quality Management Systems (QMS), ensuring we consistently provide products and services that meet customer and regulatory requirements. This certification demonstrates our commitment to continuous improvement and customer satisfaction.</p>
+                    <div class="cert-features">
+                        <span class="feature-tag">Customer Focus</span>
+                        <span class="feature-tag">Process Improvement</span>
+                        <span class="feature-tag">Quality Assurance</span>
+                    </div>
+                </div>
+
+                <div class="cert-card fade-in-on-scroll" data-delay="200">
+                    <div class="cert-icon">
+                        <div class="cert-badge">ISO</div>
+                        <div class="cert-number">14001:2015</div>
+                    </div>
+                    <h3>Environmental Management Systems</h3>
+                    <p>International standard for Environmental Management Systems (EMS), providing a framework to manage our environmental responsibilities systematically and sustainably. We are committed to reducing our environmental impact.</p>
+                    <div class="cert-features">
+                        <span class="feature-tag">Sustainability</span>
+                        <span class="feature-tag">Waste Reduction</span>
+                        <span class="feature-tag">Green Manufacturing</span>
+                    </div>
+                </div>
+
+                <div class="cert-card fade-in-on-scroll" data-delay="400">
+                    <div class="cert-icon">
+                        <div class="cert-badge">ISO</div>
+                        <div class="cert-number">45001:2018</div>
+                    </div>
+                    <h3>Occupational Health & Safety</h3>
+                    <p>International standard for Occupational Health and Safety Management Systems (OHSMS), helping us provide a safe and healthy workplace by preventing work-related injuries and illnesses while improving OH&S performance.</p>
+                    <div class="cert-features">
+                        <span class="feature-tag">Workplace Safety</span>
+                        <span class="feature-tag">Risk Management</span>
+                        <span class="feature-tag">Employee Wellbeing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certificate-gallery" class="section section-light">
+        <div class="container">
+            <h2 class="section-title fade-in-on-scroll">Certificate Gallery</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item fade-in-on-scroll" data-delay="0">
+                    <img src="{{ url_for('static', filename='pics/iso_9001.jpg') }}" alt="ISO 9001:2015 Certificate" class="gallery-image">
+                    <div class="gallery-overlay">ISO 9001:2015</div>
+                </div>
+                <div class="gallery-item fade-in-on-scroll" data-delay="200">
+                    <img src="{{ url_for('static', filename='pics/iso_14001.jpg') }}" alt="ISO 14001:2015 Certificate" class="gallery-image">
+                    <div class="gallery-overlay">ISO 14001:2015</div>
+                </div>
+                <div class="gallery-item fade-in-on-scroll" data-delay="400">
+                    <img src="{{ url_for('static', filename='pics/iso_45001.jpg') }}" alt="ISO 45001:2018 Certificate" class="gallery-image">
+                    <div class="gallery-overlay">ISO 45001:2018</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="lightbox-caption"></div>
+    </div>
+
+    <section class="section section-dark">
+        <div class="container">
+            <h2 class="section-title fade-in-on-scroll">Awards & Recognition</h2>
+            
+            <div class="awards-timeline">
+                <div class="timeline-item fade-in-on-scroll" data-delay="0">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="award-year">2022</div>
+                        <h3>Quality Kaizen Presentation Award</h3>
+                        <p class="award-giver">Escorts Kubota Limited</p>
+                        <p>Certificate of Participation</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in-on-scroll" data-delay="200">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="award-year">2025</div>
+                        <h3>30 years of partnership</h3>
+                        <p class="award-giver">Escorts Kubota Limited</p>
+                        <p>Awarded for being a trusted partner and consistently meeting stringent quality standards</p>
+                    </div>
+                </div>
+
+                <!-- <div class="timeline-item fade-in-on-scroll" data-delay="400">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="award-year">2022</div>
+                        <h3>Quality Kaizen Presentation</h3>
+                        <p class="award-giver">Mahindra & Mahindra</p>
+                        <p>Achieved preferred vendor status for exceptional performance in manufacturing precision components and maintaining supply chain excellence.</p>
+                    </div>
+                </div> -->
+
+                <!-- <div class="timeline-item fade-in-on-scroll" data-delay="600">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="award-year">2020</div>
+                        <h3>Safety Excellence Award</h3>
+                        <p class="award-giver">Hero MotoCorp</p>
+                        <p>Recognized for implementing comprehensive safety measures and achieving zero workplace accidents for consecutive 1000+ days.</p>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='scripts.js', v=1.1) }}"></script>
+    <script src="{{ url_for('static', filename='certifications.js', v=1.1) }}"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'logo.html' %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_kbi.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KBI</title>
+    
+</head>
+<body>
+        {% include 'navigation.html' %}
+
+    <section class="hero">
+        <div class="slider">
+            <div class="slide">
+                <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="Image 1">
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Image 2">
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='pics/real_leadership.png') }}" alt="Image 3">
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1>Welcome to Khandelwal Busar Industries</h1>
+            <p>Building the Future of Manufacturing</p>
+            <a href="/processes" class="btn">Our Technology</a>
+        </div>
+    </section>
+
+    <section class="about">
+        <div class="about-content">
+            <h2>About Us</h2>
+            <p><b>Khandelwal Busar Industries</b> (Established in 1981) is a key manufacturer of  Sheet metal & Fabrication components for automobile industry and of power and telecom cable inputs. It has 2 plants. One in <b>Faridabad,Haryana</b> and the other in <b>Alwar,Rajasthan</b></p>
+        </div>
+    </section>
+
+    <section class="product-catalogue">
+        <div class="container">
+            <h2>Product Catalogue</h2>
+            <p>View or download our latest product catalogue to explore our extensive range of offerings.</p>
+            <a href="https://storage.googleapis.com/kbi-catalogues/product_catalogue.pdf" class="btn" target="_blank" rel="noopener noreferrer">View Catalogue (PDF)</a>
+            <div class="qr-code-container" style="margin-top: 20px;">
+                <p>Or scan this QR code to view on your mobile device:</p>
+                <img src="{{ url_for('static', filename='pics/product-catalogue-qr.png') }}" alt="Product Catalogue QR Code" style="width: 128px; height: 128px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional sections for services, products, and contact can be added here -->
+
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'logo.html' %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - KBI</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_kbi.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='contact_us.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    {% include 'navigation.html' %}
+    <!-- Hero Section -->
+    <section class="hero" style="background-image: url('static/pics/contact_us_hero.png'); background-size: cover;">
+        <div class="hero-content">
+            <h1>Contact Us</h1>
+            <p>We'd love to hear from you. Get in touch and let's discuss how we can help.</p>
+            <a href="#contact-form" class="btn">Get In Touch</a>
+        </div>
+    </section>
+
+    <!-- Contact Information Section -->
+    <section class="contact-info-section">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-info-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Visit Our Office</h3>
+                    <p>Plot no. 112, Sec-59<br>
+                        HSIIDC Faridabad – 121004<br>
+                        Haryana (India)
+                    <br>
+                    <br>
+                Plot A22, MIA<br>
+                Alwar 301001<br>
+            Rajasthan (India)</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Call Us</h3>
+                    <p>Phone: +91 9811181125<br>
+                       HR: +91 8587000740<br>
+                    </p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Us</h3>
+                    <p>General: info@khandelwalbusar.com<br>
+                       GST and GWS: alwar@khandelwalbusar.com<br>
+                       Autocomponents: business@khandelwalbusar.com</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Business Hours</h3>
+                    <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
+                       Saturday: 10:00 AM - 4:00 PM<br>
+                       Sunday: Closed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form-section" id="contact-form">
+        <div class="container">
+            <h2>Send Us a Message</h2>
+            <div class="form-content">
+                <div class="form-text">
+                    <h3>Let's Start a Conversation</h3>
+                    <p>Have a question, need support, or want to discuss a project? We're here to help. Fill out the form and we'll get back to you as soon as possible.</p>
+                    <div class="form-features">
+                        <div class="feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Quick Response Time</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Secure & Confidential</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Professional Support</span>
+                        </div>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a subject...</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Product Support</option>
+                            <option value="sales">Business Inquiry</option>
+                            <option value="partnership">Partnership</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message *</label>
+                        <textarea id="message" name="message" rows="5" required placeholder="Tell us how we can help you..."></textarea>
+                    </div>
+                    <button type="submit" class="btn submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How quickly do you respond to inquiries?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call us directly.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What information should I include in my message?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Please provide as much detail as possible about your inquiry, including your specific needs, timeline, and any relevant background information.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Do you offer phone consultations?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, we offer phone consultations for qualified prospects. Please submit a form or call us to schedule a consultation.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can I visit your office?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We welcome office visits by appointment. Please contact us in advance to schedule a meeting at our location.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="map-section">
+        <div class="container">
+            <h2>Find Us</h2>
+            <div class="map-wrapper">
+                <div class="map-item">
+                    <h3>Faridabad Unit</h3>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3512.6087452930224!2d77.30365768120048!3d28.310173913553385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdb05a9c6f243%3A0x5c92c46ec3ec3dd3!2sKhandelwal%20Busar%20Industries%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1752573598148!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <div class="map-item">
+                    <h3>Alwar Unit</h3>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m25!1m12!1m3!1d21343.24931775208!2d76.6198681627595!3d27.55765908500915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m10!3e6!4m4!1s0x39729a0232bd9ed5%3A0x4908eef38d108033!3m2!1d27.5528901!2d76.63467729999999!4m3!3m2!1d27.5529907!2d76.6345735!5e0!3m2!1sen!2sin!4v1753381110940!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='contact_us.js') }}"></script>
+</body>
+</html>

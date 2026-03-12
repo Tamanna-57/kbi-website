@@ -1,0 +1,12 @@
+{
+    "name": "Product Name",
+    "description": "Product description",
+    "category": "Category",
+    "image": "/path/to/image.jpg",
+    "applications": [{"title": "App", "description": "Desc"}],
+    "features": [{"title": "Feature", "description": "Desc"}],
+    "specifications": {"key": "value"},
+    "manufacturing_process": [{"title": "Step", "description": "Desc"}],
+    "related_machines": [{"id": 1, "name": "Machine", "image": "path"}],
+    "quality_standards": [{"name": "ISO", "level": "Certified"}]
+  }
