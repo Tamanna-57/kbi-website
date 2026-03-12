@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!slides.length) return;
 
-    // Must match the interval set in scripts.js (5000 ms)
-    var SLIDE_MS = 5000;
+    // Must match the interval set in scripts.js (7000 ms)
+    var SLIDE_MS = 7000;
 
     // ── Set total count ─────────────────────────────────────────────────────
     if (totalEl) {

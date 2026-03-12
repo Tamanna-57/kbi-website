@@ -24,7 +24,7 @@
 .hero .hero-content {
     text-align: left;
     padding: 0 5rem;
-    max-width: 700px;
+    max-width: 720px;
     margin: 0;
 }
 
@@ -43,28 +43,63 @@
     padding-left: 0.75rem;
 }
 
-/* ── Headline ── */
-.hero .hero-content h1 {
-    font-size: 3.8rem;
-    line-height: 1.15;
+/* ──────────────────────────────────────────────────────────────
+   Tagline — the primary hero statement ("Precision is Progress.")
+   Inspired by RIL's "Growth is Life" treatment.
+   ────────────────────────────────────────────────────────────── */
+.hero-tagline {
+    font-size: 4.4rem;
     font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 1.2rem;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+    line-height: 1.08;
+    color: #fff;
+    letter-spacing: -1.5px;
+    margin-bottom: 0.75rem !important;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.45);
+    /* Override global p animation timing */
+    opacity: 0 !important;
+    animation: fadeInUp 1s ease 0.3s forwards !important;
 }
 
-/* Gold accent word in headline */
+/* Gold accent rule — mirrors the gold divider on RIL */
+.hero-tagline-rule {
+    width: 240px;
+    height: 3px;
+    background: linear-gradient(to right, #f5c518 0%, rgba(245, 197, 24, 0.15) 100%);
+    margin-bottom: 1.4rem;
+    opacity: 0;
+    animation: fadeInUp 0.7s ease 0.55s forwards;
+}
+
+/* ── H1 — company name (secondary to tagline, like an identifier) ── */
+.hero .hero-content h1 {
+    font-size: 1.65rem;
+    line-height: 1.3;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+    margin-bottom: 1rem;
+    text-shadow: none;
+    /* Override default h1 animation */
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.72s forwards;
+}
+
+/* Brand accent */
 .hero-accent {
     color: #f5c518;
 }
 
 /* ── Sub-headline paragraph ── */
-.hero .hero-content > p {
-    font-size: 1.12rem;
-    line-height: 1.75;
-    color: rgba(255, 255, 255, 0.85);
+.hero-sub {
+    font-size: 1.08rem !important;
+    line-height: 1.75 !important;
+    color: rgba(255, 255, 255, 0.78) !important;
     text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
-    margin-bottom: 2.2rem;
+    margin-bottom: 2rem !important;
+    /* Override global p animation */
+    opacity: 0 !important;
+    animation: fadeInUp 1s ease 0.92s forwards !important;
 }
 
 /* ── CTA container ── */
@@ -73,7 +108,7 @@
     gap: 1rem;
     flex-wrap: wrap;
     opacity: 0;
-    animation: fadeInUp 1s ease 0.85s forwards;
+    animation: fadeInUp 1s ease 1.1s forwards;
 }
 
 /* Reset the global .btn stagger animation inside hero-ctas */
@@ -116,28 +151,100 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* ── Ken Burns zoom on active slide image ── */
+/* ──────────────────────────────────────────────────────────────
+   Ken Burns — SLOWER / more premium feel (was 5.5s)
+   ────────────────────────────────────────────────────────────── */
 .slide img {
     transform-origin: center center;
 }
 
 .slide.active img {
-    animation: kenBurns 5.5s ease-out forwards;
+    animation: kenBurns 9s ease-out forwards;
 }
 
 @keyframes kenBurns {
     from { transform: scale(1.0); }
-    to   { transform: scale(1.08); }
+    to   { transform: scale(1.06); }
 }
 
-/* ── Hide original slider dots (replaced by counter + arrows) ── */
-/* They remain in the DOM so JS arrow clicks still work */
+/* ── Slower, smoother slide fade transition (was 1s) ── */
+.slide {
+    transition: opacity 1.8s ease-in-out;
+}
+
+/* ── Hide original slider dots (counter + arrows replace them) ── */
 .hero .slider-controls {
     opacity: 0;
     pointer-events: none;
 }
 
-/* ── Bottom bar: counter left + progress centre ── */
+/* ──────────────────────────────────────────────────────────────
+   Hero Highlights Strip
+   4 clickable pillars: Manufacturing | Products | Machinery | Partnerships
+   Positioned above the bottom bar.
+   ────────────────────────────────────────────────────────────── */
+.hero-highlights {
+    position: absolute;
+    bottom: 68px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0 5rem;
+    gap: 0;
+    opacity: 0;
+    animation: fadeInUp 1s ease 1.3s forwards;
+}
+
+.hero-hl-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    padding: 0.7rem 1.8rem 0.7rem 0;
+    text-decoration: none !important;
+    border: none !important;
+    background: transparent !important;
+    color: inherit !important;
+    transition: opacity 0.25s ease;
+}
+
+.hero-hl-item:hover {
+    background: transparent !important;
+    color: inherit !important;
+    border: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+    opacity: 0.78;
+}
+
+.hero-hl-divider {
+    width: 1px;
+    background: rgba(255, 255, 255, 0.25);
+    margin: 0.4rem 1.8rem 0.4rem 0;
+    flex-shrink: 0;
+    align-self: stretch;
+}
+
+.hl-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #fff;
+    display: block;
+}
+
+.hl-sub {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.58);
+    display: block;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
+
+/* ── Bottom bar: counter left + progress ── */
 .hero-bottom-bar {
     position: absolute;
     bottom: 0;
@@ -146,38 +253,38 @@
     z-index: 2;
     display: flex;
     align-items: center;
-    padding: 0 5rem 1.8rem;
+    padding: 0 5rem 1.6rem;
     gap: 1.5rem;
 }
 
-/* Slide counter  e.g. "01 / 03" */
+/* Slide counter e.g. "01 / 04" */
 .hero-counter {
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.65);
     font-family: 'Courier New', monospace;
     white-space: nowrap;
     flex-shrink: 0;
 }
 
 .counter-current {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: #fff;
     font-weight: 700;
 }
 
 .counter-sep {
     margin: 0 0.3rem;
-    opacity: 0.5;
+    opacity: 0.45;
 }
 
-/* Progress bar — gold fill, grows over 5 s */
+/* Progress bar — gold fill, grows over 7 s */
 .hero-progress {
     flex: 1;
-    max-width: 260px;
+    max-width: 240px;
     height: 2px;
-    background: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 2px;
     overflow: hidden;
 }
@@ -187,7 +294,6 @@
     width: 0%;
     background: #f5c518;
     border-radius: 2px;
-    /* JS drives the transition */
 }
 
 /* ── Prev / Next arrow buttons ── */
@@ -197,7 +303,7 @@
     transform: translateY(-50%);
     z-index: 3;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #fff;
     width: 50px;
     height: 50px;
@@ -229,12 +335,17 @@
         max-width: 600px;
     }
 
-    .hero .hero-content h1 {
-        font-size: 3rem;
+    .hero-tagline {
+        font-size: 3.4rem !important;
+    }
+
+    .hero-highlights {
+        padding: 0 3rem;
+        bottom: 65px;
     }
 
     .hero-bottom-bar {
-        padding: 0 3rem 1.5rem;
+        padding: 0 3rem 1.4rem;
     }
 }
 
@@ -255,16 +366,29 @@
         padding-left: 0;
     }
 
+    .hero-tagline {
+        font-size: 2.6rem !important;
+        letter-spacing: -0.5px;
+    }
+
+    .hero-tagline-rule {
+        margin: 0 auto 1.2rem;
+    }
+
     .hero .hero-content h1 {
-        font-size: 2.2rem;
+        font-size: 1.2rem;
     }
 
     .hero-ctas {
         justify-content: center;
     }
 
-    /* Hide arrows on touch devices (swipe works via scripts.js) */
+    /* Hide arrows on touch (swipe via scripts.js) */
     .hero-arrow {
+        display: none;
+    }
+
+    .hero-highlights {
         display: none;
     }
 
@@ -274,7 +398,7 @@
     }
 
     .hero-progress {
-        max-width: 150px;
+        max-width: 140px;
     }
 
     .counter-current {
@@ -283,12 +407,12 @@
 }
 
 @media (max-width: 480px) {
-    .hero .hero-content h1 {
-        font-size: 1.75rem;
+    .hero-tagline {
+        font-size: 2rem !important;
     }
 
-    .hero .hero-content > p {
-        font-size: 0.98rem;
+    .hero-sub {
+        font-size: 0.95rem !important;
     }
 
     .hero-ctas .btn {
