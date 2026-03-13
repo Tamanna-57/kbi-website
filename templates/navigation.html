@@ -352,6 +352,147 @@
             outline: 2px solid rgb(23, 23, 79);
             outline-offset: 2px;
         }
+
+        /* ═══════════════════════════════════════════════════════════
+           Mega Dropdown — RIL-inspired full-width navigation panels
+           ═══════════════════════════════════════════════════════════ */
+
+        /* Wrapper for nav items that have a dropdown */
+        .nav-group {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* Chevron indicator on dropdown triggers */
+        .nav-trigger::after {
+            content: '';
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 3.5px solid transparent;
+            border-right: 3.5px solid transparent;
+            border-top: 4px solid currentColor;
+            margin-left: 5px;
+            vertical-align: middle;
+            transition: transform 0.22s ease;
+            opacity: 0.65;
+        }
+
+        .nav-group:hover .nav-trigger::after,
+        .nav-group.open .nav-trigger::after {
+            transform: rotate(180deg);
+            opacity: 1;
+        }
+
+        /* The mega dropdown panel — full viewport width, fixed below nav */
+        .nav-mega {
+            position: fixed;
+            top: 83px;
+            left: 0;
+            right: 0;
+            z-index: 998;
+            background: #fff;
+            border-top: 3px solid rgb(23, 23, 79);
+            border-bottom: 1px solid rgba(23, 23, 79, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+            /* Hidden by default */
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-8px);
+            /* Small delay on close prevents accidental dismissal */
+            transition: opacity 0.22s ease 0.08s, transform 0.22s ease 0.08s;
+        }
+
+        /* Show on hover / open class */
+        .nav-group:hover .nav-mega,
+        .nav-group.open .nav-mega {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            transition-delay: 0s;
+        }
+
+        /* Inner content wrapper */
+        .mega-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.2rem 4rem 2.5rem;
+            display: flex;
+            gap: 5rem;
+        }
+
+        /* Each column */
+        .mega-col {
+            min-width: 170px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Column heading */
+        .mega-heading {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            color: rgb(23, 23, 79);
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(23, 23, 79, 0.14);
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Dropdown links — override the global nav-links a styles */
+        .mega-link {
+            font-size: 0.875rem !important;
+            color: #4a5568 !important;
+            padding: 0.3rem 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            border: none !important;
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+            letter-spacing: 0.2px;
+            font-weight: 400;
+            transition: color 0.18s ease, padding-left 0.18s ease !important;
+            box-shadow: none !important;
+            display: block;
+            text-decoration: none;
+        }
+
+        .mega-link:hover {
+            color: rgb(23, 23, 79) !important;
+            background: transparent !important;
+            border: none !important;
+            padding-left: 0.55rem !important;
+            transform: none !important;
+            box-shadow: none !important;
+            font-weight: 500;
+        }
+
+        /* Hide mega on mobile (hamburger menu handles navigation) */
+        @media (max-width: 768px) {
+            .nav-mega {
+                display: none !important;
+            }
+            .nav-trigger::after {
+                display: none;
+            }
+            .nav-group {
+                display: block;
+                width: 100%;
+            }
+            .nav-trigger {
+                display: block;
+                width: 100%;
+            }
+        }
+
+        /* Adjust mega top when nav is scrolled/compact */
+        .nav-mega.scrolled-offset {
+            top: 72px;
+        }
     </style>
 </head>
 <body>
@@ -363,12 +504,123 @@
             </a>
             <div class="nav-links" id="navLinks">
                 <a href="/">Home</a>
-                <a href="/about_us">About Us</a>
-                <a href="/customers">Customers</a>
-                <a href="/processes">Processes</a>
-                <a href="/products">Products</a>
-                <a href="/machines">Machines</a>
-                <a href="/certifications">Certifications</a>
+
+                <!-- About Us -->
+                <div class="nav-group">
+                    <a href="/about_us" class="nav-trigger">About Us</a>
+                    <div class="nav-mega" id="megaAbout">
+                        <div class="mega-inner">
+                            <div class="mega-col">
+                                <div class="mega-heading">Company</div>
+                                <a href="/about_us" class="mega-link">Company Overview</a>
+                                <a href="/about_us" class="mega-link">Our Journey</a>
+                                <a href="/about_us" class="mega-link">Leadership Team</a>
+                            </div>
+                            <div class="mega-col">
+                                <div class="mega-heading">Our Plants</div>
+                                <a href="/about_us" class="mega-link">Faridabad, Haryana</a>
+                                <a href="/about_us" class="mega-link">Alwar, Rajasthan</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customers -->
+                <div class="nav-group">
+                    <a href="/customers" class="nav-trigger">Customers</a>
+                    <div class="nav-mega" id="megaCustomers">
+                        <div class="mega-inner">
+                            <div class="mega-col">
+                                <div class="mega-heading">By Sector</div>
+                                <a href="/customers" class="mega-link">Automobile Industry</a>
+                                <a href="/customers" class="mega-link">Telecom &amp; Power</a>
+                            </div>
+                            <div class="mega-col">
+                                <div class="mega-heading">Key Partners</div>
+                                <a href="/customers" class="mega-link">Maruti Suzuki</a>
+                                <a href="/customers" class="mega-link">Mahindra</a>
+                                <a href="/customers" class="mega-link">Eicher / Volvo</a>
+                                <a href="/customers" class="mega-link">New Holland</a>
+                                <a href="/customers" class="mega-link">Kubota</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processes -->
+                <div class="nav-group">
+                    <a href="/processes" class="nav-trigger">Processes</a>
+                    <div class="nav-mega" id="megaProcesses">
+                        <div class="mega-inner">
+                            <div class="mega-col">
+                                <div class="mega-heading">Forming</div>
+                                <a href="/processes" class="mega-link">Cutting</a>
+                                <a href="/processes" class="mega-link">Pressing</a>
+                                <a href="/processes" class="mega-link">Tooling</a>
+                            </div>
+                            <div class="mega-col">
+                                <div class="mega-heading">Finishing</div>
+                                <a href="/processes" class="mega-link">Welding</a>
+                                <a href="/processes" class="mega-link">Machining</a>
+                                <a href="/processes" class="mega-link">Shot Blasting</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products -->
+                <div class="nav-group">
+                    <a href="/products" class="nav-trigger">Products</a>
+                    <div class="nav-mega" id="megaProducts">
+                        <div class="mega-inner">
+                            <div class="mega-col">
+                                <div class="mega-heading">Sheet Metal</div>
+                                <a href="/products" class="mega-link">Brackets &amp; Assemblies</a>
+                                <a href="/products" class="mega-link">Pedals &amp; Levers</a>
+                                <a href="/products" class="mega-link">Axle Components</a>
+                                <a href="/products" class="mega-link">Chassis Parts</a>
+                            </div>
+                            <div class="mega-col">
+                                <div class="mega-heading">Cable Inputs</div>
+                                <a href="/products" class="mega-link">Galvanized Wire</a>
+                                <a href="/products" class="mega-link">Steel Tape</a>
+                                <a href="https://storage.googleapis.com/kbi-catalogues/product_catalogue.pdf" class="mega-link" target="_blank" rel="noopener">Product Catalogue ↗</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Machines -->
+                <div class="nav-group">
+                    <a href="/machines" class="nav-trigger">Machines</a>
+                    <div class="nav-mega" id="megaMachines">
+                        <div class="mega-inner">
+                            <div class="mega-col">
+                                <div class="mega-heading">Equipment</div>
+                                <a href="/machines" class="mega-link">Press Lines</a>
+                                <a href="/machines" class="mega-link">Boring Machines</a>
+                                <a href="/machines" class="mega-link">Wire Drawing</a>
+                                <a href="/machines" class="mega-link">Welding Equipment</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certifications -->
+                <div class="nav-group">
+                    <a href="/certifications" class="nav-trigger">Certifications</a>
+                    <div class="nav-mega" id="megaCerts">
+                        <div class="mega-inner">
+                            <div class="mega-col">
+                                <div class="mega-heading">Quality Standards</div>
+                                <a href="/certifications" class="mega-link">ISO 9001:2015 — Quality Management</a>
+                                <a href="/certifications" class="mega-link">ISO 14001:2015 — Environmental</a>
+                                <a href="/certifications" class="mega-link">ISO 45001:2018 — Occupational Safety</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <a href="/contact_us">Contact</a>
             </div>
             <div class="hamburger" id="hamburger">
@@ -421,15 +673,19 @@
 
         // Scroll effect for navbar
         let lastScrollTop = 0;
+        const megaPanels = document.querySelectorAll('.nav-mega');
         window.addEventListener('scroll', () => {
             const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
+
             if (scrollTop > 50) {
                 navbar.classList.add('scrolled');
+                // Shift mega panels up when nav compacts on scroll
+                megaPanels.forEach(m => { m.style.top = '72px'; });
             } else {
                 navbar.classList.remove('scrolled');
+                megaPanels.forEach(m => { m.style.top = '83px'; });
             }
-            
+
             lastScrollTop = scrollTop;
         });
 
