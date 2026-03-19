@@ -1,275 +1,334 @@
-// Image slider functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const slides = document.querySelectorAll('.slide');
-    const slider = document.querySelector('.slider');
-    let currentSlide = 0;
-    let slideInterval;
-    
-    // Create slider controls if they don't exist
-    if (!document.querySelector('.slider-controls')) {
-        const controls = document.createElement('div');
-        controls.className = 'slider-controls';
-        
-        slides.forEach((_, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'slider-dot';
-            if (index === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(index));
-            controls.appendChild(dot);
-        });
-        
-        slider.appendChild(controls);
-    }
-    
-    const dots = document.querySelectorAll('.slider-dot');
-    
-    // Initialize first slide
-    if (slides.length > 0) {
-        slides[0].classList.add('active');
-    }
-    
+/* ═══════════════════════════════════════════════════════════════
+   KBI — Main Scripts (RIL-inspired interactions)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ───────────────────────────────────────────────────────────────
+   1. HERO — crossfade carousel
+─────────────────────────────────────────────────────────────── */
+(function initHero() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dots   = document.querySelectorAll('.hero-dot');
+    if (!slides.length) return;
+
+    let current  = 0;
+    let timer    = null;
+    const INTERVAL = 5500;
+    const DURATION  = 1100; // must match --dur-hero in CSS
+
     function showSlide(index) {
-        // Remove active class from all slides and dots
-        slides.forEach(slide => slide.classList.remove('active'));
-        dots.forEach(dot => dot.classList.remove('active'));
-        
-        // Add active class to current slide and dot
-        if (slides[index]) {
-            slides[index].classList.add('active');
-        }
-        if (dots[index]) {
-            dots[index].classList.add('active');
-        }
-    }
-    
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-    
-    function goToSlide(index) {
-        currentSlide = index;
-        showSlide(currentSlide);
-        resetAutoSlide();
-    }
-    
-    function startAutoSlide() {
-        slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
-    }
-    
-    function resetAutoSlide() {
-        clearInterval(slideInterval);
-        startAutoSlide();
-    }
-    
-    // Start auto-sliding
-    if (slides.length > 1) {
-        startAutoSlide();
-    }
-    
-    // Pause auto-slide on hover
-    slider.addEventListener('mouseenter', () => {
-        clearInterval(slideInterval);
-    });
-    
-    slider.addEventListener('mouseleave', () => {
-        if (slides.length > 1) {
-            startAutoSlide();
-        }
-    });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft') {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
-            resetAutoSlide();
-        } else if (e.key === 'ArrowRight') {
-            nextSlide();
-            resetAutoSlide();
-        }
-    });
-    
-    // Touch/swipe support for mobile
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    slider.addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-    
-    slider.addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    });
-    
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
-        
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
-                // Swipe left - next slide
-                nextSlide();
-            } else {
-                // Swipe right - previous slide
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                showSlide(currentSlide);
-            }
-            resetAutoSlide();
-        }
-    }
-});
+        slides[current].classList.remove('active');
+        dots[current]?.classList.remove('active');
+        dots[current]?.setAttribute('aria-selected', 'false');
 
-// Smooth scrolling for anchor links
-document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('a[href^="#"]');
-    
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href !== '#') {
-                e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            }
+        current = (index + slides.length) % slides.length;
+
+        slides[current].classList.add('active');
+        dots[current]?.classList.add('active');
+        dots[current]?.setAttribute('aria-selected', 'true');
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(() => showSlide(current + 1), INTERVAL);
+    }
+
+    // Wire up dots
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => { showSlide(i); startTimer(); });
+        dot.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showSlide(i); startTimer(); }
         });
     });
-});
 
-// Fade in animation on scroll
-document.addEventListener('DOMContentLoaded', function() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
+    // Keyboard (global) — only when hero is visible
+    document.addEventListener('keydown', (e) => {
+        const hero = document.getElementById('hero');
+        if (!hero) return;
+        const rect = hero.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+        if (e.key === 'ArrowLeft')  { showSlide(current - 1); startTimer(); }
+        if (e.key === 'ArrowRight') { showSlide(current + 1); startTimer(); }
+    });
+
+    // Touch swipe
+    let touchX = 0;
+    const heroEl = document.querySelector('.hero-slider');
+    if (heroEl) {
+        heroEl.addEventListener('touchstart', (e) => { touchX = e.changedTouches[0].screenX; }, { passive: true });
+        heroEl.addEventListener('touchend', (e) => {
+            const diff = touchX - e.changedTouches[0].screenX;
+            if (Math.abs(diff) > 50) {
+                showSlide(diff > 0 ? current + 1 : current - 1);
+                startTimer();
+            }
+        }, { passive: true });
+
+        // Pause on hover
+        heroEl.addEventListener('mouseenter', () => clearInterval(timer));
+        heroEl.addEventListener('mouseleave', startTimer);
+    }
+
+    // Initialise
+    slides[0].classList.add('active');
+    dots[0]?.classList.add('active');
+    startTimer();
+})();
+
+
+/* ───────────────────────────────────────────────────────────────
+   2. OUR BUSINESSES — hover-driven split panel
+─────────────────────────────────────────────────────────────── */
+(function initBusinesses() {
+    const canvas  = document.getElementById('businessesCanvas');
+    const img     = document.getElementById('businessesImg');
+    const title   = document.getElementById('businessesTitle');
+    const desc    = document.getElementById('businessesDesc');
+    const link    = document.getElementById('businessesLink');
+    const items   = document.querySelectorAll('.businesses-nav__item');
+    if (!canvas || !items.length) return;
+
+    const segments = [
+        {
+            title: 'Automotive Components',
+            desc:  'Precision sheet metal stampings, fabrications, and sub-assemblies for India\'s leading automobile manufacturers — Maruti Suzuki, Mahindra, Eicher, New Holland, and more.',
+            img:   '/static/pics/real_products.jpeg',
+            href:  '/products'
+        },
+        {
+            title: 'Power & Telecom',
+            desc:  'High-quality galvanized steel wire, strips, and cable input components for power transmission and telecommunications infrastructure across India.',
+            img:   '/static/pics/cords_cables.webp',
+            href:  '/products'
+        },
+        {
+            title: 'Advanced Manufacturing',
+            desc:  'State-of-the-art fabrication in our Faridabad and Alwar facilities — CNC machining, multi-spindle drilling, precision pressing, welding, and shot-blasting.',
+            img:   '/static/pics/pressline.webp',
+            href:  '/processes'
+        },
+        {
+            title: 'Quality Assurance',
+            desc:  'ISO 9001:2015 certified quality management. Every component passes rigorous dimensional, surface, and functional checks before leaving our plants.',
+            img:   '/static/pics/real_quality.png',
+            href:  '/certifications'
+        }
+    ];
+
+    let current = 0;
+    let transitioning = false;
+
+    function activate(index) {
+        if (index === current && canvas.classList.contains('content-ready')) return;
+        if (transitioning) return;
+        transitioning = true;
+
+        // Update nav
+        items.forEach((it, i) => it.classList.toggle('active', i === index));
+
+        // Fade out content
+        canvas.classList.remove('content-ready');
+
+        const seg = segments[index];
+
+        setTimeout(() => {
+            // Swap image
+            img.classList.remove('is-visible');
+            img.src = seg.img;
+            img.alt = seg.title;
+
+            // Swap text
+            title.textContent = seg.desc ? seg.title : '';
+            desc.textContent  = seg.desc;
+            if (link) {
+                link.href = seg.href;
+            }
+
+            current = index;
+
+            // Allow browser to load
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    img.classList.add('is-visible');
+                    canvas.classList.add('content-ready');
+                    transitioning = false;
+                });
+            });
+        }, 280);
+    }
+
+    // Wire up nav items
+    items.forEach((item, i) => {
+        item.addEventListener('mouseenter', () => activate(i));
+        item.addEventListener('click',      () => activate(i));
+        item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(i); }
+        });
+    });
+
+    // Initialise first segment
+    const first = segments[0];
+    img.src   = first.img;
+    img.alt   = first.title;
+    title.textContent = first.title;
+    desc.textContent  = first.desc;
+    if (link) link.href = first.href;
+    requestAnimationFrame(() => {
+        img.classList.add('is-visible');
+        canvas.classList.add('content-ready');
+    });
+})();
+
+
+/* ───────────────────────────────────────────────────────────────
+   3. SUSTAINABILITY TABS — animated indicator
+─────────────────────────────────────────────────────────────── */
+(function initTabs() {
+    const tabs      = document.querySelectorAll('.sustain-tab');
+    const panels    = document.querySelectorAll('.sustain-panel');
+    const indicator = document.querySelector('.sustain-tab-indicator');
+    if (!tabs.length) return;
+
+    function positionIndicator(tab) {
+        if (!indicator) return;
+        indicator.style.left  = tab.offsetLeft + 'px';
+        indicator.style.width = tab.offsetWidth + 'px';
+    }
+
+    function activateTab(index) {
+        tabs.forEach((t, i) => {
+            const active = i === index;
+            t.classList.toggle('active', active);
+            t.setAttribute('aria-selected', active);
+        });
+        panels.forEach((p, i) => {
+            const active = i === index;
+            p.classList.toggle('active', active);
+            p.hidden = !active;
+        });
+        positionIndicator(tabs[index]);
+    }
+
+    tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => activateTab(i));
+        tab.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') { activateTab((i + 1) % tabs.length); tabs[(i + 1) % tabs.length].focus(); }
+            if (e.key === 'ArrowLeft')  { activateTab((i - 1 + tabs.length) % tabs.length); tabs[(i - 1 + tabs.length) % tabs.length].focus(); }
+        });
+    });
+
+    // Init position
+    const activeTab = document.querySelector('.sustain-tab.active') || tabs[0];
+    activateTab([...tabs].indexOf(activeTab));
+
+    // Reposition on resize
+    window.addEventListener('resize', () => {
+        const activeIdx = [...tabs].findIndex(t => t.classList.contains('active'));
+        if (activeIdx >= 0) positionIndicator(tabs[activeIdx]);
+    }, { passive: true });
+})();
+
+
+/* ───────────────────────────────────────────────────────────────
+   4. SCROLL-REVEAL via IntersectionObserver
+─────────────────────────────────────────────────────────────── */
+(function initReveal() {
+    const els = document.querySelectorAll('.reveal-section');
+    if (!els.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
             }
         });
-    }, observerOptions);
-    
-    // Observe cards and sections
-    const elementsToObserve = document.querySelectorAll('.card, .about-content, .section');
-    elementsToObserve.forEach(el => {
-        observer.observe(el);
-    });
-});
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-// Enhanced button interactions
-document.addEventListener('DOMContentLoaded', function() {
-    const buttons = document.querySelectorAll('.btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            // Add ripple effect
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
-    });
-});
+    els.forEach(el => observer.observe(el));
+})();
 
-// CSS for ripple effect (will be added dynamically)
-if (!document.querySelector('#ripple-styles')) {
-    const style = document.createElement('style');
-    style.id = 'ripple-styles';
-    style.textContent = `
-        .btn {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-            pointer-events: none;
-        }
-        
-        @keyframes ripple-animation {
-            to {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
-}
 
-// Performance optimization: Preload next slide image
-document.addEventListener('DOMContentLoaded', function() {
-    const slides = document.querySelectorAll('.slide img');
-    
-    // Preload the next image
-    function preloadNextImage(currentIndex) {
-        const nextIndex = (currentIndex + 1) % slides.length;
-        if (slides[nextIndex] && !slides[nextIndex].complete) {
-            const img = new Image();
-            img.src = slides[nextIndex].src;
+/* ───────────────────────────────────────────────────────────────
+   5. NUMBER COUNTER — investors stats
+─────────────────────────────────────────────────────────────── */
+(function initCounters() {
+    const counters = document.querySelectorAll('.stat-tile__number[data-count]');
+    if (!counters.length) return;
+
+    function animateCounter(el) {
+        const target   = parseInt(el.dataset.count, 10);
+        const duration = 1600;
+        const start    = performance.now();
+
+        function step(now) {
+            const elapsed  = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            // ease-out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(eased * target).toLocaleString();
+            if (progress < 1) requestAnimationFrame(step);
         }
+
+        requestAnimationFrame(step);
     }
-    
-    // Preload first few images
-    slides.forEach((slide, index) => {
-        if (index < 3) {
-            const img = new Image();
-            img.src = slide.src;
-        }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.4 });
+
+    counters.forEach(c => observer.observe(c));
+})();
+
+
+/* ───────────────────────────────────────────────────────────────
+   6. SMOOTH SCROLL — internal anchor links
+─────────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href === '#') return;
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
     });
 });
 
-// Accessibility improvements
-document.addEventListener('DOMContentLoaded', function() {
-    const slider = document.querySelector('.slider');
-    const slides = document.querySelectorAll('.slide');
-    
-    // Add ARIA labels
+
+/* ───────────────────────────────────────────────────────────────
+   7. BUTTON RIPPLE EFFECT
+─────────────────────────────────────────────────────────────── */
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn');
+    if (!btn) return;
+
+    const ripple = document.createElement('span');
+    const rect   = btn.getBoundingClientRect();
+    const size   = Math.max(rect.width, rect.height);
+    ripple.className     = 'ripple';
+    ripple.style.width   = ripple.style.height = size + 'px';
+    ripple.style.left    = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top     = (e.clientY - rect.top  - size / 2) + 'px';
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+});
+
+
+/* ───────────────────────────────────────────────────────────────
+   8. ACCESSIBILITY — ARIA for hero slider
+─────────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+    const slider = document.querySelector('.hero-slider');
     if (slider) {
         slider.setAttribute('role', 'region');
         slider.setAttribute('aria-label', 'Image carousel');
     }
-    
-    slides.forEach((slide, index) => {
-        slide.setAttribute('role', 'img');
-        slide.setAttribute('aria-label', `Slide ${index + 1} of ${slides.length}`);
-    });
-    
-    // Add keyboard focus management
-    const dots = document.querySelectorAll('.slider-dot');
-    dots.forEach((dot, index) => {
-        dot.setAttribute('role', 'button');
-        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
-        dot.setAttribute('tabindex', '0');
-        
-        dot.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                dot.click();
-            }
-        });
-    });
 });
