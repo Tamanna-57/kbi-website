@@ -12,7 +12,7 @@
     backdrop-filter: blur(20px);
   }
   .site-header.transparent {
-    background: linear-gradient(to bottom,rgba(15,23,42,.78),rgba(15,23,42,.2),transparent);
+    background: rgba(10, 15, 35, 0.25);
   }
   .site-header.scrolled {
     background: rgba(15,23,42,.98);
@@ -32,32 +32,28 @@
   .logo-wrap {
     display: inline-flex;
     align-items: center;
-    gap: .75rem;
+    gap: .65rem;
     text-decoration: none;
     color: #fff;
     flex-shrink: 0;
   }
-  .logo-circle {
+  .logo-img {
     width: 52px; height: 52px;
-    border-radius: 50%;
-    background: #b8860b;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 1.1rem;
-    color: #fff; letter-spacing: .05em;
+    object-fit: contain;
     flex-shrink: 0;
+    /* invert to white when over hero; reset when scrolled */
+    transition: filter .4s ease;
   }
+  nav.transparent .logo-img { filter: brightness(0) invert(1); }
+  nav.scrolled    .logo-img { filter: none; }
   .logo-text { display: flex; flex-direction: column; gap: .05rem; }
   .logo-name {
-    font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-    font-size: .78rem; color: #fff; line-height: 1.2;
-  }
-  .logo-sub {
-    font-size: .7rem; text-transform: uppercase; letter-spacing: .08em;
-    color: rgba(255,255,255,.7); line-height: 1.2;
+    font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    font-size: .76rem; color: #fff; line-height: 1.25;
   }
   .logo-tagline {
-    font-size: .65rem; letter-spacing: .18em; text-transform: uppercase;
-    color: #b8860b; margin-top: .15rem;
+    font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+    color: #b8860b; margin-top: .1rem;
   }
   /* Main nav */
   .main-nav { flex: 1; }
@@ -217,10 +213,9 @@
   }
   @media (max-width: 640px) {
     .header-inner { padding: .65rem 1rem; gap: 1rem; }
-    .logo-circle { width: 44px; height: 44px; font-size: .95rem; }
-    .logo-name { font-size: .7rem; }
-    .logo-sub { font-size: .62rem; }
-    .logo-tagline { font-size: .58rem; }
+    .logo-img { width: 40px; height: 40px; }
+    .logo-name { font-size: .68rem; }
+    .logo-tagline { font-size: .56rem; }
   }
 </style>
 
@@ -229,7 +224,7 @@
 
     <!-- Logo -->
     <a href="/" class="logo-wrap" aria-label="KBI Home">
-      <div class="logo-circle" aria-hidden="true">KBI</div>
+      <img src="{{ url_for('static', filename='pics/KBI_logo.png') }}" alt="KBI" class="logo-img">
       <div class="logo-text">
         <span class="logo-name">Khandelwal Busar<br>Industries</span>
         <span class="logo-tagline">Building the Future</span>
