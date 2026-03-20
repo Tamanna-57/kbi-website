@@ -444,6 +444,9 @@ section { position: relative; z-index: 1; }
   background: var(--color-bg);
   padding: 5rem 0 0;
   overflow: hidden;
+  isolation: isolate;       /* own stacking context — nothing leaks out */
+  position: relative;
+  z-index: 1;
 }
 
 .products-showcase-header {

@@ -246,6 +246,9 @@ document.addEventListener("DOMContentLoaded", () => {
         end: () => `+=${Math.abs(getScrollAmount())}`,
         scrub: 1,
         pin: true,
+        pinType: "transform",   /* transform instead of position:fixed —
+                                   prevents the pinned div from floating
+                                   over other sections in the layout     */
         anticipatePin: 1,
         invalidateOnRefresh: true,
       }
