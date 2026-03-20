@@ -1,207 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% include 'logo.html' %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - KBI</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='about_us.css') }}">
+  {% include 'logo.html' %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - KBI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='about_us.css') }}">
 </head>
 <body>
-    <header>{% include 'navigation.html' %}</header>
-        
-    
-    <!-- <div class="hero-img"><img src="{{ url_for('static', filename='pics/About_us.png') }}" alt="Image 1"></div> -->
-    <!-- Hero Section -->
-    <section class="hero" style="background-image: url('{{ url_for('static', filename='pics/real_training_room.png') }}');">
-        <div class="hero-content">
-            <h1>About KBI</h1>
-            <p>Innovating for tomorrow, delivering excellence today</p>
-            <a href="#story" class="btn">Discover Our Story</a>
-        </div>
-    </section>
+  <header>{% include 'navigation.html' %}</header>
 
-    <!-- Our Story Section -->
-    <section id="story" class="story-section">
-        <div class="container">
-            <h2>Our Story</h2>
-            <div class="story-content">
-                <div class="story-text">
-                    <p>KBI got established in <b>1981</b> in </b>Faridabad,Haryana</b>. It is a key manufacturer of  <b>Sheet metal & Fabrication components</b> for automobile industry. Another Unit of the Company manufactures <b>power and telecom cable inputs</b> in <b>Alwar,Rajasthan</b>.</p>
-                    <p>Today, we stand as a testament to dedication, growth, and the relentless pursuit of perfection. Every challenge we've faced has strengthened our resolve to deliver exceptional value to our clients and partners.</p>
-                </div>
-                <div class="story-image">
-                    <div class="image-placeholder"><img src="{{ url_for('static', filename='pics/Our Journey.png') }}" alt="journey"></div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- ═══════════════════════════════════════════════════════════
+       1. HERO
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="au-hero">
+    <div class="au-hero__bg" style="background-image:url('{{ url_for('static', filename='pics/real_front.png') }}')"></div>
+    <div class="au-hero__overlay"></div>
+    <div class="au-hero__content">
+      <p class="au-hero__eyebrow">Since 1981</p>
+      <h1 class="au-hero__title">Crafting Precision,<br>Building Trust</h1>
+      <p class="au-hero__sub">Sheet metal &amp; fabrication components trusted by India's leading OEMs</p>
+      <a href="#story" class="au-hero__btn">Discover Our Story</a>
+    </div>
+    <div class="au-hero__scroll-hint">
+      <span></span>
+    </div>
+  </section>
 
-    <!-- Mission & Values Section -->
-    <section class="mission-values">
-        <div class="container">
-            <h2>Our Mission & Values</h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon">🎯</div>
-                    <h3>Mission</h3>
-                    <p>To provide innovative solutions that empower businesses to achieve their full potential through cutting-edge technology and exceptional service.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon">💎</div>
-                    <h3>Quality</h3>
-                    <p>We maintain the highest standards in everything we do, ensuring our products and services exceed expectations consistently.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon">🚀</div>
-                    <h3>Innovation</h3>
-                    <p>We embrace change and continuously seek new ways to improve, staying ahead of industry trends and technological advances.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon">🤝</div>
-                    <h3>Partnership</h3>
-                    <p>We build lasting relationships with our clients, understanding their unique needs and providing tailored solutions.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- ═══════════════════════════════════════════════════════════
+       2. OUR STORY
+  ═══════════════════════════════════════════════════════════ -->
+  <section id="story" class="au-story">
+    <div class="au-story__inner">
 
-    <!-- Timeline Section -->
-    <section class="timeline-section">
-        <div class="container">
-            <h2>Our Journey</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>1981 - Established</h3>
-                        <p>As Kochar Agro Industries, got associated with MSIL</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>1995 - Major Milestone</h3>
-                        <p>Associated with VECV and ESCORTS</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>2005 - Takeover</h3>
-                        <p>Khandelwals bought the company</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>2007 - Growth</h3>
-                        <p>Got Associated with CNH</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>2008 - Expansion</h3>
-                        <p>Started manufacturing galvanized strips and steel tapes in a new unit at Alwar</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>2022 - Bold Expansion</h3>
-                        <p>Associated with Kobelco India Limited</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>2023 - Rising Growth</h3>
-                        <p>Associated with Mahindra Defence</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3>2024 - Bracing for the Future</h3>
-                        <p>Associated with Euler Motors</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+      <!-- Left: text -->
+      <div class="au-story__text reveal-au">
+        <p class="au-section-label">Our Story</p>
+        <h2 class="au-story__heading">Four Decades of<br>Engineering Excellence</h2>
+        <blockquote class="au-story__quote">
+          "From a small workshop in Faridabad to a trusted partner of India's largest OEMs — our journey is built on precision."
+        </blockquote>
+        <p class="au-story__body">
+          KBI was established in <strong>1981</strong> in <strong>Faridabad, Haryana</strong> as Kochar Agro Industries,
+          immediately associating with Maruti Suzuki India Limited. Over four decades we have grown into a key
+          manufacturer of <strong>Sheet Metal &amp; Fabrication components</strong> for the automobile industry.
+        </p>
+        <p class="au-story__body">
+          A second unit in <strong>Alwar, Rajasthan</strong> manufactures power and telecom cable inputs — galvanized
+          steel tape, strips, and wire — serving infrastructure and utilities sectors nationwide.
+        </p>
+        <a href="#journey" class="au-story__link">View Our Journey ↓</a>
+      </div>
 
-    <!-- Team Section -->
-    <section class="team-section">
-        <div class="container">
-            <h2>Meet Our Team</h2>
-            <div class="team-stats">
-                <div class="stat-card">
-                    <div class="stat-number">150+</div>
-                    <div class="stat-label">Team Members</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">200+</div>
-                    <div class="stat-label">Years Experience</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">3</div>
-                    <div class="stat-label">Verticals</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">30+</div>
-                    <div class="stat-label">Companies Served</div>
-                </div>
-            </div>
-            <div class="team-grid">
-                <div class="team-member">
-                    <div class="member-image"><img src="{{ url_for('static', filename='pics/Amit.jpg') }}" alt="Amit"></div>
-                    <h3>Amit Kapoor</h3>
-                    <p>Chief Executive Officer (Autocomponents)</p>
-                    <div class="member-bio">Mr. Amit Kapoor, is a Mechanical Engineering Graduate with MBA in Operations Management.
-                        He is a result oriented professional with over 26 years of work experience in Business
-                        Development, Green Field Projects, Plant Operations and has a diverse professional
-                        background and expertise in the fields of Construction / Material Handling Equipment’s, Cement
-                        and Mining Industry, Pre Engineered Buildings and Heavy Steel Fabrication for Railway
-                        Bridges, Flyovers, Metro Stations and Power Plant Structures. Having contributed significantly
-                        to companies like Action Construction Equipment Limited, FLSmidth Private Limited, Kirby
-                        Building Systems India Limited's Lloyds Group, he possesses a wealth of experience in the
-                        industry and is known for his strategic leadership. Mr. Kapoor has played an instrumental role in
-                        the success of these renowned companies. His career journey showcases a commitment to
-                        excellence, innovative problem-solving, and effective team management. With a focus on
-                        construction equipment, building systems, and broader industrial solutions, he has left a lasting
-                        impact on each organization he has been associated with. Mr. Amit Kapoor's career reflects a
-                        dedication to driving growth and achieving results in the dynamic sectors he has been a part of.</div>
-                </div>
-                <div class="team-member">
-                    <div class="member-image"><img src="{{ url_for('static', filename='pics/Vipin.jpg') }}" alt="Vipin"></div>
-               
-                    <h3>Vipin Dixit</h3>
-                    <p>Business Manager (Autocomponents)</p>
-                    <div class="member-bio">Mr. Vipin Dixit has a total experience of 15
-                        Years. He is Head of Department for Quality Function and emphasizes growth, creativity and
-                        analytical thinking. With his analytical skills and experience he brings on board Excellent Quality
-                        products by ensuring that all manufacturing processes and products meet quality standards.
-                        This includes developing and implementing quality control procedures, conducting audits and
-                        inspections, analyzing data to identify areas of improvement and collaborating with other
-                        departments to address quality related issues. During his work tenure he has worked with some
-                        renowned companies like JBM Industries, JS Industries, Sheetkraft India Private Limited. He
-                        has been awarded for the best Kaizen Improvement from M/S Escorts Kubota India Limited in
-                        the Year 2022. His exposure is into Sheet Metal and Fabrication components for Earth Moving
-                        Equipment’s, Tractor Components, Mining Industry and Wheel Suspension for Indian Railways.</div>
-                </div>
-                <div class="team-member">
-                    <div class="member-image"><img src="{{ url_for('static', filename='pics/Narender.jpeg') }}" alt="Narender"></div>
-                    <h3>Narender Garg</h3>
-                    <p>Business Manager (GST and GWS)</p>
-                    <div class="member-bio">Narender Parkash has done MBA marketing from Guru Jambeshwar University, Hissar(Haryana).
-                        He has been associate with KBI company for more than 23 years. Doing marketing of Galvanised Steel Tape/wire/Strip.</div>
-                </div>
-            </div>
+      <!-- Right: staggered portrait collage -->
+      <div class="au-story__collage reveal-au reveal-au--right">
+        <div class="au-collage__img au-collage__img--back">
+          <img src="{{ url_for('static', filename='pics/real_shop_floor.png') }}" alt="Shop floor">
         </div>
-    </section>
+        <div class="au-collage__img au-collage__img--mid">
+          <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="KBI Front">
+        </div>
+        <div class="au-collage__img au-collage__img--front">
+          <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Quality check">
+        </div>
+      </div>
 
-    {% include 'footer.html' %}
-    <script src="{{ url_for('static', filename='about_us.js') }}"></script>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       3. IDENTITY / VISION / VALUES
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="au-identity">
+    <div class="au-identity__inner">
+
+      <!-- Values card (dark navy) -->
+      <div class="au-values-card reveal-au">
+        <p class="au-section-label au-section-label--light">Our Identity</p>
+        <h2 class="au-values-card__title">What Defines Us</h2>
+        <div class="au-values-grid">
+          <div class="au-value">
+            <div class="au-value__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+            </div>
+            <div>
+              <h4>Quality First</h4>
+              <p>Zero-defect manufacturing backed by rigorous inspection at every stage.</p>
+            </div>
+          </div>
+          <div class="au-value">
+            <div class="au-value__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/></svg>
+            </div>
+            <div>
+              <h4>Precision Engineering</h4>
+              <p>Tight dimensional tolerances maintained across high-volume production runs.</p>
+            </div>
+          </div>
+          <div class="au-value">
+            <div class="au-value__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            </div>
+            <div>
+              <h4>Innovation</h4>
+              <p>Continuous investment in advanced CNC, press, and welding technology.</p>
+            </div>
+          </div>
+          <div class="au-value">
+            <div class="au-value__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <h4>Partnership</h4>
+              <p>Long-term OEM relationships built on reliability, trust, and transparency.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vision + Mission card (white) -->
+      <div class="au-vision-card reveal-au reveal-au--right">
+        <div class="au-vision-block">
+          <div class="au-vision-block__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </div>
+          <div>
+            <h3 class="au-vision-block__label">Our Vision</h3>
+            <p class="au-vision-block__text">To be India's preferred manufacturer of precision sheet-metal and fabrication components, trusted by leading OEMs across automotive, agriculture, and infrastructure sectors.</p>
+          </div>
+        </div>
+        <div class="au-vision-divider"></div>
+        <div class="au-vision-block">
+          <div class="au-vision-block__icon au-vision-block__icon--amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <div>
+            <h3 class="au-vision-block__label">Our Mission</h3>
+            <p class="au-vision-block__text">Deliver world-class components through advanced manufacturing processes, a skilled workforce, and an uncompromising commitment to quality and on-time delivery.</p>
+          </div>
+        </div>
+        <div class="au-stats-row">
+          <div class="au-stat">
+            <span class="au-stat__num">40+</span>
+            <span class="au-stat__lbl">Years Active</span>
+          </div>
+          <div class="au-stat">
+            <span class="au-stat__num">30+</span>
+            <span class="au-stat__lbl">OEM Clients</span>
+          </div>
+          <div class="au-stat">
+            <span class="au-stat__num">150+</span>
+            <span class="au-stat__lbl">Team Members</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       4. OUR JOURNEY — vertical timeline
+  ═══════════════════════════════════════════════════════════ -->
+  <section id="journey" class="au-journey">
+    <div class="au-journey__inner">
+      <p class="au-section-label au-section-label--amber">Our Journey</p>
+      <h2 class="au-journey__heading">Milestones That<br>Shaped KBI</h2>
+      <div class="au-timeline">
+
+        <div class="au-tl-item reveal-tl">
+          <div class="au-tl-dot"><span>1981</span></div>
+          <div class="au-tl-body">
+            <h4>Established</h4>
+            <p>As Kochar Agro Industries, got associated with Maruti Suzuki India Limited (MSIL).</p>
+          </div>
+        </div>
+
+        <div class="au-tl-item reveal-tl">
+          <div class="au-tl-dot"><span>1995</span></div>
+          <div class="au-tl-body">
+            <h4>Major Milestone</h4>
+            <p>Associated with VECV (VE Commercial Vehicles) and Escorts Kubota Limited.</p>
+          </div>
+        </div>
+
+        <div class="au-tl-item reveal-tl">
+          <div class="au-tl-dot"><span>2005</span></div>
+          <div class="au-tl-body">
+            <h4>Takeover</h4>
+            <p>The Khandelwal family acquired the company, ushering in a new era of growth.</p>
+          </div>
+        </div>
+
+        <div class="au-tl-item reveal-tl">
+          <div class="au-tl-dot"><span>2007</span></div>
+          <div class="au-tl-body">
+            <h4>Growth</h4>
+            <p>Associated with CNH Industrial — global leader in agricultural and construction equipment.</p>
+          </div>
+        </div>
+
+        <div class="au-tl-item reveal-tl">
+          <div class="au-tl-dot"><span>2008</span></div>
+          <div class="au-tl-body">
+            <h4>Expansion</h4>
+            <p>Started manufacturing galvanized strips and steel tapes in a new unit at Alwar, Rajasthan.</p>
+          </div>
+        </div>
+
+        <div class="au-tl-item reveal-tl">
+          <div class="au-tl-dot"><span>2022</span></div>
+          <div class="au-tl-body">
+            <h4>Bold Expansion</h4>
+            <p>Associated with Kobelco India Limited — leading excavator manufacturer.</p>
+          </div>
+        </div>
+
+        <div class="au-tl-item reveal-tl">
+          <div class="au-tl-dot"><span>2023</span></div>
+          <div class="au-tl-body">
+            <h4>Rising Growth</h4>
+            <p>Associated with Mahindra Defence Systems — diversifying into defence manufacturing.</p>
+          </div>
+        </div>
+
+        <div class="au-tl-item reveal-tl">
+          <div class="au-tl-dot"><span>2024</span></div>
+          <div class="au-tl-body">
+            <h4>Bracing for the Future</h4>
+            <p>Associated with Euler Motors — entering the electric vehicle components segment.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       5. MEET OUR TEAM
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="au-team">
+    <div class="au-team__inner">
+      <p class="au-section-label">Our People</p>
+      <h2 class="au-team__heading">Meet the Team</h2>
+      <p class="au-team__sub">Experienced leaders driving growth, quality, and innovation across every vertical.</p>
+
+      <div class="au-team-grid">
+
+        <div class="au-member reveal-au">
+          <div class="au-member__photo-wrap">
+            <img src="{{ url_for('static', filename='pics/Amit.jpg') }}" alt="Amit Kapoor" class="au-member__photo">
+          </div>
+          <div class="au-member__info">
+            <h3 class="au-member__name">Amit Kapoor</h3>
+            <p class="au-member__role">Chief Executive Officer — Autocomponents</p>
+            <p class="au-member__bio">
+              Mechanical Engineering graduate with an MBA in Operations Management and 26+ years of experience
+              spanning Business Development, Green Field Projects, and Plant Operations. Previously with Action
+              Construction Equipment, FLSmidth, and Kirby Building Systems, Amit brings strategic leadership
+              and deep industry expertise to KBI.
+            </p>
+          </div>
+        </div>
+
+        <div class="au-member reveal-au">
+          <div class="au-member__photo-wrap">
+            <img src="{{ url_for('static', filename='pics/Vipin.jpg') }}" alt="Vipin Dixit" class="au-member__photo">
+          </div>
+          <div class="au-member__info">
+            <h3 class="au-member__name">Vipin Dixit</h3>
+            <p class="au-member__role">Business Manager — Autocomponents</p>
+            <p class="au-member__bio">
+              15 years of experience heading Quality functions across sheet metal and fabrication. Worked with
+              JBM Industries, JS Industries, and Sheetkraft India. Awarded Best Kaizen Improvement by Escorts
+              Kubota in 2022. Expert in quality control procedures, audits, and collaborative improvement initiatives.
+            </p>
+          </div>
+        </div>
+
+        <div class="au-member reveal-au">
+          <div class="au-member__photo-wrap">
+            <img src="{{ url_for('static', filename='pics/Narender.jpeg') }}" alt="Narender Garg" class="au-member__photo">
+          </div>
+          <div class="au-member__info">
+            <h3 class="au-member__name">Narender Garg</h3>
+            <p class="au-member__role">Business Manager — GST &amp; GWS</p>
+            <p class="au-member__bio">
+              MBA in Marketing from Guru Jambheshwar University, Hisar. Associated with KBI for over 23 years,
+              leading marketing of Galvanised Steel Tape, Wire, and Strip for power and telecom cable applications.
+              A cornerstone of KBI's Alwar operations.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  {% include 'footer.html' %}
+  <script src="{{ url_for('static', filename='about_us.js') }}"></script>
 </body>
 </html>
