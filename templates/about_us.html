@@ -14,44 +14,63 @@
   <header>{% include 'navigation.html' %}</header>
 
   <!-- ═══════════════════════════════════════════════════
-       1. HERO  — full-viewport, text centred
+       1. HERO  — split: text left, image right
   ═══════════════════════════════════════════════════ -->
   <section class="au-hero">
-    <div class="au-hero__bg" style="background-image:url('{{ url_for('static', filename='pics/real_front.png') }}')"></div>
-    <div class="au-hero__overlay"></div>
-    <div class="au-hero__content">
-      <p class="au-hero__eyebrow">Since 1981</p>
-      <h1 class="au-hero__title">Crafting Precision.<br>Building Trust.</h1>
-      <p class="au-hero__sub">Sheet metal &amp; fabrication components trusted by India's leading OEMs</p>
+    <div class="au-hero__text">
+      <p class="au-hero__eyebrow">About Us</p>
+      <h1 class="au-hero__title">40+ Years of<br>Manufacturing<br>Excellence</h1>
+      <p class="au-hero__desc">From a small Faridabad workshop in 1981 to a trusted partner of India's largest OEMs — KBI manufactures precision sheet metal, fabrication components, and galvanized cable inputs that keep industries moving.</p>
+      <div class="au-hero__stats">
+        <div class="au-hero__stat">
+          <span class="au-hero__stat-num">1981</span>
+          <span class="au-hero__stat-lbl">Founded</span>
+        </div>
+        <div class="au-hero__stat-divider"></div>
+        <div class="au-hero__stat">
+          <span class="au-hero__stat-num">30+</span>
+          <span class="au-hero__stat-lbl">OEM Clients</span>
+        </div>
+        <div class="au-hero__stat-divider"></div>
+        <div class="au-hero__stat">
+          <span class="au-hero__stat-num">2</span>
+          <span class="au-hero__stat-lbl">Plants</span>
+        </div>
+      </div>
+      <a href="#story" class="au-hero__btn">Our Story</a>
+    </div>
+    <div class="au-hero__img-wrap reveal-au">
+      <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="KBI Facility">
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════
-       2. OUR STORY  — matches reference exactly
+       2. OUR STORY  — text left, wide rectangular images right
   ═══════════════════════════════════════════════════ -->
-  <section class="au-story">
+  <section id="story" class="au-story">
     <div class="au-story__inner">
 
-      <!-- Left: centred italic quote + CTA -->
       <div class="au-story__text reveal-au">
-        <h2 class="au-story__heading">Our Story</h2>
-        <div class="au-story__underline"></div>
-        <blockquote class="au-story__quote">
-          "From a small workshop in Faridabad in 1981 to a trusted partner of India's largest OEMs — KBI has spent four decades mastering sheet metal, fabrication, and cable-input manufacturing. We connect precision engineering to the ambitions of the automobile, agricultural, and infrastructure industries."
-        </blockquote>
-        <a href="#journey" class="au-story__btn">Discover Our Journey</a>
+        <p class="au-section-tag">Our Story</p>
+        <h2 class="au-story__heading">Built on<br>Precision &amp;<br>Partnership</h2>
+        <div class="au-story__divider"></div>
+        <p class="au-story__body">KBI was founded in <strong>1981</strong> in Faridabad, Haryana as Kochar Agro Industries — immediately partnering with Maruti Suzuki India Limited. Over four decades, we have grown into a reliable manufacturer of sheet metal and fabrication components for the automobile industry.</p>
+        <p class="au-story__body">Our second plant in <strong>Alwar, Rajasthan</strong> produces galvanized steel tape, wire, and strip for power and telecom cable applications — serving India's infrastructure backbone.</p>
+        <a href="#journey" class="au-story__link">See Our Journey →</a>
       </div>
 
-      <!-- Right: 3 staggered portrait images (pill shapes) -->
-      <div class="au-story__portraits reveal-au reveal-au--delay">
-        <div class="au-portrait au-portrait--1">
+      <!-- Wide rectangular images with curved edges -->
+      <div class="au-story__images reveal-au reveal-au--delay">
+        <div class="au-img-card au-img-card--tall">
           <img src="{{ url_for('static', filename='pics/real_shop_floor.png') }}" alt="Shop floor">
         </div>
-        <div class="au-portrait au-portrait--2">
-          <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="KBI building">
-        </div>
-        <div class="au-portrait au-portrait--3">
-          <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Quality check">
+        <div class="au-img-stack">
+          <div class="au-img-card au-img-card--wide">
+            <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="KBI building">
+          </div>
+          <div class="au-img-card au-img-card--wide">
+            <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Quality check">
+          </div>
         </div>
       </div>
 
@@ -59,9 +78,7 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════
-       3. IDENTITY / VISION / VALUES
-       Layout matches reference: centred header,
-       dark pill card with 4 icons, white Vision+Mission card
+       3. IDENTITY / VISION / VALUES  (keep current design — matches reference)
   ═══════════════════════════════════════════════════ -->
   <section class="au-identity">
     <div class="au-identity__inner">
@@ -69,7 +86,6 @@
       <p class="au-identity__label reveal-au">About Us</p>
       <h2 class="au-identity__heading reveal-au">Our Identity,<br>Vision and Values</h2>
 
-      <!-- Values pill card (dark navy/green) -->
       <div class="au-values-pill reveal-au">
         <div class="au-val-item">
           <div class="au-val-item__icon">
@@ -85,7 +101,7 @@
         </div>
         <div class="au-val-item">
           <div class="au-val-item__icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.07-6.07l-.7.7M6.64 17.36l-.7.7M17.36 17.36l.7.7M6.64 6.64l-.7-.7M12 7a5 5 0 100 10A5 5 0 0012 7z"/></svg>
           </div>
           <span>Precision</span>
         </div>
@@ -97,7 +113,6 @@
         </div>
       </div>
 
-      <!-- Vision + Mission white card -->
       <div class="au-vm-card reveal-au">
         <div class="au-vm-col">
           <div class="au-vm-col__header">
@@ -120,88 +135,147 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════
-       4. OUR JOURNEY — vertical timeline
+       4. OUR JOURNEY  — HORIZONTAL timeline
   ═══════════════════════════════════════════════════ -->
   <section id="journey" class="au-journey">
-    <div class="au-journey__inner">
-      <p class="au-journey__label">Our Journey</p>
-      <h2 class="au-journey__heading">Milestones That<br>Shaped KBI</h2>
+    <div class="au-journey__header">
+      <p class="au-section-tag au-section-tag--amber">Our Journey</p>
+      <h2 class="au-journey__heading">Milestones That Shaped KBI</h2>
+    </div>
 
-      <div class="au-timeline">
-        <div class="au-tl-item reveal-tl">
-          <div class="au-tl-year">1981</div>
-          <div class="au-tl-dot"></div>
-          <div class="au-tl-body">
-            <h4>Established</h4>
-            <p>As Kochar Agro Industries, associated with Maruti Suzuki India Limited (MSIL).</p>
+    <div class="au-journey__scroll-wrap">
+      <div class="au-htl">
+
+        <!-- ── Row: top content (odd items) ── -->
+        <div class="au-htl__tops">
+          <!-- 1981 -->
+          <div class="au-htl__top-cell au-htl__top-cell--filled">
+            <div class="au-htl-card">
+              <div class="au-htl-card__img">
+                <img src="{{ url_for('static', filename='pics/maruti_suzuki_img.png') }}" alt="Maruti Suzuki">
+              </div>
+              <p class="au-htl-card__title">Established</p>
+              <p class="au-htl-card__desc">Partnered with Maruti Suzuki India Limited</p>
+            </div>
+          </div>
+          <!-- 1995 empty -->
+          <div class="au-htl__top-cell"></div>
+          <!-- 2005 -->
+          <div class="au-htl__top-cell au-htl__top-cell--filled">
+            <div class="au-htl-card">
+              <div class="au-htl-card__img">
+                <img src="{{ url_for('static', filename='pics/real_front.png') }}" alt="KBI building">
+              </div>
+              <p class="au-htl-card__title">Family Takeover</p>
+              <p class="au-htl-card__desc">Khandelwal family acquired KBI</p>
+            </div>
+          </div>
+          <!-- 2007 empty -->
+          <div class="au-htl__top-cell"></div>
+          <!-- 2008 -->
+          <div class="au-htl__top-cell au-htl__top-cell--filled">
+            <div class="au-htl-card">
+              <div class="au-htl-card__img">
+                <img src="{{ url_for('static', filename='pics/Galvanized_Steel_Tape.png') }}" alt="Galvanized steel">
+              </div>
+              <p class="au-htl-card__title">Alwar Expansion</p>
+              <p class="au-htl-card__desc">New plant for galvanized steel tape &amp; wire</p>
+            </div>
+          </div>
+          <!-- 2022 empty -->
+          <div class="au-htl__top-cell"></div>
+          <!-- 2023 -->
+          <div class="au-htl__top-cell au-htl__top-cell--filled">
+            <div class="au-htl-card">
+              <div class="au-htl-card__img">
+                <img src="{{ url_for('static', filename='pics/Mahindra_Defence_img.jpg') }}" alt="Mahindra Defence">
+              </div>
+              <p class="au-htl-card__title">Defence Sector</p>
+              <p class="au-htl-card__desc">Partnered with Mahindra Defence Systems</p>
+            </div>
+          </div>
+          <!-- 2024 empty -->
+          <div class="au-htl__top-cell"></div>
+        </div>
+
+        <!-- ── Centre line + dots ── -->
+        <div class="au-htl__line-row">
+          <div class="au-htl__line"></div>
+
+          <div class="au-htl__dot-row">
+            <div class="au-htl__dot-wrap"><div class="au-htl__dot"></div><span class="au-htl__year">1981</span></div>
+            <div class="au-htl__dot-wrap"><div class="au-htl__dot"></div><span class="au-htl__year">1995</span></div>
+            <div class="au-htl__dot-wrap"><div class="au-htl__dot"></div><span class="au-htl__year">2005</span></div>
+            <div class="au-htl__dot-wrap"><div class="au-htl__dot"></div><span class="au-htl__year">2007</span></div>
+            <div class="au-htl__dot-wrap"><div class="au-htl__dot"></div><span class="au-htl__year">2008</span></div>
+            <div class="au-htl__dot-wrap"><div class="au-htl__dot"></div><span class="au-htl__year">2022</span></div>
+            <div class="au-htl__dot-wrap"><div class="au-htl__dot"></div><span class="au-htl__year">2023</span></div>
+            <div class="au-htl__dot-wrap"><div class="au-htl__dot"></div><span class="au-htl__year">2024</span></div>
           </div>
         </div>
-        <div class="au-tl-item reveal-tl">
-          <div class="au-tl-year">1995</div>
-          <div class="au-tl-dot"></div>
-          <div class="au-tl-body">
-            <h4>Major Milestone</h4>
-            <p>Associated with VECV (VE Commercial Vehicles) and Escorts Kubota Limited.</p>
+
+        <!-- ── Row: bottom content (even items) ── -->
+        <div class="au-htl__bots">
+          <!-- 1981 empty -->
+          <div class="au-htl__bot-cell"></div>
+          <!-- 1995 -->
+          <div class="au-htl__bot-cell au-htl__bot-cell--filled">
+            <div class="au-htl-card au-htl-card--bot">
+              <div class="au-htl-card__img">
+                <img src="{{ url_for('static', filename='pics/volvo_eicher.webp') }}" alt="VECV">
+              </div>
+              <p class="au-htl-card__title">Major Milestone</p>
+              <p class="au-htl-card__desc">VECV &amp; Escorts Kubota association</p>
+            </div>
+          </div>
+          <!-- 2005 empty -->
+          <div class="au-htl__bot-cell"></div>
+          <!-- 2007 -->
+          <div class="au-htl__bot-cell au-htl__bot-cell--filled">
+            <div class="au-htl-card au-htl-card--bot">
+              <div class="au-htl-card__img">
+                <img src="{{ url_for('static', filename='pics/New_Holland_img.png') }}" alt="CNH">
+              </div>
+              <p class="au-htl-card__title">CNH Industrial</p>
+              <p class="au-htl-card__desc">Global agri &amp; construction equipment leader</p>
+            </div>
+          </div>
+          <!-- 2008 empty -->
+          <div class="au-htl__bot-cell"></div>
+          <!-- 2022 -->
+          <div class="au-htl__bot-cell au-htl__bot-cell--filled">
+            <div class="au-htl-card au-htl-card--bot">
+              <div class="au-htl-card__img">
+                <img src="{{ url_for('static', filename='pics/kobelco_img.png') }}" alt="Kobelco">
+              </div>
+              <p class="au-htl-card__title">Bold Expansion</p>
+              <p class="au-htl-card__desc">Kobelco India — leading excavator maker</p>
+            </div>
+          </div>
+          <!-- 2023 empty -->
+          <div class="au-htl__bot-cell"></div>
+          <!-- 2024 -->
+          <div class="au-htl__bot-cell au-htl__bot-cell--filled">
+            <div class="au-htl-card au-htl-card--bot">
+              <div class="au-htl-card__img">
+                <img src="{{ url_for('static', filename='pics/eulermotors_img.jpg') }}" alt="Euler Motors">
+              </div>
+              <p class="au-htl-card__title">Future-Ready</p>
+              <p class="au-htl-card__desc">Euler Motors — entering EV components</p>
+            </div>
           </div>
         </div>
-        <div class="au-tl-item reveal-tl">
-          <div class="au-tl-year">2005</div>
-          <div class="au-tl-dot"></div>
-          <div class="au-tl-body">
-            <h4>Takeover</h4>
-            <p>The Khandelwal family acquired the company, ushering in a new era of growth.</p>
-          </div>
-        </div>
-        <div class="au-tl-item reveal-tl">
-          <div class="au-tl-year">2007</div>
-          <div class="au-tl-dot"></div>
-          <div class="au-tl-body">
-            <h4>Growth</h4>
-            <p>Associated with CNH Industrial — global leader in agricultural and construction equipment.</p>
-          </div>
-        </div>
-        <div class="au-tl-item reveal-tl">
-          <div class="au-tl-year">2008</div>
-          <div class="au-tl-dot"></div>
-          <div class="au-tl-body">
-            <h4>Expansion</h4>
-            <p>New unit in Alwar, Rajasthan manufacturing galvanized strips and steel tapes for power &amp; telecom.</p>
-          </div>
-        </div>
-        <div class="au-tl-item reveal-tl">
-          <div class="au-tl-year">2022</div>
-          <div class="au-tl-dot"></div>
-          <div class="au-tl-body">
-            <h4>Bold Expansion</h4>
-            <p>Associated with Kobelco India Limited — leading excavator manufacturer.</p>
-          </div>
-        </div>
-        <div class="au-tl-item reveal-tl">
-          <div class="au-tl-year">2023</div>
-          <div class="au-tl-dot"></div>
-          <div class="au-tl-body">
-            <h4>Rising Growth</h4>
-            <p>Associated with Mahindra Defence Systems — diversifying into defence manufacturing.</p>
-          </div>
-        </div>
-        <div class="au-tl-item reveal-tl">
-          <div class="au-tl-year">2024</div>
-          <div class="au-tl-dot"></div>
-          <div class="au-tl-body">
-            <h4>Future-Ready</h4>
-            <p>Associated with Euler Motors — entering the electric vehicle components segment.</p>
-          </div>
-        </div>
+
       </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════
-       5. MEET OUR TEAM — horizontal row (matches reference)
+       5. MEET OUR TEAM  — horizontal 3-column
   ═══════════════════════════════════════════════════ -->
   <section class="au-team">
     <div class="au-team__inner">
-      <p class="au-team__label reveal-au">Meet Our Team</p>
+      <p class="au-section-tag reveal-au">Meet Our Team</p>
       <h2 class="au-team__heading reveal-au">Our Team</h2>
 
       <div class="au-team-grid">
@@ -211,8 +285,8 @@
             <img src="{{ url_for('static', filename='pics/Amit.jpg') }}" alt="Amit Kapoor">
           </div>
           <h3 class="au-member__name">Amit Kapoor</h3>
-          <p class="au-member__role">Chief Executive Officer<br>Autocomponents</p>
-          <p class="au-member__bio">Mechanical Engineering graduate with MBA in Operations Management and 26+ years in Business Development, Green Field Projects, and Plant Operations.</p>
+          <p class="au-member__role">Chief Executive Officer — Autocomponents</p>
+          <p class="au-member__bio">26+ years in Business Development, Green Field Projects, and Plant Operations. Previously with Action Construction Equipment, FLSmidth, and Kirby Building Systems.</p>
         </div>
 
         <div class="au-member reveal-au reveal-au--d1">
@@ -220,8 +294,8 @@
             <img src="{{ url_for('static', filename='pics/Vipin.jpg') }}" alt="Vipin Dixit">
           </div>
           <h3 class="au-member__name">Vipin Dixit</h3>
-          <p class="au-member__role">Business Manager<br>Autocomponents</p>
-          <p class="au-member__bio">15 years heading Quality functions across sheet metal and fabrication. Awarded Best Kaizen Improvement by Escorts Kubota in 2022.</p>
+          <p class="au-member__role">Business Manager — Autocomponents</p>
+          <p class="au-member__bio">15 years heading Quality across sheet metal and fabrication. Awarded Best Kaizen Improvement by Escorts Kubota in 2022.</p>
         </div>
 
         <div class="au-member reveal-au reveal-au--d2">
@@ -229,8 +303,8 @@
             <img src="{{ url_for('static', filename='pics/Narender.jpeg') }}" alt="Narender Garg">
           </div>
           <h3 class="au-member__name">Narender Garg</h3>
-          <p class="au-member__role">Business Manager<br>GST &amp; GWS</p>
-          <p class="au-member__bio">Associated with KBI for over 23 years, leading marketing of Galvanised Steel Tape, Wire &amp; Strip for power and telecom cable applications.</p>
+          <p class="au-member__role">Business Manager — GST &amp; GWS</p>
+          <p class="au-member__bio">23+ years with KBI, leading Galvanised Steel Tape, Wire &amp; Strip marketing for power and telecom cable applications.</p>
         </div>
 
       </div>
