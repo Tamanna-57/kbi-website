@@ -205,7 +205,73 @@ document.addEventListener("DOMContentLoaded", () => {
     els.forEach(el => io.observe(el));
   })();
 
-  /* ── 6. BUTTON RIPPLE ───────────────────────────────── */
+  /* ── 6. PRODUCTS HORIZONTAL SCROLL (GSAP + Lenis) ───── */
+  (function () {
+    const trackWrap = document.getElementById("productsTrackWrap");
+    const track     = document.getElementById("productsTrack");
+    if (!trackWrap || !track) return;
+
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+    if (isMobile) {
+      // On mobile just allow native horizontal scroll — no pinning
+      trackWrap.classList.add("no-gsap");
+      return;
+    }
+
+    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
+      trackWrap.classList.add("no-gsap");
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Lenis smooth scroll
+    if (typeof Lenis !== "undefined") {
+      const lenis = new Lenis({ lerp: 0.08 });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    // Horizontal scroll: pin trackWrap while track moves left
+    const getScrollAmount = () => -(track.scrollWidth - trackWrap.clientWidth);
+
+    gsap.to(track, {
+      x: getScrollAmount,
+      ease: "none",
+      scrollTrigger: {
+        trigger: trackWrap,
+        start: "top top",
+        end: () => `+=${Math.abs(getScrollAmount())}`,
+        scrub: 1.2,
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+      }
+    });
+
+    // Card entrance: fade + rise
+    const cards = track.querySelectorAll(".psc-card");
+    gsap.set(cards, { opacity: 0, y: 52 });
+
+    cards.forEach((card, i) => {
+      gsap.to(card, {
+        opacity: 1,
+        y: 0,
+        duration: 0.72,
+        ease: "power2.out",
+        delay: i * 0.09,
+        scrollTrigger: {
+          trigger: trackWrap,
+          start: "top 78%",
+          toggleActions: "play none none none",
+        }
+      });
+    });
+  })();
+
+  /* ── 8. BUTTON RIPPLE ───────────────────────────────── */
   document.addEventListener("click", e => {
     const btn = e.target.closest(".cta-btn, .hero-btn, .kbi-intro-link, .tech-read-more");
     if (!btn) return;

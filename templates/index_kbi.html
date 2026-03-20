@@ -172,6 +172,96 @@
     </section>
 
     <!-- ══════════════════════════════════════
+         OUR PRODUCTS — Horizontal Scroll Showcase
+         • pinned track, scrolls horizontally via GSAP ScrollTrigger
+         • Lenis smooth scroll integration
+         • hover scale + reveal, entrance fade-up
+    ══════════════════════════════════════ -->
+    <section class="products-showcase" id="our-products">
+        <div class="products-showcase-header">
+            <span class="products-showcase-kicker">⚡ OUR PRODUCTS</span>
+            <h2 class="products-showcase-title">Engineered for<br>Excellence</h2>
+            <p class="products-showcase-sub">Precision components trusted by India's leading OEMs across automotive, telecom and power sectors.</p>
+        </div>
+
+        <div class="products-track-wrap" id="productsTrackWrap">
+            <div class="products-track" id="productsTrack">
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/products_axle.jpg') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Axles · Tractor</span>
+                        <h3 class="psc-name">World Wide Axle</h3>
+                        <p class="psc-desc">Dual-slider axles for heavy-duty tractor and agricultural applications.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/chassis.webp') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Cabin Assembly · Tractor</span>
+                        <h3 class="psc-name">Chassis</h3>
+                        <p class="psc-desc">Custom chassis and cabin assembly solutions for commercial vehicles and construction equipment.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/products_pedal.jpg') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Pedals · Cars · Tractor</span>
+                        <h3 class="psc-name">Pedals</h3>
+                        <p class="psc-desc">Precision-fabricated pedal assemblies for automotive and tractor OEM clients.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/Galvanized_Steel_Tape.png') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Cable Accessories</span>
+                        <h3 class="psc-name">Galvanised Steel Tapes</h3>
+                        <p class="psc-desc">Armoring tapes providing protective covering for underground power and telecom cables.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/Bracket assembly steering mounting.webp') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Cabin Assembly</span>
+                        <h3 class="psc-name">Steering Bracket Assembly</h3>
+                        <p class="psc-desc">High-strength steering mounting brackets engineered for demanding OEM cabin assembly requirements.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/Bracket Seat Belt.webp') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Cars · Cabin Assembly</span>
+                        <h3 class="psc-name">Bracket Seat Belt</h3>
+                        <p class="psc-desc">Safety-critical seat belt mounting brackets meeting global automotive standards.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="products-showcase-footer">
+            <a href="/products" class="cta-btn primary">View All 12 Products →</a>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
          ANNOUNCEMENTS + STATS
     ══════════════════════════════════════ -->
     <section class="info-section" id="news">
@@ -223,6 +313,9 @@
     </section>
 
     {% include 'footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>

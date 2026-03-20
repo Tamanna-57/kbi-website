@@ -283,18 +283,18 @@ section { position: relative; z-index: 1; }
   font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 500; line-height: 1; letter-spacing: .01em;
   margin: 0 0 1.5rem; color: #fff;
-  opacity: 0; transform: translateX(-28px);
-  transition: opacity .5s var(--ease), transform .5s var(--ease);
+  opacity: 0;
+  transition: opacity .45s var(--ease);
 }
-.tech-content-panel.content-ready .tech-title { opacity: 1; transform: translateX(0); }
+.tech-content-panel.content-ready .tech-title { opacity: 1; }
 
 .tech-desc {
   font-size: 1rem; line-height: 1.78; color: rgba(200,207,224,.88);
   margin: 0 0 2rem;
-  opacity: 0; transform: translateX(-20px);
-  transition: opacity .5s var(--ease) .08s, transform .5s var(--ease) .08s;
+  opacity: 0;
+  transition: opacity .45s var(--ease) .07s;
 }
-.tech-content-panel.content-ready .tech-desc { opacity: 1; transform: translateX(0); }
+.tech-content-panel.content-ready .tech-desc { opacity: 1; }
 
 .tech-read-more {
   display: inline-flex; align-items: center; gap: .45rem;
@@ -304,15 +304,14 @@ section { position: relative; z-index: 1; }
   font-size: .8rem; text-transform: lowercase;
   letter-spacing: .04em; color: #fff;
   background: transparent; backdrop-filter: blur(6px);
-  opacity: 0; transform: translateX(-16px);
+  opacity: 0;
   transition:
-    opacity .5s var(--ease) .15s,
-    transform .5s var(--ease) .15s,
+    opacity .45s var(--ease) .13s,
     background var(--dur-med) var(--ease),
     color var(--dur-med) var(--ease),
     border-color var(--dur-med) var(--ease);
 }
-.tech-content-panel.content-ready .tech-read-more { opacity: 1; transform: translateX(0); }
+.tech-content-panel.content-ready .tech-read-more { opacity: 1; }
 .tech-read-more:hover {
   background: #f9fafb; color: #0a0f23; border-color: transparent;
 }
@@ -358,37 +357,37 @@ section { position: relative; z-index: 1; }
 
 .kbi-intro-card {
   max-width: 1200px; margin: 0 auto;
-  background: #f9fafb;
+  background: #e4edf8;
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0,1fr) minmax(0,1.1fr);
-  min-height: 460px;
+  min-height: 580px;
   box-shadow: 0 24px 60px rgba(0,0,0,.35);
 }
 
 /* Left text */
 .kbi-intro-left {
-  padding: 3.5rem 3rem;
+  padding: 4rem 3.5rem;
   display: flex; flex-direction: column; justify-content: center;
-  color: #111827;
+  color: #0d1a3a;
 }
 
 .kbi-intro-logo {
-  width: 80px; height: auto;
+  width: 88px; height: auto;
   object-fit: contain;
-  margin-bottom: 1.4rem;
+  margin-bottom: 1.6rem;
 }
 
 .kbi-intro-title {
   font-family: "EB Garamond", Georgia, serif;
-  font-size: clamp(1.7rem, 3vw, 2.4rem);
-  font-weight: 600; color: #111827;
-  margin: 0 0 1rem; line-height: 1.2;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 600; color: #0d1a3a;
+  margin: 0 0 1.1rem; line-height: 1.2;
 }
 
 .kbi-intro-desc {
-  font-size: .97rem; line-height: 1.8; color: #374151;
+  font-size: .97rem; line-height: 1.85; color: #2c3e6b;
   margin: 0 0 1.8rem;
 }
 
@@ -396,8 +395,8 @@ section { position: relative; z-index: 1; }
   display: inline-flex; align-items: center; gap: .45rem;
   padding: .6rem 1.5rem;
   border-radius: var(--radius-pill);
-  border: 1px solid #374151;
-  font-size: .82rem; color: #111827;
+  border: 1px solid #2c3e6b;
+  font-size: .82rem; color: #0d1a3a;
   background: transparent; align-self: flex-start;
   transition:
     background var(--dur-med) var(--ease),
@@ -406,7 +405,7 @@ section { position: relative; z-index: 1; }
     transform var(--dur-med) var(--ease);
 }
 .kbi-intro-link:hover {
-  background: #111827; color: #fff;
+  background: #0d1a3a; color: #fff;
   transform: translateY(-1px);
 }
 .kbi-intro-arrow { display:inline-block; transition: transform var(--dur-fast) var(--ease); }
@@ -437,6 +436,172 @@ section { position: relative; z-index: 1; }
   opacity: 1; transform: translateY(0);
   transition-delay: .12s;
 }
+
+/* ══════════════════════════════════════════════════════
+   OUR PRODUCTS — Horizontal Scroll Showcase
+══════════════════════════════════════════════════════ */
+.products-showcase {
+  background: var(--color-bg);
+  padding: 5rem 0 0;
+  overflow: hidden;
+}
+
+.products-showcase-header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 3rem;
+}
+
+.products-showcase-kicker {
+  display: block;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+  color: var(--color-accent);
+  margin-bottom: .8rem;
+}
+
+.products-showcase-title {
+  font-family: "EB Garamond", Georgia, serif;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 500;
+  color: var(--color-text-main);
+  margin: 0 0 .8rem;
+  line-height: 1.1;
+}
+
+.products-showcase-sub {
+  max-width: 42rem;
+  font-size: .97rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Track wrapper — GSAP pins this */
+.products-track-wrap {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.products-track {
+  display: flex;
+  gap: 1.8rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: max(2rem, calc((100vw - 1200px) / 2));
+  padding-right: max(2rem, calc((100vw - 1200px) / 2));
+  will-change: transform;
+}
+
+/* Product Cards */
+.psc-card {
+  flex-shrink: 0;
+  width: 340px;
+  height: 465px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 20px 50px rgba(0,0,0,.45);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.psc-card:hover {
+  transform: scale(1.04) translateY(-8px);
+  box-shadow: 0 36px 72px rgba(0,0,0,.65);
+}
+
+.psc-img {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform .65s var(--ease);
+}
+.psc-card:hover .psc-img { transform: scale(1.08); }
+
+.psc-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(8,13,30,.95) 0%,
+    rgba(8,13,30,.50) 50%,
+    rgba(8,13,30,.08) 100%
+  );
+}
+
+.psc-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 1.6rem 1.8rem 2rem;
+  color: #fff;
+}
+
+.psc-cat {
+  display: block;
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--color-accent);
+  margin-bottom: .45rem;
+}
+
+.psc-name {
+  font-family: "EB Garamond", Georgia, serif;
+  font-size: 1.55rem;
+  font-weight: 500;
+  margin: 0 0 .5rem;
+  line-height: 1.2;
+}
+
+.psc-desc {
+  font-size: .85rem;
+  line-height: 1.6;
+  color: rgba(200,207,224,.8);
+  margin: 0 0 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.psc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: rgba(255,255,255,.8);
+  border-bottom: 1px solid rgba(184,134,11,.55);
+  padding-bottom: 2px;
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.psc-link:hover { color: var(--color-accent); border-color: var(--color-accent); }
+
+.psc-arrow {
+  display: inline-block;
+  transition: transform var(--dur-fast) var(--ease);
+}
+.psc-link:hover .psc-arrow { transform: translateX(4px); }
+
+.products-showcase-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem 4.5rem;
+  text-align: center;
+}
+
+/* Fallback scrollable row (no GSAP / mobile) */
+.products-track-wrap.no-gsap {
+  height: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.products-track-wrap.no-gsap::-webkit-scrollbar { display: none; }
 
 /* ══════════════════════════════════════════════════════
    INFO SECTION (announcements + stats)
@@ -611,11 +776,16 @@ section { position: relative; z-index: 1; }
   .tech-inner     { grid-template-columns: 1fr; gap: 2rem; }
   .tech-nav-list  { display: grid; grid-template-columns: repeat(2,1fr); gap: .4rem; }
   .tech-nav-divider { display: none; }
-  .kbi-intro-card { grid-template-columns: 1fr; }
-  .kbi-intro-right { min-height: 260px; }
+  .kbi-intro-card { grid-template-columns: 1fr; min-height: auto; }
+  .kbi-intro-right { min-height: 280px; }
   .info-inner     { grid-template-columns: 1fr; gap: 2.5rem; }
   .footer-links   { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .hero-scroll-hint { display: none; }
+  /* Products: disable pin, allow horizontal scroll */
+  .products-track-wrap { height: auto; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .products-track-wrap::-webkit-scrollbar { display: none; }
+  .products-track { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .psc-card { width: 290px; height: 400px; }
 }
 
 @media (max-width: 560px) {
@@ -623,5 +793,6 @@ section { position: relative; z-index: 1; }
   .hero-btn   { justify-content: center; }
   .tech-nav-list { grid-template-columns: 1fr; }
   .footer-links { grid-template-columns: 1fr; }
-  .kbi-intro-left { padding: 2rem 1.5rem; }
+  .kbi-intro-left { padding: 2.5rem 2rem; }
+  .psc-card { width: 270px; height: 375px; }
 }
