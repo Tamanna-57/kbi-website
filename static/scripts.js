@@ -1,6 +1,12 @@
 /* ══════════════════════════════════════════════════════
    KBI — Main Scripts  v3
 ══════════════════════════════════════════════════════ */
+
+/* Always start at top on load/refresh — prevents browser restoring
+   mid-page scroll position (which breaks GSAP pinned sections)      */
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+window.scrollTo(0, 0);
+
 document.addEventListener("DOMContentLoaded", () => {
 
   /* ── 1. HERO CROSSFADE SLIDER ───────────────────────── */
@@ -224,6 +230,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     gsap.registerPlugin(ScrollTrigger);
+
+    // Prevent scroll position accumulation across refreshes
+    ScrollTrigger.config({ limitCallbacks: true, ignoreMobileResize: true });
 
     // Horizontal scroll: pin trackWrap while track moves left
     const getScrollAmount = () => -(track.scrollWidth - trackWrap.clientWidth);
