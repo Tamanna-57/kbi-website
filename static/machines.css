@@ -253,9 +253,9 @@
 .machine-card:hover .machine-category { color: rgba(255,255,255,.6); }
 
 .machine-info h3 {
-  font-family: 'EB Garamond', Georgia, serif;
-  font-size: 1.35rem;
-  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
   color: var(--m-navy);
   margin: 0 0 .6rem;
   line-height: 1.2;
