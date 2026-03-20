@@ -2,109 +2,144 @@
 <html lang="en">
 <head>
     {% include 'logo.html' %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_kbi.css') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KBI — Khandelwal Busar Industries</title>
+
+    <!-- Fonts: Inter + EB Garamond + Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_kbi.css') }}">
 </head>
 <body>
+
     {% include 'navigation.html' %}
 
-    <!-- ═══════════════════════════════════════════════════
-         HERO — Full-viewport crossfade carousel
-    ═══════════════════════════════════════════════════ -->
+    <!-- ══════════════════════════════════════
+         HERO — full-viewport dark carousel
+    ══════════════════════════════════════ -->
     <section class="hero" id="hero" aria-label="Hero section">
 
-        <!-- Crossfade slides -->
-        <div class="hero-slider" role="region" aria-label="Image carousel">
-            <div class="hero-slide active" aria-label="Slide 1 of 4">
-                <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="KBI Manufacturing Facility">
-            </div>
-            <div class="hero-slide" aria-label="Slide 2 of 4">
-                <img src="{{ url_for('static', filename='pics/pressline.webp') }}" alt="KBI Press Line">
-            </div>
-            <div class="hero-slide" aria-label="Slide 3 of 4">
-                <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Quality Assurance">
-            </div>
-            <div class="hero-slide" aria-label="Slide 4 of 4">
-                <img src="{{ url_for('static', filename='pics/real_leadership.png') }}" alt="KBI Leadership">
-            </div>
+        <div class="hero-slides" role="region" aria-label="Image carousel">
+            <div class="hero-slide active"
+                 style="background-image:url('{{ url_for('static', filename='pics/real_front_2.png') }}')"
+                 aria-label="Slide 1"></div>
+            <div class="hero-slide"
+                 style="background-image:url('{{ url_for('static', filename='pics/pressline.webp') }}')"
+                 aria-label="Slide 2"></div>
+            <div class="hero-slide"
+                 style="background-image:url('{{ url_for('static', filename='pics/real_shop_floor.png') }}')"
+                 aria-label="Slide 3"></div>
         </div>
 
-        <!-- Gradient overlay -->
         <div class="hero-overlay" aria-hidden="true"></div>
 
-        <!-- Static content — stays while backgrounds change -->
         <div class="hero-content">
-            <p class="hero-eyebrow">Established 1981</p>
-            <h1 class="hero-headline">Quality<br>is Life.</h1>
-            <p class="hero-subtext">Precision sheet metal &amp; fabrication components<br>for India's leading OEMs.</p>
-            <div class="hero-ctas">
-                <a href="/about_us" class="hero-btn">
-                    About Us <span class="hero-btn__arrow" aria-hidden="true">→</span>
-                </a>
-                <a href="/products" class="hero-btn hero-btn--outline">
-                    Our Products <span class="hero-btn__arrow" aria-hidden="true">→</span>
-                </a>
+            <h1 class="hero-title">Building the Future<br>of Manufacturing</h1>
+            <div class="hero-line" aria-hidden="true"></div>
+            <p class="hero-subtitle">
+                Since 1981, KBI has powered India's automobiles, power and telecom
+                infrastructure with precision sheet metal, fabrication and cable input solutions.
+            </p>
+            <div class="hero-btns">
+                <a href="/about_us" class="hero-btn">About Us <span aria-hidden="true">→</span></a>
+                <a href="#businesses" class="hero-btn">Our Businesses <span aria-hidden="true">→</span></a>
             </div>
         </div>
 
-        <!-- Scroll hint -->
-        <div class="hero-scroll-hint" aria-hidden="true">
-            <span class="hero-scroll-hint__line"></span>
-            <span class="hero-scroll-hint__text">Scroll</span>
+        <!-- Slide dots + scroll hint -->
+        <div class="hero-slider-controls" role="tablist" aria-label="Slide navigation">
+            <button class="slide-dot active" role="tab" aria-label="Slide 1" aria-selected="true"  data-slide="0"></button>
+            <button class="slide-dot"        role="tab" aria-label="Slide 2" aria-selected="false" data-slide="1"></button>
+            <button class="slide-dot"        role="tab" aria-label="Slide 3" aria-selected="false" data-slide="2"></button>
         </div>
 
-        <!-- Slide dots -->
-        <div class="hero-dots" role="tablist" aria-label="Slide navigation">
-            <button class="hero-dot active" role="tab" aria-label="Slide 1" aria-selected="true" data-slide="0"></button>
-            <button class="hero-dot" role="tab" aria-label="Slide 2" aria-selected="false" data-slide="1"></button>
-            <button class="hero-dot" role="tab" aria-label="Slide 3" aria-selected="false" data-slide="2"></button>
-            <button class="hero-dot" role="tab" aria-label="Slide 4" aria-selected="false" data-slide="3"></button>
+        <div class="hero-scroll-hint" aria-hidden="true">
+            <span>Scroll</span>
+            <div class="scroll-mouse">
+                <span class="scroll-wheel"></span>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════
+         WE CARE BANNER (light, no photo)
+    ══════════════════════════════════════ -->
+    <section class="we-care-banner" id="about">
+        <div class="we-care-inner">
+
+            <div class="we-care-copy">
+                <span class="we-care-kicker">We Care for Quality, People &amp; Planet</span>
+                <h2>KBI is committed to responsible,<br>future-ready manufacturing.</h2>
+                <p>From Faridabad to Alwar, we invest in safer workplaces, reliable supply chains
+                   and continuous improvement so that every component we ship strengthens the
+                   trust of OEMs and end-customers across India.</p>
+            </div>
+
+            <div class="we-care-pills">
+                <a href="/certifications" class="we-care-pill active">
+                    <span class="pill-label">Sustainability</span>
+                    <span class="pill-desc">Reducing waste &amp; rework on every line.</span>
+                </a>
+                <a href="/processes" class="we-care-pill">
+                    <span class="pill-label">Innovation</span>
+                    <span class="pill-desc">Investing in modern presses &amp; CNCs.</span>
+                </a>
+                <a href="/about_us" class="we-care-pill">
+                    <span class="pill-label">Our Impact</span>
+                    <span class="pill-desc">Enabling India's mobility &amp; connectivity.</span>
+                </a>
+            </div>
+
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════
-         OUR BUSINESSES — hover-driven split panel
-    ═══════════════════════════════════════════════════ -->
-    <section class="businesses-section reveal-section" id="businesses">
-        <div class="businesses-inner">
+    <!-- ══════════════════════════════════════
+         OUR BUSINESSES — hover split panel
+    ══════════════════════════════════════ -->
+    <section class="segments-section reveal-section" id="businesses">
+        <div class="seg-label-row">
+            <span class="section-label">⚡ Our Segments</span>
+        </div>
+        <h2 class="section-title">Precision Across Industries</h2>
 
-            <!-- Left: visual canvas -->
+        <div class="businesses-inner">
+            <!-- Left canvas -->
             <div class="businesses-canvas" id="businessesCanvas">
                 <div class="businesses-canvas__img-wrap">
                     <img src="{{ url_for('static', filename='pics/real_products.jpeg') }}"
                          alt="Automotive Components"
                          id="businessesImg"
-                         class="businesses-canvas__img">
+                         class="businesses-canvas__img is-visible">
                 </div>
                 <div class="businesses-canvas__overlay" aria-hidden="true"></div>
                 <div class="businesses-canvas__text">
-                    <h2 class="businesses-canvas__title" id="businessesTitle">Automotive Components</h2>
-                    <p class="businesses-canvas__desc" id="businessesDesc">Precision sheet metal stampings, fabrications, and sub-assemblies for India's leading automobile manufacturers — Maruti Suzuki, Mahindra, Eicher, and more.</p>
-                    <a href="/products" class="businesses-canvas__link" id="businessesLink">
-                        Explore Products <span aria-hidden="true">→</span>
-                    </a>
+                    <h3 class="businesses-canvas__title" id="businessesTitle">Automotive Components</h3>
+                    <p class="businesses-canvas__desc" id="businessesDesc">Precision sheet metal stampings, fabrications and sub-assemblies for India's leading OEMs — Maruti Suzuki, Mahindra, Eicher and more.</p>
+                    <a href="/products" class="businesses-canvas__link" id="businessesLink">Explore Products <span aria-hidden="true">→</span></a>
                 </div>
             </div>
 
-            <!-- Right: vertical nav list -->
+            <!-- Right nav -->
             <div class="businesses-nav">
                 <p class="businesses-nav__heading">Our Capabilities</p>
                 <ul class="businesses-nav__list" id="businessesList">
-                    <li class="businesses-nav__item active" data-segment="0" tabindex="0" role="button" aria-label="View Automotive">
+                    <li class="businesses-nav__item active" data-segment="0" tabindex="0" role="button">
                         <span class="businesses-nav__label">Automotive</span>
                         <span class="businesses-nav__arrow" aria-hidden="true">→</span>
                     </li>
-                    <li class="businesses-nav__item" data-segment="1" tabindex="0" role="button" aria-label="View Power &amp; Telecom">
+                    <li class="businesses-nav__item" data-segment="1" tabindex="0" role="button">
                         <span class="businesses-nav__label">Power &amp; Telecom</span>
                         <span class="businesses-nav__arrow" aria-hidden="true">→</span>
                     </li>
-                    <li class="businesses-nav__item" data-segment="2" tabindex="0" role="button" aria-label="View Manufacturing">
+                    <li class="businesses-nav__item" data-segment="2" tabindex="0" role="button">
                         <span class="businesses-nav__label">Advanced Manufacturing</span>
                         <span class="businesses-nav__arrow" aria-hidden="true">→</span>
                     </li>
-                    <li class="businesses-nav__item" data-segment="3" tabindex="0" role="button" aria-label="View Quality">
+                    <li class="businesses-nav__item" data-segment="3" tabindex="0" role="button">
                         <span class="businesses-nav__label">Quality Assurance</span>
                         <span class="businesses-nav__arrow" aria-hidden="true">→</span>
                     </li>
@@ -113,201 +148,124 @@
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════
-         SUSTAINABILITY TABS
-    ═══════════════════════════════════════════════════ -->
-    <section class="sustain-section reveal-section" id="sustainability">
-        <div class="container">
-            <div class="sustain-tabs-wrap">
-                <div class="sustain-tabs" role="tablist" aria-label="KBI pillars">
-                    <button class="sustain-tab active" role="tab" aria-selected="true"
-                            aria-controls="panel-0" id="tab-0" data-tab="0">Sustainability</button>
-                    <button class="sustain-tab" role="tab" aria-selected="false"
-                            aria-controls="panel-1" id="tab-1" data-tab="1">Innovation</button>
-                    <button class="sustain-tab" role="tab" aria-selected="false"
-                            aria-controls="panel-2" id="tab-2" data-tab="2">Our Impact</button>
-                    <div class="sustain-tab-indicator" aria-hidden="true"></div>
+    <!-- ══════════════════════════════════════
+         ANNOUNCEMENTS + STATS
+    ══════════════════════════════════════ -->
+    <section class="info-section reveal-section" id="news">
+        <div class="info-inner">
+
+            <!-- Announcements col -->
+            <div>
+                <p class="col-heading">Latest Updates</p>
+                <ul class="announcement-list">
+                    <li class="announcement-item">
+                        <span class="ann-tag">Certification</span>
+                        <span class="ann-title">KBI Renews ISO 9001:2015 Quality Management Certification</span>
+                        <div class="ann-meta">
+                            <span>March 2025</span>
+                            <a href="/certifications">Read →</a>
+                        </div>
+                    </li>
+                    <li class="announcement-item">
+                        <span class="ann-tag">Expansion</span>
+                        <span class="ann-title">Capacity Expansion at Alwar Plant — New Pressing Lines Added</span>
+                        <div class="ann-meta">
+                            <span>Jan 2025</span>
+                            <a href="/processes">Read →</a>
+                        </div>
+                    </li>
+                    <li class="announcement-item">
+                        <span class="ann-tag">Partnership</span>
+                        <span class="ann-title">New Long-Term Supply Agreement with Leading Automotive OEM</span>
+                        <div class="ann-meta">
+                            <span>Dec 2024</span>
+                            <a href="/customers">Read →</a>
+                        </div>
+                    </li>
+                </ul>
+                <a href="/about_us" class="more-link">View All Updates →</a>
+            </div>
+
+            <!-- Stats col -->
+            <div>
+                <p class="col-heading">KBI at a Glance</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-num" data-count="43">0</div>
+                        <div class="stat-unit">+ Years</div>
+                        <div class="stat-label">In Operation</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" data-count="2">0</div>
+                        <div class="stat-unit">Plants</div>
+                        <div class="stat-label">Faridabad &amp; Alwar</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" data-count="500">0</div>
+                        <div class="stat-unit">+</div>
+                        <div class="stat-label">Component Types</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" data-count="10">0</div>
+                        <div class="stat-unit">+ OEMs</div>
+                        <div class="stat-label">Served Nationally</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="sustain-panels">
-                <div class="sustain-panel active" id="panel-0" role="tabpanel" aria-labelledby="tab-0" data-panel="0">
-                    <div class="sustain-panel__inner">
-                        <div class="sustain-panel__text">
-                            <h2>Committed to Sustainable Manufacturing</h2>
-                            <p>KBI adheres to ISO 14001:2015 environmental management standards, continuously working to reduce waste, optimise energy consumption, and minimise our environmental footprint across both our Faridabad and Alwar facilities.</p>
-                            <a href="/certifications" class="btn">View Certifications</a>
-                        </div>
-                        <div class="sustain-panel__media">
-                            <img src="{{ url_for('static', filename='pics/iso_14001.jpg') }}" alt="ISO 14001 Certificate" loading="lazy">
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </section>
 
-                <div class="sustain-panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1" data-panel="1" hidden>
-                    <div class="sustain-panel__inner">
-                        <div class="sustain-panel__text">
-                            <h2>Innovation Drives Our Processes</h2>
-                            <p>From advanced CNC machining and precision pressing to robotic welding and automated quality checks — KBI continuously invests in state-of-the-art manufacturing technologies to deliver better components, faster and more consistently.</p>
-                            <a href="/processes" class="btn">Our Processes</a>
-                        </div>
-                        <div class="sustain-panel__media">
-                            <img src="{{ url_for('static', filename='pics/pressline.webp') }}" alt="Advanced Press Line" loading="lazy">
-                        </div>
-                    </div>
-                </div>
+    <!-- ══════════════════════════════════════
+         CERTIFICATIONS
+    ══════════════════════════════════════ -->
+    <section class="certifications-section reveal-section" id="certifications">
+        <span class="section-label centered">📋 Quality Standards</span>
+        <h2 class="section-title centered">Certified Excellence</h2>
 
-                <div class="sustain-panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" data-panel="2" hidden>
-                    <div class="sustain-panel__inner">
-                        <div class="sustain-panel__text">
-                            <h2>Four Decades of Industrial Impact</h2>
-                            <p>Since 1981, KBI has supplied millions of precision components to India's leading OEMs, contributing to the nation's industrial growth. With 2 plants, hundreds of skilled employees, and partnerships with top-tier companies, our impact is felt across the automotive and infrastructure value chain.</p>
-                            <a href="/about_us" class="btn">Our Story</a>
-                        </div>
-                        <div class="sustain-panel__media">
-                            <img src="{{ url_for('static', filename='pics/Our Journey.png') }}" alt="KBI Journey" loading="lazy">
-                        </div>
-                    </div>
-                </div>
+        <div class="cert-grid">
+            <div class="cert-card">
+                <img src="{{ url_for('static', filename='pics/iso_9001.jpg') }}" alt="ISO 9001" style="width:56px;height:56px;object-fit:contain;">
+                <h3>ISO 9001:2015</h3>
+                <p>Quality Management System — ensuring consistent, high-quality products at every stage.</p>
+            </div>
+            <div class="cert-card">
+                <img src="{{ url_for('static', filename='pics/iso_14001.jpg') }}" alt="ISO 14001" style="width:56px;height:56px;object-fit:contain;">
+                <h3>ISO 14001:2015</h3>
+                <p>Environmental Management System — committed to sustainable and responsible manufacturing.</p>
+            </div>
+            <div class="cert-card">
+                <img src="{{ url_for('static', filename='pics/iso_45001.jpg') }}" alt="ISO 45001" style="width:56px;height:56px;object-fit:contain;">
+                <h3>ISO 45001:2018</h3>
+                <p>Occupational Health &amp; Safety — protecting our people across both plants.</p>
+            </div>
+            <div class="cert-card">
+                <img src="{{ url_for('static', filename='pics/KBI_logo.png') }}" alt="KBI Quality" style="width:56px;height:56px;object-fit:contain;">
+                <h3>In-House QA</h3>
+                <p>Rigorous dimensional, surface and functional checks before every shipment.</p>
             </div>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════
-         ANNOUNCEMENTS
-    ═══════════════════════════════════════════════════ -->
-    <section class="announcements-section reveal-section" id="announcements">
-        <div class="container">
-            <div class="announcements-header">
-                <h2 class="announcements-title">Latest Updates</h2>
-                <a href="/about_us" class="announcements-view-all">View All <span aria-hidden="true">→</span></a>
-            </div>
-            <div class="announcements-grid">
-
-                <article class="announce-card">
-                    <div class="announce-card__media">
-                        <img src="{{ url_for('static', filename='pics/iso_9001.jpg') }}" alt="ISO 9001 Certification" loading="lazy">
-                    </div>
-                    <div class="announce-card__body">
-                        <span class="announce-card__tag">Certification</span>
-                        <h3 class="announce-card__title">KBI Renews ISO 9001:2015 Certification</h3>
-                        <p class="announce-card__excerpt">KBI has successfully renewed its ISO 9001:2015 Quality Management System certification, reaffirming our commitment to the highest standards of excellence.</p>
-                        <a href="/certifications" class="announce-card__link">
-                            Read More <span class="announce-card__arrow" aria-hidden="true">→</span>
-                        </a>
-                    </div>
-                </article>
-
-                <article class="announce-card">
-                    <div class="announce-card__media">
-                        <img src="{{ url_for('static', filename='pics/real_shop_floor.png') }}" alt="Plant Expansion" loading="lazy">
-                    </div>
-                    <div class="announce-card__body">
-                        <span class="announce-card__tag">Expansion</span>
-                        <h3 class="announce-card__title">Capacity Expansion at Alwar Plant</h3>
-                        <p class="announce-card__excerpt">KBI has expanded its Alwar, Rajasthan facility with additional pressing and fabrication lines to meet growing OEM demand and new programme requirements.</p>
-                        <a href="/processes" class="announce-card__link">
-                            Read More <span class="announce-card__arrow" aria-hidden="true">→</span>
-                        </a>
-                    </div>
-                </article>
-
-                <article class="announce-card">
-                    <div class="announce-card__media">
-                        <img src="{{ url_for('static', filename='pics/customers.png') }}" alt="Customer Partnerships" loading="lazy">
-                    </div>
-                    <div class="announce-card__body">
-                        <span class="announce-card__tag">Partnership</span>
-                        <h3 class="announce-card__title">Strengthening OEM Relationships</h3>
-                        <p class="announce-card__excerpt">KBI continues to deepen its long-standing partnerships with India's top-tier automotive OEMs, supplying precision components across multiple platforms.</p>
-                        <a href="/customers" class="announce-card__link">
-                            Read More <span class="announce-card__arrow" aria-hidden="true">→</span>
-                        </a>
-                    </div>
-                </article>
-
-            </div>
+    <!-- ══════════════════════════════════════
+         CTA
+    ══════════════════════════════════════ -->
+    <section class="cta-section reveal-section" id="contact">
+        <span class="section-label centered">🤝 Work With Us</span>
+        <h2 class="section-title centered">Ready to Partner with KBI?</h2>
+        <p style="color:var(--color-text-muted);max-width:480px;margin:.75rem auto 0;font-size:.98rem;line-height:1.7;text-align:center;">
+            Join the many OEMs across India who trust KBI for precision components, on-time delivery and consistent quality.
+        </p>
+        <div class="cta-btns">
+            <a href="/contact_us" class="cta-btn primary">Get In Touch</a>
+            <a href="https://storage.googleapis.com/kbi-catalogues/product_catalogue.pdf"
+               target="_blank" rel="noopener noreferrer"
+               class="cta-btn outline">Download Catalogue</a>
         </div>
     </section>
 
-    <!-- ═══════════════════════════════════════════════════
-         INVESTORS / TRUST BLOCK
-    ═══════════════════════════════════════════════════ -->
-    <section class="investors-section reveal-section" id="investors">
-        <div class="container">
-            <div class="investors-inner">
-
-                <!-- Left: copy -->
-                <div class="investors-copy">
-                    <h2>Trusted by Industry Leaders</h2>
-                    <p>With over four decades of precision manufacturing excellence, KBI has built lasting partnerships with India's top automotive, power, and industrial OEMs — delivering quality components on time, every time.</p>
-                    <a href="/customers" class="btn btn--dark">Our Customers →</a>
-                </div>
-
-                <!-- Centre: stats tiles -->
-                <div class="investors-stats">
-                    <div class="stat-tile">
-                        <span class="stat-tile__number" data-count="43">0</span>
-                        <span class="stat-tile__unit">+</span>
-                        <span class="stat-tile__label">Years in Operation</span>
-                    </div>
-                    <div class="stat-tile">
-                        <span class="stat-tile__number" data-count="2">0</span>
-                        <span class="stat-tile__unit"></span>
-                        <span class="stat-tile__label">Manufacturing Plants</span>
-                    </div>
-                    <div class="stat-tile">
-                        <span class="stat-tile__number" data-count="500">0</span>
-                        <span class="stat-tile__unit">+</span>
-                        <span class="stat-tile__label">Component Types</span>
-                    </div>
-                </div>
-
-                <!-- Right: key documents -->
-                <div class="investors-docs">
-                    <h3 class="investors-docs__heading">Key Documents</h3>
-                    <ul class="investors-docs__list">
-                        <li class="investors-docs__item">
-                            <a href="https://storage.googleapis.com/kbi-catalogues/product_catalogue.pdf"
-                               target="_blank" rel="noopener noreferrer"
-                               class="investors-docs__link">
-                                <span class="investors-docs__icon" aria-hidden="true">📄</span>
-                                <span class="investors-docs__name">Product Catalogue 2024</span>
-                                <span class="investors-docs__action" aria-hidden="true">↓</span>
-                            </a>
-                        </li>
-                        <li class="investors-docs__item">
-                            <a href="/certifications" class="investors-docs__link">
-                                <span class="investors-docs__icon" aria-hidden="true">📋</span>
-                                <span class="investors-docs__name">Quality Certifications</span>
-                                <span class="investors-docs__action" aria-hidden="true">→</span>
-                            </a>
-                        </li>
-                        <li class="investors-docs__item">
-                            <a href="/processes" class="investors-docs__link">
-                                <span class="investors-docs__icon" aria-hidden="true">⚙️</span>
-                                <span class="investors-docs__name">Process Capabilities</span>
-                                <span class="investors-docs__action" aria-hidden="true">→</span>
-                            </a>
-                        </li>
-                        <li class="investors-docs__item">
-                            <a href="/contact_us" class="investors-docs__link">
-                                <span class="investors-docs__icon" aria-hidden="true">📞</span>
-                                <span class="investors-docs__name">Contact &amp; RFQ</span>
-                                <span class="investors-docs__action" aria-hidden="true">→</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════════════════════════════════════════════
-         CTA + FOOTER
-    ═══════════════════════════════════════════════════ -->
     {% include 'footer.html' %}
+
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
