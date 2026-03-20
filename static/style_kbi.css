@@ -667,26 +667,36 @@ section { position: relative; z-index: 1; }
 
 .marquee-item {
   flex-shrink: 0;
-  padding: 0 3.5rem;
+  padding: 0 3rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: .55rem;
 }
 
 .marquee-item img {
-  height: 44px;
+  height: 62px;
   width: auto;
-  max-width: 140px;
+  max-width: 160px;
   object-fit: contain;
-  /* grayscale + brighten: keeps logo shapes visible (no brightness(0)
-     which collapses everything to a solid rectangle)                  */
-  filter: grayscale(1) brightness(1.9) contrast(0.6);
-  opacity: 0.58;
-  transition: opacity .35s ease, filter .35s ease;
+  filter: none;
+  opacity: 0.88;
+  transition: opacity .3s ease, transform .3s ease;
 }
-.marquee-item img:hover {
+.marquee-item:hover img {
   opacity: 1;
-  filter: grayscale(0) brightness(1) contrast(1);
+  transform: scale(1.06);
+}
+
+.marquee-item span {
+  font-family: 'Inter', sans-serif;
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+  white-space: nowrap;
 }
 
 /* Divider between items */
