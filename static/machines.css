@@ -216,8 +216,15 @@
 
 /* ── Image ── */
 .machine-image {
-  height: 190px;
+  margin: 1rem 1rem 0;
+  border-radius: 12px;
   overflow: hidden;
+  height: 180px;
+  border: 1px solid rgba(13,26,58,.1);
+  transition: border-color .35s;
+}
+.machine-card:hover .machine-image {
+  border-color: rgba(255,255,255,.15);
 }
 .machine-image img {
   width: 100%;
