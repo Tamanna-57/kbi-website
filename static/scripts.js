@@ -242,17 +242,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Card entrance: fade + rise
+    // Card entrance: slide in from right, staggered
     const cards = track.querySelectorAll(".psc-card");
-    gsap.set(cards, { opacity: 0, y: 52 });
+    gsap.set(cards, { opacity: 0, x: 80 });
 
     cards.forEach((card, i) => {
       gsap.to(card, {
         opacity: 1,
-        y: 0,
-        duration: 0.72,
+        x: 0,
+        duration: 0.75,
         ease: "power2.out",
-        delay: i * 0.09,
+        delay: i * 0.1,
         scrollTrigger: {
           trigger: trackWrap,
           start: "top 78%",
