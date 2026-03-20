@@ -325,40 +325,80 @@
     </section>
 
     <!-- ══════════════════════════════════════
-         ANNOUNCEMENTS + STATS
+         UPDATES & NOTICES  (RIL-style)
     ══════════════════════════════════════ -->
-    <section class="info-section" id="news">
-        <div class="info-inner">
-            <div>
-                <p class="col-heading">Latest Updates</p>
-                <ul class="announcement-list">
-                    <li class="announcement-item">
-                        <span class="ann-tag">Certification</span>
-                        <span class="ann-title">KBI Renews ISO 9001:2015 Quality Management Certification</span>
-                        <div class="ann-meta"><span>March 2025</span><a href="/certifications">Read →</a></div>
-                    </li>
-                    <li class="announcement-item">
-                        <span class="ann-tag">Expansion</span>
-                        <span class="ann-title">Capacity Expansion at Alwar Plant — New Pressing Lines Added</span>
-                        <div class="ann-meta"><span>Jan 2025</span><a href="/processes">Read →</a></div>
-                    </li>
-                    <li class="announcement-item">
-                        <span class="ann-tag">Partnership</span>
-                        <span class="ann-title">New Long-Term Supply Agreement with Leading Automotive OEM</span>
-                        <div class="ann-meta"><span>Dec 2024</span><a href="/customers">Read →</a></div>
-                    </li>
-                </ul>
-                <a href="/about_us" class="more-link">View All Updates →</a>
+    <section class="ril-updates" id="news">
+        <div class="ril-updates__inner">
+
+            <!-- Left: heading -->
+            <div class="ril-u-left">
+                <p class="ril-u-eyebrow">Company</p>
+                <h2 class="ril-u-title">Updates &amp;<br>Notices</h2>
             </div>
-            <div>
-                <p class="col-heading">KBI at a Glance</p>
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-num" data-count="43">0</div><div class="stat-unit">+ Years</div><div class="stat-label">In Operation</div></div>
-                    <div class="stat-card"><div class="stat-num" data-count="2">0</div><div class="stat-unit">Plants</div><div class="stat-label">Faridabad &amp; Alwar</div></div>
-                    <div class="stat-card"><div class="stat-num" data-count="500">0</div><div class="stat-unit">+</div><div class="stat-label">Component Types</div></div>
-                    <div class="stat-card"><div class="stat-num" data-count="10">0</div><div class="stat-unit">+ OEMs</div><div class="stat-label">Served Nationally</div></div>
+
+            <!-- Vertical divider -->
+            <div></div>
+
+            <!-- Middle: Latest News notices -->
+            <div class="ril-u-col">
+                <h3 class="ril-u-col__heading">Latest News</h3>
+                <div class="ril-u-divider"></div>
+                <div class="ril-notice">
+                    <span class="ril-notice__date">MAR 2025</span>
+                    <p class="ril-notice__title">KBI Renews ISO 9001:2015 Quality Management Certification</p>
                 </div>
+                <div class="ril-u-divider"></div>
+                <div class="ril-notice">
+                    <span class="ril-notice__date">JAN 2025</span>
+                    <p class="ril-notice__title">Capacity Expansion at Alwar Plant — New Pressing Lines Added</p>
+                </div>
+                <div class="ril-u-divider"></div>
+                <div class="ril-notice">
+                    <span class="ril-notice__date">DEC 2024</span>
+                    <p class="ril-notice__title">New Long-Term Supply Agreement with Leading Automotive OEM</p>
+                </div>
+                <a href="/about_us" class="ril-u-btn">know more →</a>
             </div>
+
+            <!-- Vertical divider -->
+            <div></div>
+
+            <!-- Right: Certifications -->
+            <div class="ril-u-col">
+                <h3 class="ril-u-col__heading">Certifications</h3>
+                <div class="ril-u-divider"></div>
+                <div class="ril-doc">
+                    <div class="ril-doc__thumb">
+                        <img src="{{ url_for('static', filename='pics/iso_9001.jpg') }}" alt="ISO 9001">
+                    </div>
+                    <div>
+                        <p class="ril-doc__name">ISO 9001:2015</p>
+                        <span class="ril-doc__sub">Quality Management System</span>
+                    </div>
+                </div>
+                <div class="ril-u-divider"></div>
+                <div class="ril-doc">
+                    <div class="ril-doc__thumb">
+                        <img src="{{ url_for('static', filename='pics/iso_14001.jpg') }}" alt="ISO 14001">
+                    </div>
+                    <div>
+                        <p class="ril-doc__name">ISO 14001:2015</p>
+                        <span class="ril-doc__sub">Environmental Management</span>
+                    </div>
+                </div>
+                <div class="ril-u-divider"></div>
+                <div class="ril-doc">
+                    <div class="ril-doc__thumb">
+                        <img src="{{ url_for('static', filename='pics/iso_45001.jpg') }}" alt="ISO 45001">
+                    </div>
+                    <div>
+                        <p class="ril-doc__name">ISO 45001:2018</p>
+                        <span class="ril-doc__sub">Occupational Health &amp; Safety</span>
+                    </div>
+                </div>
+                <a href="/certifications" class="ril-u-btn">know more →</a>
+            </div>
+
         </div>
     </section>
 

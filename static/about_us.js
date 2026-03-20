@@ -1,42 +1,41 @@
-/* ══════════════════════════════════════════════════════
-   KBI — About Us Page  Scripts
-══════════════════════════════════════════════════════ */
+/* KBI — About Us  |  Scroll-reveal + smooth anchors */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ── Scroll-reveal: generic sections ──────────────── */
-  const ioReveal = new IntersectionObserver((entries) => {
+  /* ── Generic reveal (sections, cards, etc.) ─────────── */
+  const ioGeneric = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       e.target.classList.add("in-view");
-      ioReveal.unobserve(e.target);
+      ioGeneric.unobserve(e.target);
     });
-  }, { threshold: 0.14 });
+  }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
 
-  document.querySelectorAll(".reveal-au").forEach(el => ioReveal.observe(el));
+  document.querySelectorAll(".reveal-au").forEach(el => ioGeneric.observe(el));
 
-  /* ── Scroll-reveal: timeline items (staggered) ─────── */
-  const ioTl = new IntersectionObserver((entries) => {
+  /* ── Team: stagger each member ───────────────────────── */
+  const ioTeam = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
-      const items = e.target.querySelectorAll(".reveal-tl");
-      items.forEach((item, i) => {
-        setTimeout(() => item.classList.add("in-view"), i * 120);
+      const members = e.target.querySelectorAll(".au-member");
+      members.forEach((m, i) => {
+        setTimeout(() => m.classList.add("in-view"), i * 110);
       });
-      ioTl.unobserve(e.target);
+      ioTeam.unobserve(e.target);
     });
-  }, { threshold: 0.08 });
+  }, { threshold: 0.1 });
 
-  const timeline = document.querySelector(".au-timeline");
-  if (timeline) ioTl.observe(timeline);
+  const teamGrid = document.querySelector(".au-team-grid");
+  if (teamGrid) ioTeam.observe(teamGrid);
 
-  /* ── Smooth scroll for in-page anchor links ────────── */
+  /* ── Smooth anchor scrolling ─────────────────────────── */
   document.querySelectorAll('a[href^="#"]').forEach(link => {
     link.addEventListener("click", e => {
-      const target = document.getElementById(link.getAttribute("href").slice(1));
-      if (!target) return;
+      const id = link.getAttribute("href").slice(1);
+      const el = document.getElementById(id);
+      if (!el) return;
       e.preventDefault();
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
 

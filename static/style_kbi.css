@@ -710,50 +710,180 @@ section { position: relative; z-index: 1; }
 /* (no GSAP fallback needed — track is always a free scroll row) */
 
 /* ══════════════════════════════════════════════════════
-   INFO SECTION (announcements + stats)
+   UPDATES & NOTICES  (RIL-inspired layout)
 ══════════════════════════════════════════════════════ */
-.info-section {
-  max-width: 1200px; margin: 0 auto; padding: 4.5rem 2rem;
+.ril-updates {
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  padding: clamp(3.5rem, 6vw, 5.5rem) 0;
 }
-.info-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; }
-.col-heading {
-  font-size: .82rem; text-transform: uppercase; letter-spacing: .16em;
-  color: var(--color-text-muted); margin-bottom: 1rem;
-}
-.announcement-list { display: flex; flex-direction: column; gap: .8rem; }
-.announcement-item {
-  padding: .75rem .85rem; border-radius: var(--radius-md);
-  cursor: pointer;
-  transition:
-    transform var(--dur-med) var(--ease),
-    box-shadow var(--dur-med) var(--ease),
-    background var(--dur-med) var(--ease);
-}
-.announcement-item:hover {
-  background: rgba(26,39,72,.9);
-  box-shadow: 0 16px 32px rgba(10,15,35,.7);
-  transform: translateY(-3px);
-}
-.ann-tag  { font-size:.68rem; text-transform:uppercase; letter-spacing:.16em; color:var(--color-accent); display:block; }
-.ann-title { display:block; margin-top:.3rem; color:#e5e7eb; font-size:.93rem; line-height:1.5; }
-.ann-meta  { display:flex; justify-content:space-between; margin-top:.3rem; font-size:.78rem; color:var(--color-text-muted); }
-.ann-meta a { color:var(--color-accent); }
-.ann-meta a:hover { text-decoration:underline; }
-.more-link { display:inline-flex; margin-top:1rem; font-size:.78rem; text-transform:uppercase; letter-spacing:.18em; color:var(--color-text-muted); }
-.more-link:hover { color:#e5e7eb; }
 
-.stats-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; }
-.stat-card {
-  padding: 1.1rem 1.2rem; border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--color-surface-2), var(--color-surface));
-  border: 1px solid rgba(255,255,255,.1);
-  box-shadow: 0 16px 36px rgba(10,15,35,.6);
-  transition: transform var(--dur-med) var(--ease), box-shadow var(--dur-med) var(--ease);
+.ril-updates__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 4vw, 4rem);
+  display: grid;
+  grid-template-columns: 1.15fr 1px 1fr 1px 1fr;
+  gap: 0 clamp(1.5rem, 3vw, 3.5rem);
+  align-items: start;
 }
-.stat-card:hover { transform: translateY(-3px); box-shadow: 0 24px 48px rgba(10,15,35,.8); }
-.stat-num  { font-size: 1.9rem; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
-.stat-unit { font-size: .78rem; text-transform: uppercase; letter-spacing: .14em; color: var(--color-text-muted); }
-.stat-label { margin-top: .3rem; font-size: .84rem; color: var(--color-text-muted); }
+
+/* Vertical column dividers */
+.ril-updates__inner > .ril-u-col:nth-child(3)::before,
+.ril-updates__inner > .ril-u-col:nth-child(5)::before {
+  display: none; /* handled via grid 1px columns */
+}
+
+/* We insert 1px divider pseudo-columns via a wrapper trick below */
+
+.ril-u-left {
+  padding-right: 1rem;
+}
+
+.ril-u-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 .9rem;
+  display: block;
+}
+
+.ril-u-title {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  font-weight: 500;
+  line-height: 1.12;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+/* Vertical separator pseudo-columns */
+.ril-updates__inner > :nth-child(2),
+.ril-updates__inner > :nth-child(4) {
+  /* these are the 1px grid column gaps — they act as dividers */
+  background: rgba(255,255,255,.12);
+  align-self: stretch;
+  width: 1px;
+}
+
+.ril-u-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.ril-u-col__heading {
+  font-family: 'Inter', sans-serif;
+  font-size: .84rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--color-text-main);
+  margin: 0 0 1.2rem;
+}
+
+.ril-u-divider {
+  height: 1px;
+  background: rgba(255,255,255,.1);
+  margin: .9rem 0;
+  flex-shrink: 0;
+}
+
+/* Notice item */
+.ril-notice { flex-shrink: 0; }
+
+.ril-notice__date {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: .35rem;
+}
+
+.ril-notice__title {
+  font-family: 'Inter', sans-serif;
+  font-size: .88rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Document item */
+.ril-doc {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.ril-doc__thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 9px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+}
+.ril-doc__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ril-doc__name {
+  font-family: 'Inter', sans-serif;
+  font-size: .86rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  margin: 0 0 .2rem;
+  line-height: 1.3;
+}
+
+.ril-doc__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: .72rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+/* "know more →" pill button */
+.ril-u-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1.6rem;
+  font-family: 'Inter', sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.65);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,.2);
+  padding: .5rem 1.3rem;
+  border-radius: 50px;
+  transition: color .2s, background .2s, border-color .2s;
+  align-self: flex-start;
+}
+.ril-u-btn:hover {
+  background: rgba(255,255,255,.07);
+  color: var(--color-text-main);
+  border-color: rgba(255,255,255,.35);
+}
+
+@media (max-width: 900px) {
+  .ril-updates__inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem 0;
+  }
+  .ril-updates__inner > :nth-child(2),
+  .ril-updates__inner > :nth-child(4) {
+    display: none;
+  }
+}
 
 /* ══════════════════════════════════════════════════════
    CTA SECTION
