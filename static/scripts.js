@@ -147,40 +147,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ── 4. SCROLL-REVEAL ───────────────────────────────── */
   (function () {
-    const io = new IntersectionObserver((entries) => {
+    // Generic reveals (small elements — low threshold is fine)
+    const ioGeneric = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (!e.isIntersecting) return;
         const t = e.target;
-
-        // Generic reveal
-        if (t.classList.contains("reveal-section")) {
-          t.classList.add("is-visible");
-        }
-        // Tech section: animate in left/right
-        if (t.classList.contains("tech-section")) {
-          t.classList.add("in-view");
-        }
-        // KBI intro card: animate up from bottom
-        if (t.classList.contains("kbi-intro-card")) {
-          t.classList.add("in-view");
-        }
-        // Info + CTA
+        if (t.classList.contains("reveal-section"))  t.classList.add("is-visible");
+        if (t.classList.contains("kbi-intro-card"))  t.classList.add("in-view");
         if (t.classList.contains("info-section") || t.classList.contains("cta-section")) {
           t.style.opacity = "1";
           t.style.transform = "translateY(0)";
         }
-
-        io.unobserve(t);
+        ioGeneric.unobserve(t);
       });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.12 });
+
+    // Tech section gets its own observer with a higher threshold so the
+    // left/right slide animation fires when the section is well into view
+    // (≈ 32 % of 90 vh = ~29 vh visible), not at the very first pixel.
+    const ioTech = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("in-view");
+        ioTech.unobserve(e.target);
+      });
+    }, { threshold: 0.32 });
+
+    const techSection = document.querySelector(".tech-section");
+    if (techSection) ioTech.observe(techSection);
 
     [
       ...document.querySelectorAll(".reveal-section"),
-      document.querySelector(".tech-section"),
       document.querySelector(".kbi-intro-card"),
       document.querySelector(".info-section"),
       document.querySelector(".cta-section"),
-    ].forEach(el => el && io.observe(el));
+    ].forEach(el => el && ioGeneric.observe(el));
 
     // info + cta: set initial hidden state
     [document.querySelector(".info-section"), document.querySelector(".cta-section")].forEach(el => {

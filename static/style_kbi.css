@@ -266,7 +266,7 @@ section { position: relative; z-index: 1; }
 .tech-content-panel {
   max-width: 560px;
   opacity: 0; transform: translateX(-48px);
-  transition: opacity .8s var(--ease), transform .8s var(--ease);
+  transition: opacity 1.1s var(--ease) .1s, transform 1.1s var(--ease) .1s;
 }
 .tech-section.in-view .tech-content-panel { opacity: 1; transform: translateX(0); }
 
@@ -322,7 +322,7 @@ section { position: relative; z-index: 1; }
 .tech-nav-list {
   display: flex; flex-direction: column;
   opacity: 0; transform: translateX(48px);
-  transition: opacity .8s var(--ease) .15s, transform .8s var(--ease) .15s;
+  transition: opacity 1.1s var(--ease) .28s, transform 1.1s var(--ease) .28s;
 }
 .tech-section.in-view .tech-nav-list { opacity: 1; transform: translateX(0); }
 
@@ -678,12 +678,12 @@ section { position: relative; z-index: 1; }
   width: auto;
   max-width: 130px;
   object-fit: contain;
-  /* white monochrome treatment on dark bg */
+  /* faded white on dark navy — matches sheryians.com style */
   filter: brightness(0) invert(1);
-  opacity: 0.5;
-  transition: opacity .35s ease;
+  opacity: 0.62;
+  transition: opacity .35s ease, filter .35s ease;
 }
-.marquee-item img:hover { opacity: 0.95; }
+.marquee-item img:hover { opacity: 1; filter: brightness(0) invert(1) sepia(1) saturate(0); }
 
 /* Divider between items */
 .marquee-divider {
