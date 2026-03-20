@@ -525,9 +525,10 @@ section { position: relative; z-index: 1; }
   position: absolute; inset: 0;
   background: linear-gradient(
     to top,
-    rgba(8,13,30,.95) 0%,
-    rgba(8,13,30,.50) 50%,
-    rgba(8,13,30,.08) 100%
+    rgba(8,13,30,.97) 0%,
+    rgba(8,13,30,.82) 28%,
+    rgba(8,13,30,.18) 52%,
+    rgba(8,13,30,0)   70%
   );
 }
 

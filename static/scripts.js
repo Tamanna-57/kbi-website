@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
     els.forEach(el => io.observe(el));
   })();
 
-  /* ── 6. PRODUCTS HORIZONTAL SCROLL (GSAP + Lenis) ───── */
+  /* ── 6. PRODUCTS HORIZONTAL SCROLL (GSAP ScrollTrigger) ─ */
   (function () {
     const trackWrap = document.getElementById("productsTrackWrap");
     const track     = document.getElementById("productsTrack");
@@ -214,7 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     if (isMobile) {
-      // On mobile just allow native horizontal scroll — no pinning
       trackWrap.classList.add("no-gsap");
       return;
     }
@@ -226,14 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     gsap.registerPlugin(ScrollTrigger);
 
-    // Lenis smooth scroll
-    if (typeof Lenis !== "undefined") {
-      const lenis = new Lenis({ lerp: 0.08 });
-      lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-      gsap.ticker.lagSmoothing(0);
-    }
-
     // Horizontal scroll: pin trackWrap while track moves left
     const getScrollAmount = () => -(track.scrollWidth - trackWrap.clientWidth);
 
@@ -244,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
         trigger: trackWrap,
         start: "top top",
         end: () => `+=${Math.abs(getScrollAmount())}`,
-        scrub: 1.2,
+        scrub: 1,
         pin: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
