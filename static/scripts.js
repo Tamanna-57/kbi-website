@@ -211,67 +211,20 @@ document.addEventListener("DOMContentLoaded", () => {
     els.forEach(el => io.observe(el));
   })();
 
-  /* ── 6. PRODUCTS HORIZONTAL SCROLL (GSAP ScrollTrigger) ─ */
+  /* ── 6. PRODUCTS CARDS — one-time entrance via IntersectionObserver ─ */
   (function () {
     const trackWrap = document.getElementById("productsTrackWrap");
-    const track     = document.getElementById("productsTrack");
-    if (!trackWrap || !track) return;
-
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
-    if (isMobile) {
-      trackWrap.classList.add("no-gsap");
-      return;
-    }
-
-    if (typeof gsap === "undefined" || typeof ScrollTrigger === "undefined") {
-      trackWrap.classList.add("no-gsap");
-      return;
-    }
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Prevent scroll position accumulation across refreshes
-    ScrollTrigger.config({ limitCallbacks: true, ignoreMobileResize: true });
-
-    // Horizontal scroll: pin trackWrap while track moves left
-    const getScrollAmount = () => -(track.scrollWidth - trackWrap.clientWidth);
-
-    gsap.to(track, {
-      x: getScrollAmount,
-      ease: "none",
-      scrollTrigger: {
-        trigger: trackWrap,
-        start: "top top",
-        end: () => `+=${Math.abs(getScrollAmount())}`,
-        scrub: 1,
-        pin: true,
-        pinType: "transform",   /* transform instead of position:fixed —
-                                   prevents the pinned div from floating
-                                   over other sections in the layout     */
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      }
-    });
-
-    // Card entrance: slide in from right, staggered
-    const cards = track.querySelectorAll(".psc-card");
-    gsap.set(cards, { opacity: 0, x: 80 });
-
-    cards.forEach((card, i) => {
-      gsap.to(card, {
-        opacity: 1,
-        x: 0,
-        duration: 0.75,
-        ease: "power2.out",
-        delay: i * 0.1,
-        scrollTrigger: {
-          trigger: trackWrap,
-          start: "top 78%",
-          toggleActions: "play none none none",
-        }
+    if (!trackWrap) return;
+    /* Cards slide in from the right, staggered, exactly once.
+       No scroll pinning — page scrolls freely past this section. */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        trackWrap.classList.add("cards-in-view");
+        io.unobserve(e.target);
       });
-    });
+    }, { threshold: 0.15 });
+    io.observe(trackWrap);
   })();
 
   /* ── 8. BUTTON RIPPLE ───────────────────────────────── */
