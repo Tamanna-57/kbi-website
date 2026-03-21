@@ -1,37 +1,59 @@
 /* ============================================================
-   KBI Products — filter, search, drag-scroll, arrow nav
+   KBI Products — 3D center-focused carousel + filter/search
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  /* ── Elements ── */
   const track      = document.getElementById('productsGrid');
   const trackWrap  = track.closest('.prod-track-wrap');
   const arrowLeft  = document.getElementById('prodArrowLeft');
   const arrowRight = document.getElementById('prodArrowRight');
   const searchInput = document.getElementById('productSearch');
   const pills       = document.querySelectorAll('.prod-pill');
+  const dotsEl      = document.getElementById('prodDots');
 
   let activeFilters = new Set(['all']);
+  let activeIndex   = 0;
+  let autoTimer     = null;
+
+  /* ============================================================
+     3D TRANSFORM MAP
+     rel position → visual properties
+     ============================================================ */
+  const TRANSFORM_MAP = {
+     0:  { tx:    0, sc: 1.22, ry:   0, op: 1.00, z: 10 },
+     1:  { tx:  310, sc: 0.88, ry:  -8, op: 0.65, z:  7 },
+    '-1':{ tx: -310, sc: 0.88, ry:   8, op: 0.65, z:  7 },
+     2:  { tx:  580, sc: 0.72, ry: -16, op: 0.38, z:  4 },
+    '-2':{ tx: -580, sc: 0.72, ry:  16, op: 0.38, z:  4 },
+  };
+
+  function getTransform(rel) {
+    const abs = Math.abs(rel);
+    if (abs > 2) return { tx: rel > 0 ? 860 : -860, sc: 0.5, ry: rel > 0 ? -24 : 24, op: 0, z: 1 };
+    return TRANSFORM_MAP[rel] || TRANSFORM_MAP[String(rel)];
+  }
+
+  function getVisibleCards() {
+    return [...track.querySelectorAll('.prod-card:not(.hidden)')];
+  }
 
   /* ============================================================
      FILTER + SEARCH
      ============================================================ */
   function applyFilters() {
-    const term = searchInput.value.trim().toLowerCase();
+    const term  = searchInput.value.trim().toLowerCase();
     const cards = track.querySelectorAll('.prod-card');
     let visible = 0;
 
     cards.forEach(card => {
-      const name  = card.dataset.name.toLowerCase();
-      const cats  = card.dataset.category.toLowerCase().split(',').map(s => s.trim());
-      const desc  = card.querySelector('.prod-card__desc')?.textContent.toLowerCase() || '';
+      const name = card.dataset.name.toLowerCase();
+      const cats = card.dataset.category.toLowerCase().split(',').map(s => s.trim());
+      const desc = card.querySelector('.prod-card__desc')?.textContent.toLowerCase() || '';
 
       const matchSearch = !term || name.includes(term) || desc.includes(term)
         || cats.some(c => c.includes(term));
-
-      const matchFilter = activeFilters.has('all')
-        || cats.some(c => activeFilters.has(c));
+      const matchFilter = activeFilters.has('all') || cats.some(c => activeFilters.has(c));
 
       if (matchSearch && matchFilter) {
         card.classList.remove('hidden');
@@ -41,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // No-results message
     let noRes = track.querySelector('.prod-no-results');
     if (visible === 0) {
       if (!noRes) {
@@ -54,7 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
       noRes?.remove();
     }
 
-    updateArrows();
+    const visCards = getVisibleCards();
+    activeIndex = Math.min(activeIndex, Math.max(0, visCards.length - 1));
+    buildDots();
+    updateCarousel();
   }
 
   /* Pills */
@@ -80,151 +104,101 @@ document.addEventListener('DOMContentLoaded', () => {
           document.querySelector('.prod-pill[data-category="all"]').classList.add('active');
         }
       }
+      activeIndex = 0;
       applyFilters();
     });
   });
 
   /* Search */
-  searchInput.addEventListener('input', applyFilters);
+  searchInput.addEventListener('input', () => {
+    activeIndex = 0;
+    applyFilters();
+  });
 
   /* ============================================================
-     DRAG SCROLL
+     DOTS
      ============================================================ */
-  let isDragging = false;
-  let startX     = 0;
-  let scrollLeft = 0;
+  function buildDots() {
+    if (!dotsEl) return;
+    dotsEl.innerHTML = '';
+    getVisibleCards().forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'prod-carousel-dot';
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(dot);
+    });
+  }
 
-  trackWrap.addEventListener('mousedown', e => {
-    isDragging = true;
-    trackWrap.classList.add('is-dragging');
-    startX     = e.pageX - trackWrap.offsetLeft;
-    scrollLeft = trackWrap.scrollLeft;
+  /* ============================================================
+     CAROUSEL LOGIC
+     ============================================================ */
+  function goTo(idx) {
+    const visCards = getVisibleCards();
+    if (!visCards.length) return;
+    activeIndex = ((idx % visCards.length) + visCards.length) % visCards.length;
+    updateCarousel();
+    resetAuto();
+  }
+
+  function step(dir) { goTo(activeIndex + dir); }
+
+  function updateCarousel() {
+    const visCards = getVisibleCards();
+    const dots = dotsEl ? dotsEl.querySelectorAll('.prod-carousel-dot') : [];
+
+    visCards.forEach((card, i) => {
+      const rel = i - activeIndex;
+      const { tx, sc, ry, op, z } = getTransform(rel);
+      card.style.transform = `translate(-50%, -50%) translateX(${tx}px) scale(${sc}) rotateY(${ry}deg)`;
+      card.style.opacity   = op;
+      card.style.zIndex    = z;
+      card.classList.toggle('prod-card--active', rel === 0);
+    });
+
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
+  }
+
+  /* ============================================================
+     NAVIGATION — arrows, keyboard, touch, click-to-focus
+     ============================================================ */
+  arrowLeft.addEventListener('click',  () => step(-1));
+  arrowRight.addEventListener('click', () => step( 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  step(-1);
+    if (e.key === 'ArrowRight') step( 1);
   });
 
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-    trackWrap.classList.remove('is-dragging');
-  });
-
-  trackWrap.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x    = e.pageX - trackWrap.offsetLeft;
-    const walk = (x - startX) * 1.6;
-    trackWrap.scrollLeft = scrollLeft - walk;
-    updateArrows();
-  });
-
-  /* Touch drag */
-  let touchStartX = 0;
-  let touchScrollLeft = 0;
+  let touchX = 0;
   trackWrap.addEventListener('touchstart', e => {
-    touchStartX     = e.touches[0].pageX;
-    touchScrollLeft = trackWrap.scrollLeft;
+    touchX = e.touches[0].clientX;
   }, { passive: true });
+  trackWrap.addEventListener('touchend', e => {
+    const dx = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) step(dx > 0 ? 1 : -1);
+  });
 
-  trackWrap.addEventListener('touchmove', e => {
-    const dx = touchStartX - e.touches[0].pageX;
-    trackWrap.scrollLeft = touchScrollLeft + dx;
-    updateArrows();
-  }, { passive: true });
+  track.addEventListener('click', e => {
+    const card = e.target.closest('.prod-card:not(.hidden)');
+    if (!card) return;
+    const idx = getVisibleCards().indexOf(card);
+    if (idx !== -1 && idx !== activeIndex) goTo(idx);
+  });
 
   /* ============================================================
-     ARROW NAVIGATION
+     AUTO-PLAY
      ============================================================ */
-  const SCROLL_AMOUNT = 340;
+  function startAuto() { autoTimer = setInterval(() => step(1), 4000); }
+  function resetAuto()  { clearInterval(autoTimer); startAuto(); }
 
-  arrowLeft.addEventListener('click', () => {
-    trackWrap.scrollBy({ left: -SCROLL_AMOUNT, behavior: 'smooth' });
-    setTimeout(updateArrows, 350);
-  });
-
-  arrowRight.addEventListener('click', () => {
-    trackWrap.scrollBy({ left: SCROLL_AMOUNT, behavior: 'smooth' });
-    setTimeout(updateArrows, 350);
-  });
-
-  function updateArrows() {
-    const sl  = trackWrap.scrollLeft;
-    const max = trackWrap.scrollWidth - trackWrap.clientWidth;
-    arrowLeft.classList.toggle('hidden',  sl <= 2);
-    arrowRight.classList.toggle('hidden', sl >= max - 2);
-  }
-
-  /* Enable overflow-x scroll on the wrap (CSS has overflow:hidden for clean look,
-     but JS scroll still works — we just need to allow it) */
-  trackWrap.style.overflowX = 'scroll';
-  trackWrap.style.scrollbarWidth = 'none'; /* Firefox */
-  trackWrap.style.msOverflowStyle = 'none';
-  /* Hide scrollbar for webkit */
-  const styleTag = document.createElement('style');
-  styleTag.textContent = '.prod-track-wrap::-webkit-scrollbar { display: none; }';
-  document.head.appendChild(styleTag);
-
-  /* Initial arrow state */
-  updateArrows();
-  trackWrap.addEventListener('scroll', updateArrows);
+  trackWrap.addEventListener('mouseenter', () => clearInterval(autoTimer));
+  trackWrap.addEventListener('mouseleave', startAuto);
 
   /* ============================================================
-     3D FAN HOVER EFFECT
-     Distance map: [scale, translateY, rotateY, brightness]
-     Cards radiate outward from the hovered card in a triangular arc.
-     Left cards lean right (+rotateY), right cards lean left (-rotateY).
+     INIT
      ============================================================ */
-  const FAN = [
-    { scale: 1.09, y: -22, ry:  0,  bright: 1.0 },   // dist 0 — active card
-    { scale: 0.92, y:  -4, ry: 10,  bright: 0.88 },   // dist 1
-    { scale: 0.80, y:   8, ry: 17,  bright: 0.72 },   // dist 2
-    { scale: 0.70, y:  16, ry: 22,  bright: 0.58 },   // dist 3
-    { scale: 0.62, y:  22, ry: 26,  bright: 0.46 },   // dist 4+
-  ];
-
-  function applyFan(hoverCard) {
-    const visible = [...track.querySelectorAll('.prod-card:not(.hidden)')];
-    const idx = visible.indexOf(hoverCard);
-    if (idx === -1) return;
-
-    visible.forEach((card, i) => {
-      const dist = Math.abs(i - idx);
-      const dir  = i < idx ? 1 : -1;          // left = +rotateY, right = -rotateY
-      const d    = Math.min(dist, FAN.length - 1);
-      const { scale, y, ry, bright } = FAN[d];
-
-      const tf = dist === 0
-        ? `perspective(1000px) translateY(${y}px) scale(${scale})`
-        : `perspective(1000px) translateY(${y}px) scale(${scale}) rotateY(${ry * dir}deg)`;
-
-      card.style.transform = tf;
-      card.style.filter    = `brightness(${bright})`;
-      card.style.zIndex    = String(30 - dist);
-      card.style.boxShadow = dist === 0
-        ? '0 22px 44px rgba(13,26,58,.28), 0 6px 16px rgba(13,26,58,.14)'
-        : '';
-    });
-  }
-
-  function resetFan() {
-    track.querySelectorAll('.prod-card').forEach(card => {
-      card.style.transform = '';
-      card.style.filter    = '';
-      card.style.zIndex    = '';
-      card.style.boxShadow = '';
-    });
-  }
-
-  /* Event delegation — only recalculate when the hovered card changes */
-  let lastHoveredCard = null;
-
-  track.addEventListener('mouseover', e => {
-    const card = e.target.closest('.prod-card');
-    if (card && !card.classList.contains('hidden') && card !== lastHoveredCard) {
-      lastHoveredCard = card;
-      applyFan(card);
-    }
-  });
-
-  track.addEventListener('mouseleave', () => {
-    lastHoveredCard = null;
-    resetFan();
-  });
+  buildDots();
+  updateCarousel();
+  startAuto();
 });

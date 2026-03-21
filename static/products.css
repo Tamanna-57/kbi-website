@@ -105,52 +105,56 @@
    PRODUCTS CAROUSEL
    ============================================================ */
 .prod-section {
-  padding: clamp(2.5rem, 5vw, 4.5rem) 0;
+  padding: clamp(2.5rem, 5vw, 4.5rem) 0 3rem;
   background: var(--p-light);
   position: relative;
 }
 
-/* Scrollable wrapper — generous top padding gives room for card to lift up without clipping */
+/* Stage — perspective container */
 .prod-track-wrap {
-  overflow-x: scroll;
-  overflow-y: visible;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  cursor: grab;
-  user-select: none;
-  padding: 4rem 2.5rem 3rem;    /* 4rem top = room for the scale+lift combo */
-}
-.prod-track-wrap::-webkit-scrollbar { display: none; }
-.prod-track-wrap.is-dragging { cursor: grabbing; }
-
-/* Flex row — perspective on the container for 3-D depth */
-.prod-track {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  width: max-content;
+  position: relative;
+  height: 520px;
   perspective: 1200px;
+  overflow: hidden;
 }
 
-/* ── Individual card — JS drives all fan transforms ── */
+/* Track — absolute center anchor */
+.prod-track {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+/* Individual card — JS drives all 3D transforms */
 .prod-card {
-  width: clamp(230px, 20vw, 275px);
+  position: absolute;
+  width: 260px;
+  height: 400px;
+  top: -200px;
+  left: -130px;
   border-radius: 18px;
-  overflow: visible;
+  overflow: hidden;
   background: #fff;
   box-shadow: 0 4px 18px rgba(13,26,58,.1);
-  flex-shrink: 0;
-  position: relative;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  user-select: none;
   transition:
-    transform .42s cubic-bezier(.25,.46,.45,.94),
-    box-shadow .42s cubic-bezier(.25,.46,.45,.94),
-    filter .42s cubic-bezier(.25,.46,.45,.94);
-  will-change: transform, filter;
+    transform .5s cubic-bezier(.25,.46,.45,.94),
+    opacity   .5s ease,
+    box-shadow .5s ease;
+  will-change: transform, opacity;
 }
 
-/* ── Image wrapper (tight, no overflow clip on card) ── */
+.prod-card--active {
+  box-shadow: 0 28px 65px rgba(13,26,58,.4), 0 8px 20px rgba(13,26,58,.2);
+}
+
+/* Image wrapper */
 .prod-card__img-wrap {
-  width: 100%; height: 195px;
+  width: 100%; height: 190px;
   overflow: hidden;
   border-radius: 18px 18px 0 0;
   background: #eef0f5;
@@ -160,9 +164,9 @@
   object-fit: contain; display: block;
   transition: transform .4s ease;
 }
-.prod-card:hover .prod-card__img-wrap img { transform: scale(1.04); }
+.prod-card--active .prod-card__img-wrap img { transform: scale(1.04); }
 
-/* ── Card body (always visible: cat + name) ── */
+/* Card body */
 .prod-card__body {
   padding: 1rem 1.1rem .9rem;
   border-radius: 0 0 18px 18px;
@@ -183,7 +187,7 @@
   line-height: 1.25;
 }
 
-/* ── Description dropdown — expands on hover ── */
+/* Description — visible only on active card */
 .prod-card__desc-wrap {
   max-height: 0;
   overflow: hidden;
@@ -191,8 +195,8 @@
   opacity: 0;
   margin-top: 0;
 }
-.prod-card:hover .prod-card__desc-wrap {
-  max-height: 180px;
+.prod-card--active .prod-card__desc-wrap {
+  max-height: 160px;
   opacity: 1;
   margin-top: .65rem;
 }
@@ -205,17 +209,20 @@
   margin: 0;
 }
 
-/* ── Hidden (filtered out) ── */
+/* Hidden (filtered out) */
 .prod-card.hidden { display: none; }
 
-/* ── No results ── */
+/* No results */
 .prod-no-results {
   font-family: 'Inter', sans-serif;
   color: #888; text-align: center;
-  padding: 3rem 0; font-size: 1rem; width: 100%;
+  padding: 3rem 0; font-size: 1rem;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
 }
 
-/* ── Scroll arrows ── */
+/* Navigation arrows — inside track-wrap */
 .prod-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 44px; height: 44px; border-radius: 50%; border: none;
@@ -223,15 +230,36 @@
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 16px rgba(13,26,58,.25);
   transition: background .2s, transform .2s;
-  z-index: 10;
+  z-index: 20;
 }
 .prod-arrow:hover {
   background: var(--p-gold);
   transform: translateY(-50%) scale(1.08);
 }
-.prod-arrow--left  { left: .5rem; }
-.prod-arrow--right { right: .5rem; }
+.prod-arrow--left  { left: 1rem; }
+.prod-arrow--right { right: 1rem; }
 .prod-arrow.hidden { opacity: 0; pointer-events: none; }
+
+/* Dot indicators */
+.prod-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1.5rem;
+}
+.prod-carousel-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(13,26,58,.25);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background .25s, transform .25s;
+}
+.prod-carousel-dot.active {
+  background: var(--p-navy);
+  transform: scale(1.4);
+}
 
 /* ============================================================
    RESPONSIVE
@@ -243,6 +271,7 @@
 @media (max-width: 600px) {
   .prod-filter__inner { flex-direction: column; align-items: flex-start; }
   .prod-search-input { width: 100%; }
-  .prod-card { width: clamp(200px, 70vw, 260px); }
-  .prod-arrow { display: none; }
+  .prod-track-wrap { height: 420px; }
+  .prod-card { width: 210px; height: 340px; top: -170px; left: -105px; }
+  .prod-card__img-wrap { height: 150px; }
 }
