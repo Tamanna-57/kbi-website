@@ -656,7 +656,7 @@ section { position: relative; z-index: 1; }
   display: flex;
   align-items: center;
   width: max-content;
-  animation: marqueeRTL 36s linear infinite;
+  animation: marqueeRTL 20s linear infinite;
   gap: 0;
 }
 

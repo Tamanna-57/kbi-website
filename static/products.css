@@ -132,7 +132,7 @@
   perspective: 1200px;
 }
 
-/* ── Individual card ── */
+/* ── Individual card — JS drives all fan transforms ── */
 .prod-card {
   width: clamp(230px, 20vw, 275px);
   border-radius: 18px;
@@ -140,28 +140,12 @@
   background: #fff;
   box-shadow: 0 4px 18px rgba(13,26,58,.1);
   flex-shrink: 0;
+  position: relative;
   transition:
-    transform .4s var(--p-ease),
-    box-shadow .4s var(--p-ease),
-    filter .4s var(--p-ease),
-    opacity .4s var(--p-ease);
-}
-
-/* ── GROUP HOVER — ALL non-hovered cards shrink back and dim ── */
-.prod-track:has(.prod-card:hover) .prod-card {
-  transform: translateY(14px) scale(0.88);
-  box-shadow: 0 2px 10px rgba(0,0,0,.18);
-  filter: brightness(0.72) saturate(0.8);
-}
-
-/* ── HOVERED card pops forward, big, bright, glowing ── */
-.prod-track:has(.prod-card:hover) .prod-card:hover {
-  transform: translateY(-18px) scale(1.08);
-  filter: brightness(1) saturate(1);
-  box-shadow:
-    0 28px 56px rgba(0,150,255,.45),
-    0 0 40px rgba(0,150,255,.25),
-    0 8px 24px rgba(13,26,58,.3);
+    transform .42s cubic-bezier(.25,.46,.45,.94),
+    box-shadow .42s cubic-bezier(.25,.46,.45,.94),
+    filter .42s cubic-bezier(.25,.46,.45,.94);
+  will-change: transform, filter;
 }
 
 /* ── Image wrapper (tight, no overflow clip on card) ── */

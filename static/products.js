@@ -164,4 +164,67 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Initial arrow state */
   updateArrows();
   trackWrap.addEventListener('scroll', updateArrows);
+
+  /* ============================================================
+     3D FAN HOVER EFFECT
+     Distance map: [scale, translateY, rotateY, brightness]
+     Cards radiate outward from the hovered card in a triangular arc.
+     Left cards lean right (+rotateY), right cards lean left (-rotateY).
+     ============================================================ */
+  const FAN = [
+    { scale: 1.09, y: -22, ry:  0,  bright: 1.0 },   // dist 0 — active card
+    { scale: 0.92, y:  -4, ry: 10,  bright: 0.88 },   // dist 1
+    { scale: 0.80, y:   8, ry: 17,  bright: 0.72 },   // dist 2
+    { scale: 0.70, y:  16, ry: 22,  bright: 0.58 },   // dist 3
+    { scale: 0.62, y:  22, ry: 26,  bright: 0.46 },   // dist 4+
+  ];
+
+  function applyFan(hoverCard) {
+    const visible = [...track.querySelectorAll('.prod-card:not(.hidden)')];
+    const idx = visible.indexOf(hoverCard);
+    if (idx === -1) return;
+
+    visible.forEach((card, i) => {
+      const dist = Math.abs(i - idx);
+      const dir  = i < idx ? 1 : -1;          // left = +rotateY, right = -rotateY
+      const d    = Math.min(dist, FAN.length - 1);
+      const { scale, y, ry, bright } = FAN[d];
+
+      const tf = dist === 0
+        ? `perspective(1000px) translateY(${y}px) scale(${scale})`
+        : `perspective(1000px) translateY(${y}px) scale(${scale}) rotateY(${ry * dir}deg)`;
+
+      card.style.transform = tf;
+      card.style.filter    = `brightness(${bright})`;
+      card.style.zIndex    = String(30 - dist);
+      card.style.boxShadow = dist === 0
+        ? '0 22px 44px rgba(13,26,58,.28), 0 6px 16px rgba(13,26,58,.14)'
+        : '';
+    });
+  }
+
+  function resetFan() {
+    track.querySelectorAll('.prod-card').forEach(card => {
+      card.style.transform = '';
+      card.style.filter    = '';
+      card.style.zIndex    = '';
+      card.style.boxShadow = '';
+    });
+  }
+
+  /* Event delegation — only recalculate when the hovered card changes */
+  let lastHoveredCard = null;
+
+  track.addEventListener('mouseover', e => {
+    const card = e.target.closest('.prod-card');
+    if (card && !card.classList.contains('hidden') && card !== lastHoveredCard) {
+      lastHoveredCard = card;
+      applyFan(card);
+    }
+  });
+
+  track.addEventListener('mouseleave', () => {
+    lastHoveredCard = null;
+    resetFan();
+  });
 });
