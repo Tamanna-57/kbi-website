@@ -5,301 +5,249 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processes - KBI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='processes.css') }}">
 </head>
 <body>
-    <header>
-        {% include 'navigation.html' %}
-    </header>
-    
+    <header>{% include 'navigation.html' %}</header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <video autoplay loop muted playsinline class="hero-video">
+    <!-- ── HERO (video) ─────────────────────────────── -->
+    <section class="proc-hero">
+        <video autoplay loop muted playsinline class="proc-hero__video">
             <source src="{{ url_for('static', filename='pics/Autocomponent_Plant_Video_Generation.mp4') }}" type="video/mp4">
-            Your browser does not support the video tag.
         </video>
-        <!-- <div class="slider">
-            <div class="slide active">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/pressline.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/pressline.png') }}" alt="Press line machinery">
-                </picture>
-            </div>
-            <div class="slide">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/welders.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/welders.png') }}" alt="Welders at work">
-                </picture>
-            </div>
-            <div class="slide">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/axle_line.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/axle_line.png') }}" alt="Axle line production">
-                </picture>
-            </div>
-        </div> -->
-        <div class="hero-content">
-            <h1>Our Manufacturing Processes</h1>
-            <p>State-of-the-art technology and precision engineering for superior quality products</p>
-            <a href="#processes" class="btn" id="scrollBtn">Explore Our Capabilities</a>
-        </div>
-        <div class="hero-animation">
-            <div class="floating-icon">⚙️</div>
-            <div class="floating-icon">🔧</div>
-            <div class="floating-icon">🏭</div>
+        <div class="proc-hero__overlay"></div>
+        <div class="proc-hero__content">
+            <p class="proc-hero__eyebrow">⚙ Manufacturing Excellence</p>
+            <h1 class="proc-hero__title">Our Manufacturing<br>Processes</h1>
+            <p class="proc-hero__sub">State-of-the-art technology and precision engineering — five core processes that power India's industry.</p>
+            <a href="#proc-list" class="proc-hero__cta">Explore Capabilities <span>↓</span></a>
         </div>
     </section>
 
-    <!-- Processes Overview -->
-    <section class="processes-overview">
-        <div class="container">
-            <h2>Manufacturing Excellence</h2>
-            <p class="overview-text">With over 40 years of experience, KBI has perfected five core manufacturing processes that form the backbone of our production capabilities. Each process is supported by cutting-edge machinery and skilled technicians.</p>
-            
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Core Processes</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Machines</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">150+</div>
-                    <div class="stat-label">Skilled Workers</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">99%</div>
-                    <div class="stat-label">Quality Rate</div>
-                </div>
+    <!-- ── STATS BAR ─────────────────────────────────── -->
+    <section class="proc-stats">
+        <div class="proc-stats__inner">
+            <div class="proc-stat">
+                <span class="proc-stat__num">5</span>
+                <span class="proc-stat__lbl">Core Processes</span>
+            </div>
+            <div class="proc-stat-div"></div>
+            <div class="proc-stat">
+                <span class="proc-stat__num">50+</span>
+                <span class="proc-stat__lbl">Machines</span>
+            </div>
+            <div class="proc-stat-div"></div>
+            <div class="proc-stat">
+                <span class="proc-stat__num">150+</span>
+                <span class="proc-stat__lbl">Skilled Workers</span>
+            </div>
+            <div class="proc-stat-div"></div>
+            <div class="proc-stat">
+                <span class="proc-stat__num">40+</span>
+                <span class="proc-stat__lbl">Years Experience</span>
+            </div>
+            <div class="proc-stat-div"></div>
+            <div class="proc-stat">
+                <span class="proc-stat__num">99%</span>
+                <span class="proc-stat__lbl">Quality Rate</span>
             </div>
         </div>
     </section>
 
-    <!-- Main Processes Section -->
-    <section id="processes" class="processes-section">
-        <div class="container">
-            <h2>Our Core Processes</h2>
-            <div class="processes-grid">
-                
-                <!-- Tooling Process -->
-                <div class="process-card" data-process="tooling">
-                    <div class="process-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/process_Tooling.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/process_Tooling.png') }}" alt="Tooling Process">
-                        </picture>
-                        <div class="image-overlay">
-                            <h3>Tooling</h3>
-                            <p>Precision Tool Making</p>
-                        </div>
-                    </div>
-                    <div class="process-content">
-                        <h3>Tooling</h3>
-                        <p>Our tooling department creates precision dies, jigs, and fixtures using advanced CNC machines and skilled craftsmen. We manufacture custom tooling solutions for our in-house component manufacturing</p>
-                        <div class="process-features">
-                            <span class="feature">CNC Machining</span>
-                            <span class="feature">Die Making</span>
-                            <span class="feature">Jig & Fixtures</span>
-                        </div>
-                        <div class="process-machines">
-                            <strong>Available Machines:</strong>
-                            <ul>
-                                <li>CNC Milling Machines</li>
-                                <li>CNC Lathes</li>
-                                <li>VMC Machines</li>
-                                <li>CNC Wire Cut</li>
-                                <li>Assembly Station</li>
-                                <li>Surface Grinders</li>
-                            </ul>
-                        </div>
-                        <button class="btn-process" onclick="openProcessDetail('tooling')">
-                            Learn More <span class="arrow">→</span>
-                        </button>
-                    </div>
-                </div>
+    <!-- ── EDITORIAL SECTIONS ────────────────────────── -->
+    <div class="proc-editorial-list" id="proc-list">
 
-                <!-- Machining Process -->
-                <div class="process-card" data-process="machining">
-                    <div class="process-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/process_Machining.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/process_Machining.png') }}" alt="Machining Process">
-                        </picture>
-                        <div class="image-overlay">
-                            <h3>Machining</h3>
-                            <p>Precision Manufacturing</p>
-                        </div>
-                    </div>
-                    <div class="process-content">
-                        <h3>Machining</h3>
-                        <p>Our machining division specializes in precision turning, milling, and drilling operations. We produce high-quality components for automotive, agricultural, and industrial machinery.</p>
-                        <div class="process-features">
-                            <span class="feature">CNC Turning</span>
-                            <span class="feature">Milling</span>
-                            <span class="feature">Boring</span>
-                        </div>
-                        <div class="process-machines">
-                            <strong>Available Machines:</strong>
-                            <ul>
-                                <li>CNC Turning Centers</li>
-                                <li>MNTR</li>
-                                <li>VMC</li>
-                                <li>Conventional Lathes</li>
-                                <li>Drilling Machines</li>
-                            </ul>
-                        </div>
-                        <button class="btn-process" onclick="openProcessDetail('machining')">
-                            Learn More <span class="arrow">→</span>
-                        </button>
-                    </div>
+        <!-- 01 — Tooling (img left, text right) -->
+        <article class="proc-ed">
+            <div class="proc-ed__img-col">
+                <picture>
+                    <source srcset="{{ url_for('static', filename='pics/process_Tooling.webp') }}" type="image/webp">
+                    <img src="{{ url_for('static', filename='pics/process_Tooling.png') }}" alt="Tooling Process">
+                </picture>
+            </div>
+            <div class="proc-ed__text-col">
+                <span class="proc-ed__num">01</span>
+                <h2 class="proc-ed__title">Tooling</h2>
+                <div class="proc-ed__rule"></div>
+                <p class="proc-ed__desc">Our tooling department creates precision dies, jigs, and fixtures using advanced CNC machines and skilled craftsmen. We manufacture custom tooling solutions for in-house component manufacturing across automotive and industrial sectors.</p>
+                <div class="proc-ed__features">
+                    <span>CNC Machining</span>
+                    <span>Die Making</span>
+                    <span>Jig &amp; Fixtures</span>
                 </div>
-
-                <!-- Press Process -->
-                <div class="process-card" data-process="press">
-                    <div class="process-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/process_Pressing.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/process_Pressing.png') }}" alt="Press Operations">
-                        </picture>
-                        <div class="image-overlay">
-                            <h3>Press Operations</h3>
-                            <p>High-Volume Production</p>
-                        </div>
-                    </div>
-                    <div class="process-content">
-                        <h3>Press Operations</h3>
-                        <p>Our press shop is equipped with various capacity presses for stamping, forming, and deep drawing operations. We handle both high-volume production and prototype development.</p>
-                        <div class="process-features">
-                            <span class="feature">Stamping</span>
-                            <span class="feature">Forming</span>
-                            <span class="feature">Deep Drawing</span>
-                        </div>
-                        <div class="process-machines">
-                            <strong>Available Machines:</strong>
-                            <ul>
-                                <li>Pneumatic Presses (Upto 600 Ton)</li>
-                                <li>Mechanical Presses</li>
-                                <li>Hydraulic Presses</li>
-                                <li>Transfer Presses</li>
-                            </ul>
-                        </div>
-                        <button class="btn-process" onclick="openProcessDetail('press')">
-                            Learn More <span class="arrow">→</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Cutting Process -->
-                <div class="process-card" data-process="sheet-metal">
-                    <div class="process-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/process_Cutting.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/process_Cutting.png') }}" alt="Cutting Process">
-                        </picture>
-                        <div class="image-overlay">
-                            <h3>Cutting</h3>
-                            <p>Fabrication & Assembly</p>
-                        </div>
-                    </div>
-                    <div class="process-content">
-                        <h3>Cutting</h3>
-                        <p>Our subtractive manufacturing process that uses force or other techniques to divide a metal sheet into desired shapes or sizes</p>
-                        <div class="process-features">
-                            <span class="feature">Gas Cutting</span>
-                            <span class="feature">Shearing</span>
-                        </div>
-                        <div class="process-machines">
-                            <strong>Available Machines:</strong>
-                            <ul>
-                                <li>Oxyfuel Cutting Machines</li>
-                                <li>Chopsaw</li>
-                                <li>Shearing Machines</li>
-                            </ul>
-                        </div>
-                        <button class="btn-process" onclick="openProcessDetail('sheet-metal')">
-                            Learn More <span class="arrow">→</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="process-card" data-process="welding">
-                    <div class="process-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/process_Welding.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/process_Welding.png') }}" alt="Welding Process">
-                        </picture>
-                        <div class="image-overlay">
-                            <h3>Welding</h3>
-                            <p>Fabrication & Assembly</p>
-                        </div>
-                    </div>
-                    <div class="process-content">
-                        <h3>Welding</h3>
-                        <p>Our Welding joins two or more metal pieces by melting them together, creating a strong, fused bond</p>
-                        <div class="process-features">
-                            <span class="feature">Arc Welding</span>
-                            <span class="feature">Gas Welding</span>
-                            <span class="feature">Tacking</span>
-                        </div>
-                        <div class="process-machines">
-                            <strong>Available Machines:</strong>
-                            <ul>
-                                <li>Projection</li>
-                                <li>Spot</li>
-                                <li>SMAW</li>
-                                <li>MIG</li>
-                            </ul>
-                        </div>
-                        <button class="btn-process" onclick="openProcessDetail('welding')">
-                            Learn More <span class="arrow">→</span>
-                        </button>
-                    </div>
+                <div class="proc-ed__machines">
+                    <p class="proc-ed__machines-head">Equipment</p>
+                    <ul>
+                        <li>CNC Milling Machines</li>
+                        <li>CNC Lathes</li>
+                        <li>VMC Machines</li>
+                        <li>CNC Wire Cut</li>
+                        <li>Assembly Station</li>
+                        <li>Surface Grinders</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
+        </article>
 
-    <!-- Quality Section -->
-    <section class="quality-section">
-        <div class="container">
-            <h2>Quality & Precision</h2>
-            <div class="quality-grid">
-                <div class="quality-item">
-                    <div class="quality-icon">🎯</div>
-                    <h3>ISO Certified</h3>
-                    <p>Our processes are ISO 9001:2015 certified ensuring consistent quality standards</p>
+        <!-- 02 — Machining (text left, img right — flip) -->
+        <article class="proc-ed proc-ed--flip">
+            <div class="proc-ed__img-col">
+                <picture>
+                    <source srcset="{{ url_for('static', filename='pics/process_Machining.webp') }}" type="image/webp">
+                    <img src="{{ url_for('static', filename='pics/process_Machining.png') }}" alt="Machining Process">
+                </picture>
+            </div>
+            <div class="proc-ed__text-col">
+                <span class="proc-ed__num">02</span>
+                <h2 class="proc-ed__title">Machining</h2>
+                <div class="proc-ed__rule"></div>
+                <p class="proc-ed__desc">Our machining division specialises in precision turning, milling, and drilling operations. We produce high-quality components for automotive, agricultural, and industrial machinery with tight tolerances.</p>
+                <div class="proc-ed__features">
+                    <span>CNC Turning</span>
+                    <span>Milling</span>
+                    <span>Boring</span>
                 </div>
-                <div class="quality-item">
-                    <div class="quality-icon">🔍</div>
-                    <h3>Advanced Testing</h3>
-                    <p>State-of-the-art testing equipment for dimensional accuracy and material properties</p>
+                <div class="proc-ed__machines">
+                    <p class="proc-ed__machines-head">Equipment</p>
+                    <ul>
+                        <li>CNC Turning Centers</li>
+                        <li>MNTR</li>
+                        <li>VMC</li>
+                        <li>Conventional Lathes</li>
+                        <li>Drilling Machines</li>
+                    </ul>
                 </div>
-                <div class="quality-item">
-                    <div class="quality-icon">📊</div>
-                    <h3>Statistical Process Control</h3>
-                    <p>Real-time monitoring and data analysis for process optimization</p>
+            </div>
+        </article>
+
+        <!-- 03 — Press Operations (img left, text right) -->
+        <article class="proc-ed">
+            <div class="proc-ed__img-col">
+                <picture>
+                    <source srcset="{{ url_for('static', filename='pics/process_Pressing.webp') }}" type="image/webp">
+                    <img src="{{ url_for('static', filename='pics/process_Pressing.png') }}" alt="Press Operations">
+                </picture>
+            </div>
+            <div class="proc-ed__text-col">
+                <span class="proc-ed__num">03</span>
+                <h2 class="proc-ed__title">Press Operations</h2>
+                <div class="proc-ed__rule"></div>
+                <p class="proc-ed__desc">Our press shop is equipped with various capacity presses for stamping, forming, and deep drawing operations. We handle both high-volume production and prototype development with consistent precision.</p>
+                <div class="proc-ed__features">
+                    <span>Stamping</span>
+                    <span>Forming</span>
+                    <span>Deep Drawing</span>
                 </div>
-                <div class="quality-item">
-                    <div class="quality-icon">⚡</div>
-                    <h3>Quick Turnaround</h3>
-                    <p>Efficient processes and skilled workforce ensure fast delivery times</p>
+                <div class="proc-ed__machines">
+                    <p class="proc-ed__machines-head">Equipment</p>
+                    <ul>
+                        <li>Pneumatic Presses (Up to 600 Ton)</li>
+                        <li>Mechanical Presses</li>
+                        <li>Hydraulic Presses</li>
+                        <li>Transfer Presses</li>
+                    </ul>
                 </div>
+            </div>
+        </article>
+
+        <!-- 04 — Cutting (text left, img right — flip) -->
+        <article class="proc-ed proc-ed--flip">
+            <div class="proc-ed__img-col">
+                <picture>
+                    <source srcset="{{ url_for('static', filename='pics/process_Cutting.webp') }}" type="image/webp">
+                    <img src="{{ url_for('static', filename='pics/process_Cutting.png') }}" alt="Cutting Process">
+                </picture>
+            </div>
+            <div class="proc-ed__text-col">
+                <span class="proc-ed__num">04</span>
+                <h2 class="proc-ed__title">Cutting</h2>
+                <div class="proc-ed__rule"></div>
+                <p class="proc-ed__desc">Our subtractive manufacturing process uses force or other techniques to divide a metal sheet into desired shapes or sizes with high accuracy and clean edges, readying components for the next stage.</p>
+                <div class="proc-ed__features">
+                    <span>Gas Cutting</span>
+                    <span>Shearing</span>
+                </div>
+                <div class="proc-ed__machines">
+                    <p class="proc-ed__machines-head">Equipment</p>
+                    <ul>
+                        <li>Oxyfuel Cutting Machines</li>
+                        <li>Chopsaw</li>
+                        <li>Shearing Machines</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+        <!-- 05 — Welding (img left, text right) -->
+        <article class="proc-ed">
+            <div class="proc-ed__img-col">
+                <picture>
+                    <source srcset="{{ url_for('static', filename='pics/process_Welding.webp') }}" type="image/webp">
+                    <img src="{{ url_for('static', filename='pics/process_Welding.png') }}" alt="Welding Process">
+                </picture>
+            </div>
+            <div class="proc-ed__text-col">
+                <span class="proc-ed__num">05</span>
+                <h2 class="proc-ed__title">Welding</h2>
+                <div class="proc-ed__rule"></div>
+                <p class="proc-ed__desc">Our welding joins two or more metal pieces by melting them together to create a strong, fused bond. With multiple welding techniques and certified welders, we ensure structural integrity across all assemblies.</p>
+                <div class="proc-ed__features">
+                    <span>Arc Welding</span>
+                    <span>Gas Welding</span>
+                    <span>Tacking</span>
+                </div>
+                <div class="proc-ed__machines">
+                    <p class="proc-ed__machines-head">Equipment</p>
+                    <ul>
+                        <li>Projection Welding</li>
+                        <li>Spot Welding</li>
+                        <li>SMAW</li>
+                        <li>MIG Welding</li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+
+    </div><!-- /proc-editorial-list -->
+
+    <!-- ── QUALITY STRIP ─────────────────────────────── -->
+    <section class="proc-quality">
+        <div class="proc-quality__inner">
+            <div class="proc-quality-item">
+                <div class="proc-quality-item__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3>ISO Certified</h3>
+                <p>ISO 9001:2015, 14001:2015 &amp; 45001:2018 certified for quality, environment and safety.</p>
+            </div>
+            <div class="proc-quality-item">
+                <div class="proc-quality-item__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <h3>Advanced Testing</h3>
+                <p>State-of-the-art testing for dimensional accuracy and material properties validation.</p>
+            </div>
+            <div class="proc-quality-item">
+                <div class="proc-quality-item__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </div>
+                <h3>Statistical Process Control</h3>
+                <p>Real-time monitoring and data analysis for continuous process optimisation.</p>
+            </div>
+            <div class="proc-quality-item">
+                <div class="proc-quality-item__icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3>Quick Turnaround</h3>
+                <p>Efficient processes and skilled workforce ensure fast, on-time delivery every time.</p>
             </div>
         </div>
     </section>
 
     {% include 'footer.html' %}
-
-    <!-- Process Detail Modal -->
-    <div id="processModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-    
     <script src="{{ url_for('static', filename='processes.js') }}"></script>
 </body>
 </html>
