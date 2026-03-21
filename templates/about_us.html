@@ -113,22 +113,38 @@
         </div>
       </div>
 
-      <div class="au-vm-card reveal-au">
-        <div class="au-vm-col">
-          <div class="au-vm-col__header">
-            <svg class="au-vm-col__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-            <h3>Vision</h3>
+      <!-- Vision & Mission — two-circle design -->
+      <div class="au-vmc reveal-au">
+
+        <!-- Mission row: circle left, description right -->
+        <div class="au-vmc__row au-vmc__row--mission">
+          <div class="au-vmc__circle au-vmc__circle--navy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+            <span>Mission</span>
           </div>
-          <p>To be India's preferred manufacturer of precision sheet-metal and fabrication components, trusted by leading OEMs across automotive, agriculture, and infrastructure sectors.</p>
-        </div>
-        <div class="au-vm-divider"></div>
-        <div class="au-vm-col">
-          <div class="au-vm-col__header">
-            <svg class="au-vm-col__icon au-vm-col__icon--amber" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            <h3>Mission</h3>
+          <div class="au-vmc__desc au-vmc__desc--right">
+            <p>Deliver world-class components through advanced manufacturing processes, a skilled workforce, and an uncompromising commitment to quality and on-time delivery.</p>
           </div>
-          <p>Deliver world-class components through advanced manufacturing processes, a skilled workforce, and an uncompromising commitment to quality and on-time delivery.</p>
         </div>
+
+        <!-- S-curve connector -->
+        <div class="au-vmc__connector">
+          <svg viewBox="0 0 340 90" fill="none" preserveAspectRatio="none">
+            <path d="M 80 0 C 80 45 260 45 260 90" stroke="rgba(13,26,58,.18)" stroke-width="2.5" stroke-dasharray="6 4"/>
+          </svg>
+        </div>
+
+        <!-- Vision row: description left, circle right -->
+        <div class="au-vmc__row au-vmc__row--vision">
+          <div class="au-vmc__desc au-vmc__desc--left">
+            <p>To be India's preferred manufacturer of precision sheet-metal and fabrication components, trusted by leading OEMs across automotive, agriculture, and infrastructure sectors.</p>
+          </div>
+          <div class="au-vmc__circle au-vmc__circle--amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Vision</span>
+          </div>
+        </div>
+
       </div>
 
     </div>

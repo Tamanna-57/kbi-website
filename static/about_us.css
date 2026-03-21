@@ -47,10 +47,10 @@
 .au-hero {
   background: var(--au-navy);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  min-height: 80vh;
-  gap: clamp(2rem, 4vw, 4rem);
-  padding: 0 clamp(2rem, 6vw, 6rem);
+  grid-template-columns: 1fr 1.25fr;
+  min-height: 88vh;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding: 0 clamp(2rem, 5vw, 5rem);
   padding-top: clamp(95px, 11vw, 115px);
   padding-bottom: 3rem;
   align-items: center;
@@ -131,11 +131,11 @@
 }
 .au-hero__btn:hover { background: #c9910e; transform: translateY(-2px); }
 
-/* Image — bigger than before */
+/* Image — fills the right column fully */
 .au-hero__img-wrap {
   border-radius: 22px;
   overflow: hidden;
-  height: clamp(400px, 58vh, 580px);
+  height: clamp(480px, 72vh, 680px);
   box-shadow: 0 28px 72px rgba(0,0,0,.42);
   will-change: transform, opacity;
 }
@@ -323,68 +323,94 @@
   line-height: 1.35;
 }
 
-/* ── Vision/Mission: two bold side-by-side cards ─────────── */
-.au-vm-card {
+/* ── Vision/Mission: two-circle design (reference: PowerPoint style) ── */
+.au-vmc {
   width: 100%;
-  background: var(--au-white);
-  border-radius: 18px;
-  padding: 3.4rem 0 2.6rem;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: start;
-  box-shadow: 0 10px 44px rgba(13,26,58,.09);
-  position: relative;
-  z-index: 1;
-  text-align: left;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
 }
 
-.au-vm-col { padding: 0 2.2rem; }
-.au-vm-col:first-child { padding-left: 2.4rem; }
-.au-vm-col:last-child  { padding-right: 2.4rem; }
-
-.au-vm-col__header {
+/* Each row: circle + description side by side */
+.au-vmc__row {
   display: flex;
   align-items: center;
-  gap: .6rem;
-  margin-bottom: .9rem;
+  gap: 2.5rem;
 }
+.au-vmc__row--mission { justify-content: flex-start; }
+.au-vmc__row--vision  { justify-content: flex-end; }
 
-.au-vm-col__icon {
-  width: 26px; height: 26px;
-  color: var(--au-navy);
+/* The large circle */
+.au-vmc__circle {
   flex-shrink: 0;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  box-shadow: 0 16px 48px rgba(0,0,0,.18);
 }
-.au-vm-col__icon--amber { color: var(--au-amber); }
-
-.au-vm-col h3 {
+.au-vmc__circle svg {
+  width: 46px;
+  height: 46px;
+}
+.au-vmc__circle span {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: 1.55rem;
+  font-size: 1.35rem;
   font-weight: 600;
-  color: var(--au-text);
-  margin: 0;
+  letter-spacing: .02em;
 }
 
-.au-vm-col p {
+/* Navy circle (Mission) */
+.au-vmc__circle--navy {
+  background: var(--au-navy);
+  color: #fff;
+  border: 3px solid rgba(255,255,255,.12);
+}
+/* Amber/Gold circle (Vision) */
+.au-vmc__circle--amber {
+  background: var(--au-amber2);
+  color: var(--au-navy);
+  border: 3px solid rgba(255,255,255,.3);
+}
+
+/* Description text box */
+.au-vmc__desc {
+  flex: 1;
+  max-width: 300px;
+}
+.au-vmc__desc p {
   font-family: 'Inter', sans-serif;
-  font-size: .87rem;
+  font-size: .9rem;
   color: var(--au-muted);
-  line-height: 1.8;
+  line-height: 1.85;
   margin: 0;
 }
+.au-vmc__desc--right { text-align: left; }
+.au-vmc__desc--left  { text-align: right; }
 
-.au-vm-divider {
-  width: 1px;
-  background: rgba(13,26,58,.1);
-  align-self: stretch;
-  margin: .5rem 0;
+/* S-curve dashed connector SVG */
+.au-vmc__connector {
+  width: 100%;
+  height: 70px;
+  padding: 0 10px;
+}
+.au-vmc__connector svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* ══════════════════════════════════════════════════════════
    4. OUR JOURNEY — horizontal timeline (organic/scrapbook)
-      White background, vertical connector lines, rotated images
+      Deep navy bg so images & amber timeline elements pop
 ══════════════════════════════════════════════════════════ */
 .au-journey {
-  background: var(--au-white);
+  background: #0d1a3a;
   padding: clamp(3.5rem, 6vw, 5.5rem) 0 clamp(3rem, 5vw, 4.5rem);
   overflow: hidden;
 }
@@ -400,7 +426,7 @@
   font-family: 'EB Garamond', Georgia, serif;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 600;
-  color: var(--au-text);
+  color: #fff;
   margin: 0;
   line-height: 1.18;
 }
@@ -519,7 +545,7 @@
   font-family: 'Inter', sans-serif;
   font-size: .72rem;
   font-weight: 700;
-  color: var(--au-text);
+  color: #fff;
   margin: 0;
   text-align: center;
 }
@@ -527,7 +553,7 @@
 .au-htl-card__desc {
   font-family: 'Inter', sans-serif;
   font-size: .64rem;
-  color: var(--au-muted);
+  color: rgba(200,210,235,.75);
   line-height: 1.5;
   margin: 0;
   text-align: center;
@@ -569,9 +595,9 @@
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  background: var(--au-white);
+  background: #0d1a3a;
   border: 3px solid var(--au-amber);
-  box-shadow: 0 0 0 4px rgba(184,134,11,.15);
+  box-shadow: 0 0 0 4px rgba(184,134,11,.25);
   transition: transform .25s;
 }
 .au-htl__dot-wrap:hover .au-htl__dot { transform: scale(1.35); }

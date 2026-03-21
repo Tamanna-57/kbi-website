@@ -620,23 +620,23 @@ section { position: relative; z-index: 1; }
    OUR CUSTOMERS — Infinite Marquee Ticker
 ══════════════════════════════════════════════════════ */
 .customers-marquee-section {
-  background: var(--color-bg);
-  padding: 4rem 0;
-  border-top: 1px solid var(--color-border);
+  background: #1c2f5c;           /* 2 tones lighter than --color-bg */
+  padding: 3.5rem 0;
   overflow: hidden;
 }
 
 .customers-marquee-header {
   text-align: center;
-  margin-bottom: 2.8rem;
+  margin-bottom: 2.4rem;
 }
 
 .customers-marquee-kicker {
   display: inline-block;
-  font-size: .72rem;
-  text-transform: uppercase;
-  letter-spacing: .24em;
-  color: var(--color-text-muted);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: .06em;
+  color: #fff;
 }
 
 .marquee-outer {
@@ -676,12 +676,12 @@ section { position: relative; z-index: 1; }
 }
 
 .marquee-item img {
-  height: 62px;
+  height: 82px;
   width: auto;
-  max-width: 160px;
+  max-width: 200px;
   object-fit: contain;
   filter: none;
-  opacity: 0.88;
+  opacity: 0.9;
   transition: opacity .3s ease, transform .3s ease;
 }
 .marquee-item:hover img {
@@ -691,11 +691,11 @@ section { position: relative; z-index: 1; }
 
 .marquee-item span {
   font-family: 'Inter', sans-serif;
-  font-size: .65rem;
+  font-size: .8rem;
   font-weight: 600;
-  letter-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.55);
+  color: rgba(255,255,255,.7);
   white-space: nowrap;
 }
 
@@ -714,7 +714,6 @@ section { position: relative; z-index: 1; }
 ══════════════════════════════════════════════════════ */
 .ril-updates {
   background: var(--color-bg);
-  border-top: 1px solid var(--color-border);
   padding: clamp(3.5rem, 6vw, 5.5rem) 0;
 }
 
