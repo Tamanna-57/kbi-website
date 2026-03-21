@@ -110,24 +110,23 @@
   position: relative;
 }
 
-/* Scrollable wrapper */
+/* Scrollable wrapper — generous top padding gives room for card to lift up without clipping */
 .prod-track-wrap {
   overflow-x: scroll;
-  overflow-y: visible;                  /* allow cards to grow downward */
+  overflow-y: visible;
   scrollbar-width: none;
   -ms-overflow-style: none;
   cursor: grab;
   user-select: none;
-  padding: 1.5rem 2.5rem 2.5rem;
+  padding: 4rem 2.5rem 3rem;    /* 4rem top = room for the scale+lift combo */
 }
 .prod-track-wrap::-webkit-scrollbar { display: none; }
 .prod-track-wrap.is-dragging { cursor: grabbing; }
 
-/* Flex row that contains all cards.
-   perspective here gives the 3-D depth plane for the lift/sink effect. */
+/* Flex row — perspective on the container for 3-D depth */
 .prod-track {
   display: flex;
-  align-items: flex-start;             /* cards grow down independently */
+  align-items: flex-start;
   gap: 1.5rem;
   width: max-content;
   perspective: 1200px;
@@ -137,28 +136,32 @@
 .prod-card {
   width: clamp(230px, 20vw, 275px);
   border-radius: 18px;
-  overflow: visible;                   /* desc can grow below border-radius */
+  overflow: visible;
   background: #fff;
   box-shadow: 0 4px 18px rgba(13,26,58,.1);
   flex-shrink: 0;
-  /* Single transition covers transform + shadow for EVERY state */
   transition:
     transform .4s var(--p-ease),
-    box-shadow .4s var(--p-ease);
+    box-shadow .4s var(--p-ease),
+    filter .4s var(--p-ease),
+    opacity .4s var(--p-ease);
 }
 
-/* ── GROUP HOVER: when ANY card is hovered, push ALL cards back ── */
+/* ── GROUP HOVER — ALL non-hovered cards shrink back and dim ── */
 .prod-track:has(.prod-card:hover) .prod-card {
-  transform: translateY(4px) translateZ(-10px);
-  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  transform: translateY(14px) scale(0.88);
+  box-shadow: 0 2px 10px rgba(0,0,0,.18);
+  filter: brightness(0.72) saturate(0.8);
 }
 
-/* ── Then, the hovered card specifically lifts forward ── */
+/* ── HOVERED card pops forward, big, bright, glowing ── */
 .prod-track:has(.prod-card:hover) .prod-card:hover {
-  transform: translateY(-12px) translateZ(20px);
+  transform: translateY(-18px) scale(1.08);
+  filter: brightness(1) saturate(1);
   box-shadow:
-    0 20px 40px rgba(0,150,255,.4),
-    0 0 30px rgba(0,150,255,.3);
+    0 28px 56px rgba(0,150,255,.45),
+    0 0 40px rgba(0,150,255,.25),
+    0 8px 24px rgba(13,26,58,.3);
 }
 
 /* ── Image wrapper (tight, no overflow clip on card) ── */

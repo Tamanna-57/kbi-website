@@ -14,13 +14,28 @@
   <header>{% include 'navigation.html' %}</header>
 
   <!-- ═══════════════════════════════════════
-       HERO — no background photo, centred heading
+       HERO — split: text left, image right
   ═══════════════════════════════════════ -->
   <section class="mach-hero">
     <div class="mach-hero__inner">
-      <p class="mach-hero__eyebrow">Equipment &amp; Machinery</p>
-      <h1 class="mach-hero__title">Our Machines</h1>
-      <p class="mach-hero__sub">High-tonnage presses, CNC systems, welding rigs, and finishing equipment — powering precision at every stage of production.</p>
+
+      <div class="mach-hero__text">
+        <p class="mach-hero__eyebrow">Equipment &amp; Machinery</p>
+        <h1 class="mach-hero__title">Our Machines</h1>
+        <p class="mach-hero__sub">High-tonnage presses, CNC systems, welding rigs, and finishing equipment — powering precision at every stage of production.</p>
+        <ul class="mach-hero__bullets">
+          <li>Over <strong>70+ machines</strong> across 2 manufacturing plants</li>
+          <li>Capacities from <strong>25 tons to 600 tons</strong> pressing force</li>
+          <li>CNC-controlled turning, boring, wirecut &amp; machining centres</li>
+          <li>Dedicated welding bays with MIG, spot &amp; robotic-assist rigs</li>
+          <li>Full finishing line — shot blasting, painting &amp; quality inspection</li>
+        </ul>
+      </div>
+
+      <div class="mach-hero__img-wrap">
+        <img src="{{ url_for('static', filename='pics/process_Pressing.webp') }}" alt="KBI Pressing Machine">
+      </div>
+
     </div>
   </section>
 

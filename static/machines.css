@@ -15,20 +15,30 @@
 }
 
 /* ══════════════════════════════════════════════════════════
-   HERO — clean navy section, no background image
+   HERO — split layout: text left, machine image right
 ══════════════════════════════════════════════════════════ */
 .mach-hero {
   background: var(--m-navy);
-  padding-top: clamp(100px, 12vw, 120px);
-  padding-bottom: clamp(3.5rem, 6vw, 5rem);
-  text-align: center;
+  padding-top: clamp(95px, 11vw, 115px);
+  padding-bottom: clamp(3rem, 5vw, 4.5rem);
   overflow: hidden;
 }
 
 .mach-hero__inner {
-  max-width: 700px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 clamp(2rem, 5vw, 5rem);
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  align-items: center;
+  gap: clamp(2.5rem, 5vw, 5rem);
+}
+
+/* ── Left text column ── */
+.mach-hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
 .mach-hero__eyebrow {
@@ -46,7 +56,7 @@
 
 .mach-hero__title {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-size: clamp(2.8rem, 5.5vw, 5rem);
   font-weight: 500;
   line-height: 1.06;
   color: var(--m-white);
@@ -57,20 +67,69 @@
 
 .mach-hero__sub {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(.88rem, 1.4vw, 1.02rem);
+  font-size: clamp(.88rem, 1.3vw, 1rem);
   color: rgba(255,255,255,.62);
   line-height: 1.75;
-  margin: 0;
-  max-width: 580px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 0 1.8rem;
   opacity: 0;
-  animation: machFadeUp .7s var(--m-ease) .55s forwards;
+  animation: machFadeUp .7s var(--m-ease) .5s forwards;
 }
 
-@keyframes machFadeUp {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: none; }
+/* Bullet list of capabilities */
+.mach-hero__bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  opacity: 0;
+  animation: machFadeUp .7s var(--m-ease) .65s forwards;
+}
+.mach-hero__bullets li {
+  font-family: 'Inter', sans-serif;
+  font-size: .83rem;
+  color: rgba(255,255,255,.55);
+  line-height: 1.55;
+  padding-left: 1.1rem;
+  position: relative;
+}
+.mach-hero__bullets li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--m-amber2);
+  font-weight: 700;
+}
+.mach-hero__bullets strong {
+  color: rgba(255,255,255,.88);
+  font-weight: 600;
+}
+
+/* ── Right image ── */
+.mach-hero__img-wrap {
+  border-radius: 20px;
+  overflow: hidden;
+  height: clamp(420px, 60vh, 600px);
+  box-shadow: 0 32px 80px rgba(0,0,0,.45);
+  opacity: 0;
+  transform: translateX(50px);
+  animation: machSlideLeft .85s var(--m-ease) .55s forwards;
+}
+.mach-hero__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@keyframes machFadeUp   { from { opacity:0; transform: translateY(22px); } to { opacity:1; transform:none; } }
+@keyframes machSlideLeft { from { opacity:0; transform: translateX(50px); } to { opacity:1; transform:none; } }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .mach-hero__inner { grid-template-columns: 1fr; }
+  .mach-hero__img-wrap { height: 260px; }
 }
 
 /* ══════════════════════════════════════════════════════════
