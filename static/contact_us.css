@@ -1,531 +1,363 @@
-/* Import base styles and extend them */
-@import url('style_kbi.css'); /* Your existing CSS file */
+/* ════════════════════════════════════════════════════
+   Contact Us — KBI  (cu- prefix)
+   ════════════════════════════════════════════════════ */
 
-/* Contact Us specific styles */
-
-/* Hero Section for Contact Us */
-.hero {
-    background: linear-gradient(135deg, rgb(23, 23, 79), #2a2a8a);
-    color: #fff;
-    text-align: center;
-    padding: 6rem 0;
-    position: relative;
-    overflow: hidden;
+:root {
+  --cu-navy:     #0d1a3a;
+  --cu-navy2:    #1c2f5c;
+  --cu-amber:    #b8860b;
+  --cu-amber2:   #d4a017;
+  --cu-hero-bg:  #cde0ea;     /* soft blue-teal, like reference */
+  --cu-light:    #f0f5fb;
+  --cu-white:    #ffffff;
+  --cu-border:   #c8d9e8;
+  --cu-text:     #3a4a6b;
+  --cu-muted:    #6b7a99;
+  --cu-ease:     cubic-bezier(.25,.46,.45,.94);
 }
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.1);
+/* ── shared ──────────────────────────────────────────── */
+.cu-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
-.hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-    padding: 0 2rem;
-    position: relative;
-    z-index: 1;
+/* ══════════════════════════════════════════════════════
+   HERO
+   ══════════════════════════════════════════════════════ */
+.cu-hero {
+  background: var(--cu-hero-bg);
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 6rem 5rem;
 }
 
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    opacity: 0;
-    animation: fadeInUp 1s ease forwards;
+.cu-hero__content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
 }
 
-.hero p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    opacity: 0;
-    animation: fadeInUp 1s ease 0.3s forwards;
+.cu-hero__title {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: clamp(3rem, 6.5vw, 5.2rem);
+  font-weight: 700;
+  color: var(--cu-navy);
+  line-height: 1.08;
+  margin-bottom: 0.8rem;
+  letter-spacing: -.01em;
 }
 
-.btn {
-    background-color: #495057;
-    color: #fff;
-    padding: 1rem 2rem;
-    border: none;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-    display: inline-block;
-    opacity: 0;
-    animation: fadeInUp 1s ease 0.6s forwards;
-    cursor: pointer;
+.cu-hero__wave {
+  width: 140px;
+  margin: 0 auto 1.2rem;
+}
+.cu-hero__wave svg { width: 100%; height: auto; }
+
+.cu-hero__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.97rem;
+  color: var(--cu-text);
+  line-height: 1.65;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-.btn:hover {
-    background-color: #343a40;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+/* Decorative chevrons */
+.cu-hero__arrows {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.cu-hero__arrows--left  { left: 4rem; }
+.cu-hero__arrows--right { right: 4rem; }
+
+/* ══════════════════════════════════════════════════════
+   LOGO STRIP
+   ══════════════════════════════════════════════════════ */
+.cu-logos {
+  background: var(--cu-white);
+  border-top: 1px solid var(--cu-border);
+  border-bottom: 1px solid var(--cu-border);
+  padding: 1.8rem 2rem;
 }
 
-/* Contact Information Section */
-.contact-info-section {
-    padding: 4rem 0;
-    background: #f4f4f4;
+.cu-logos__inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5rem;
+  flex-wrap: wrap;
 }
 
-.contact-info-section h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: rgb(23, 23, 79);
+.cu-logos__inner img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(1) opacity(0.55);
+  transition: filter .3s var(--cu-ease);
+}
+.cu-logos__inner img:hover { filter: grayscale(0) opacity(1); }
+
+/* ══════════════════════════════════════════════════════
+   MAIN — Form + Newsletter
+   ══════════════════════════════════════════════════════ */
+.cu-main {
+  background: var(--cu-white);
+  padding: 4rem 0 4.5rem;
 }
 
-.contact-info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+.cu-main__grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
 }
 
-.contact-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+/* — Contact Form ——————————————————————————————————— */
+.cu-form-wrap { display: flex; flex-direction: column; }
+
+.cu-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
-.contact-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    border-color: #6c757d;
+.cu-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
 }
 
-.contact-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    color: rgb(23, 23, 79);
+.cu-form input,
+.cu-form textarea {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.82rem 1.05rem;
+  border: 1.5px solid var(--cu-border);
+  border-radius: 8px;
+  background: var(--cu-light);
+  color: var(--cu-navy);
+  outline: none;
+  width: 100%;
+  transition: border-color .22s, background .22s;
+}
+.cu-form input::placeholder,
+.cu-form textarea::placeholder { color: var(--cu-muted); }
+.cu-form input:focus,
+.cu-form textarea:focus {
+  border-color: var(--cu-navy);
+  background: #fff;
+}
+.cu-form textarea {
+  resize: vertical;
+  min-height: 128px;
 }
 
-.contact-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: rgb(23, 23, 79);
+/* shared button */
+.cu-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  padding: 0.82rem 2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .22s, transform .18s;
+}
+.cu-btn--form {
+  background: var(--cu-navy);
+  color: #fff;
+  align-self: flex-start;
+}
+.cu-btn--form:hover {
+  background: var(--cu-navy2);
+  transform: translateY(-1px);
 }
 
-.contact-card p {
-    color: #666;
-    line-height: 1.6;
+/* — Newsletter Card ————————————————————————————————— */
+.cu-newsletter {
+  background: var(--cu-navy);
+  border-radius: 16px;
+  padding: 2.4rem 2.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* Contact Form Section */
-.contact-form-section {
-    padding: 4rem 0;
-    background: white;
+.cu-newsletter__title {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
 }
 
-.contact-form-section h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: rgb(23, 23, 79);
+.cu-newsletter__body {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.86rem;
+  color: rgba(255,255,255,.68);
+  line-height: 1.65;
 }
 
-.form-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: start;
+.cu-newsletter__input {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  padding: 0.78rem 1rem;
+  border: 1.5px solid rgba(255,255,255,.22);
+  border-radius: 8px;
+  background: rgba(255,255,255,.07);
+  color: #fff;
+  outline: none;
+  width: 100%;
+  transition: border-color .22s;
+}
+.cu-newsletter__input::placeholder { color: rgba(255,255,255,.42); }
+.cu-newsletter__input:focus { border-color: rgba(255,255,255,.55); }
+
+.cu-newsletter__btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.78rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--cu-amber);
+  color: #fff;
+  cursor: pointer;
+  transition: background .22s;
+  align-self: flex-start;
+  width: 100%;
+}
+.cu-newsletter__btn:hover { background: var(--cu-amber2); }
+
+/* ══════════════════════════════════════════════════════
+   INFO CARDS
+   ══════════════════════════════════════════════════════ */
+.cu-info {
+  background: var(--cu-light);
+  padding: 3.5rem 0;
 }
 
-.form-text h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    color: rgb(23, 23, 79);
+.cu-info__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
-.form-text p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    color: #666;
-    line-height: 1.6;
+.cu-info-card {
+  background: var(--cu-white);
+  border-radius: 14px;
+  padding: 2rem 1.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  box-shadow: 0 2px 14px rgba(13,26,58,.06);
+  transition: box-shadow .3s var(--cu-ease), transform .3s var(--cu-ease);
+}
+.cu-info-card:hover {
+  box-shadow: 0 10px 30px rgba(13,26,58,.13);
+  transform: translateY(-3px);
 }
 
-.form-features {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+.cu-info-card__icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--cu-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cu-navy);
+  margin-bottom: 0.4rem;
+  flex-shrink: 0;
+}
+.cu-info-card__icon svg { width: 22px; height: 22px; }
+
+.cu-info-card__head {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--cu-navy);
+  line-height: 1.25;
 }
 
-.feature {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+.cu-info-card__body {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.83rem;
+  color: var(--cu-muted);
+  line-height: 1.65;
 }
 
-.feature i {
-    color: rgb(23, 23, 79);
-    font-size: 1.2rem;
+/* ══════════════════════════════════════════════════════
+   MAPS
+   ══════════════════════════════════════════════════════ */
+.cu-maps {
+  background: var(--cu-white);
+  padding: 3.5rem 0 4rem;
 }
 
-.feature span {
-    color: #495057;
-    font-weight: 500;
+.cu-maps__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
 }
 
-.contact-form {
-    background: #f9f9f9;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.cu-map-item__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--cu-navy);
+  margin-bottom: 0.75rem;
 }
 
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
+.cu-map-item iframe {
+  width: 100%;
+  height: 370px;
+  border: 0;
+  border-radius: 12px;
+  display: block;
+  box-shadow: 0 4px 20px rgba(13,26,58,.1);
 }
 
-.form-group {
-    margin-bottom: 1rem;
+/* ══════════════════════════════════════════════════════
+   ANIMATIONS
+   ══════════════════════════════════════════════════════ */
+@keyframes cuFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: rgb(23, 23, 79);
-    font-weight: 500;
+.cu-hero__title { animation: cuFadeUp .7s var(--cu-ease) both; }
+.cu-hero__sub   { animation: cuFadeUp .7s var(--cu-ease) .18s both; }
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  .cu-main__grid { grid-template-columns: 1fr; }
+  .cu-info__grid { grid-template-columns: 1fr; }
+  .cu-maps__grid { grid-template-columns: 1fr; }
+  .cu-hero { padding: 5rem 3rem 4rem; }
+  .cu-hero__arrows { display: none; }
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 0.8rem;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: rgb(23, 23, 79);
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-.submit-btn {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    margin-top: 1rem;
-}
-
-/* FAQ Section */
-.faq-section {
-    padding: 4rem 0;
-    background: #f4f4f4;
-}
-
-.faq-section h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: rgb(23, 23, 79);
-}
-
-.faq-grid {
-    display: grid;
-    gap: 1rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.faq-item {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-
-.faq-item:hover {
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-}
-
-.faq-question {
-    padding: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: white;
-    transition: background-color 0.3s ease;
-}
-
-.faq-question:hover {
-    background: #f8f9fa;
-}
-
-.faq-question h3 {
-    color: rgb(23, 23, 79);
-    margin: 0;
-    font-size: 1.2rem;
-}
-
-.faq-question i {
-    color: #495057;
-    transition: transform 0.3s ease;
-}
-
-.faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.faq-answer p {
-    padding: 0 1.5rem 1.5rem;
-    margin: 0;
-    color: #666;
-    line-height: 1.6;
-}
-
-.faq-item.active .faq-answer {
-    max-height: 200px;
-}
-
-/* Map Section */
-.map-section {
-    padding: 4rem 0;
-    background: white;
-}
-
-.map-section h2 {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
-    color: rgb(23, 23, 79);
-}
-
-.map-placeholder {
-    width: 100%;
-    height: 400px;
-    background: linear-gradient(135deg, rgb(23, 23, 79), #2a2a8a);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-}
-
-.map-placeholder i {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-}
-
-.map-placeholder p {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.map-placeholder small {
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Container */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2rem;
-    }
-    
-    .hero p {
-        font-size: 1rem;
-    }
-    
-    .contact-info-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-form {
-        padding: 1.5rem;
-    }
-    
-    .container {
-        padding: 0 1rem;
-    }
-    
-    .map-placeholder {
-        height: 300px;
-    }
-    
-    .map-placeholder i {
-        font-size: 3rem;
-    }
-    
-    .map-placeholder p {
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero {
-        padding: 4rem 0;
-    }
-    
-    .hero h1 {
-        font-size: 1.5rem;
-    }
-    
-    .contact-card {
-        padding: 1.5rem;
-    }
-    
-    .contact-form {
-        padding: 1rem;
-    }
-    
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        padding: 0.6rem;
-    }
-    
-    .map-placeholder {
-        height: 250px;
-    }
-}
-
-/* Contact Us CSS Fixes */
-
-/* Fix for email text overflow in contact cards */
-.contact-card p {
-    color: #666;
-    line-height: 1.6;
-    word-wrap: break-word;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
-}
-
-/* Ensure contact cards have proper width constraints */
-.contact-card {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    min-width: 0; /* Allow shrinking */
-    overflow: hidden; /* Hide overflow */
-}
-
-/* Center the map iframe */
-.map-section iframe {
-    width: 100%;
-    max-width: 100%;
-    height: 450px;
-    border: 0;
-    border-radius: 10px;
-    display: block;
-    margin: 0 auto;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-/* Ensure map container is centered */
-.map-section .container {
-    text-align: center;
-}
-
-/* Responsive fixes for mobile */
-@media (max-width: 768px) {
-    .map-section iframe {
-        height: 350px;
-    }
-    
-    .contact-card {
-        padding: 1.5rem;
-        min-width: 0;
-    }
-    
-    .contact-card p {
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .map-section iframe {
-        height: 300px;
-    }
-    
-    .contact-card {
-        padding: 1rem;
-    }
-    
-    .contact-card p {
-        font-size: 0.85rem;
-    }
-}
-
-.map-wrapper {
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center items horizontally */
-    gap: 2rem; /* Adds space between the map items */
-}
-
-.map-item {
-    text-align: center;
-    width: 100%;
-    max-width: 800px; /* Optional: constrain the max width of map items */
-}
-
-/* Optional: Make iframes more responsive */
-.map-wrapper iframe {
-    max-width: 100%; /* Ensures iframes don't overflow their container */
-    width: 100%; /* Make iframe take full width of its container */
-    height: 450px; /* Keep a fixed height or adjust as needed */
-    margin-top: 1rem; /* Space between heading and iframe */
+@media (max-width: 600px) {
+  .cu-form__row  { grid-template-columns: 1fr; }
+  .cu-logos__inner { gap: 2rem; }
+  .cu-logos__inner img { height: 36px; }
+  .cu-hero { padding: 4rem 1.5rem 3rem; }
+  .cu-container { padding: 0 1.2rem; }
 }
