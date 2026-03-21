@@ -154,13 +154,14 @@
 /* ── EDITORIAL LIST ────────────────────────────────── */
 .proc-editorial-list {
   background: var(--p-navy);
+  overflow: hidden;
 }
 
 /* Each process article */
 .proc-ed {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 420px;
+  height: 480px;
 }
 
 /* Flip: image goes to the right (via order) */
@@ -170,7 +171,19 @@
 /* Image column */
 .proc-ed__img-col {
   overflow: hidden;
-  max-height: 440px;
+  position: relative;
+}
+
+/* Subtle amber colour grade overlay */
+.proc-ed__img-col::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgba(13,26,58,.22) 0%,
+    rgba(184,134,11,.08) 100%);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .proc-ed__img-col picture,
@@ -179,21 +192,24 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform .7s var(--p-ease);
+  transition: transform .32s var(--p-ease), filter .32s;
+  filter: brightness(1.06) contrast(1.08) saturate(1.18);
 }
 
 .proc-ed:hover .proc-ed__img-col img {
-  transform: scale(1.04);
+  transform: scale(1.05);
+  filter: brightness(1.1) contrast(1.1) saturate(1.28);
 }
 
 /* Text column */
 .proc-ed__text-col {
-  padding: clamp(3rem, 6vw, 5rem) clamp(2.5rem, 5vw, 4.5rem);
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(2.5rem, 5vw, 4.5rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
   background: var(--p-navy);
   border-top: 1px solid rgba(255,255,255,.05);
+  overflow: hidden;
 }
 
 /* Alternating bg: every odd text col slightly lighter */
@@ -374,9 +390,9 @@
 @media (max-width: 900px) {
   .proc-ed {
     grid-template-columns: 1fr;
-    min-height: unset;
+    height: auto;
   }
-  .proc-ed__img-col { height: 320px; }
+  .proc-ed__img-col { height: 300px; }
   .proc-ed--flip .proc-ed__img-col { order: 0; }
   .proc-ed--flip .proc-ed__text-col { order: 0; }
   .proc-stats__inner { gap: 0; }
@@ -387,7 +403,8 @@
 
 @media (max-width: 600px) {
   .proc-hero__title { font-size: 2.6rem; }
-  .proc-ed__img-col { height: 260px; }
+  .proc-ed { height: auto; }
+  .proc-ed__img-col { height: 240px; }
   .proc-ed__text-col { padding: 2rem 1.5rem; }
   .proc-ed__num { font-size: 3rem; }
   .proc-ed__title { font-size: 1.8rem; }
