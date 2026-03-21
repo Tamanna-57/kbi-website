@@ -323,86 +323,89 @@
   line-height: 1.35;
 }
 
-/* ── Vision/Mission: two-circle design (reference: PowerPoint style) ── */
+/* ── Mission & Vision: pill-card layout (reference-inspired) ── */
 .au-vmc {
   width: 100%;
-  max-width: 640px;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 0;
+  gap: 2.8rem;
+  margin-top: 2.8rem;
 }
 
-/* Each row: circle + description side by side */
-.au-vmc__row {
-  display: flex;
-  align-items: center;
-  gap: 2.5rem;
-}
-.au-vmc__row--mission { justify-content: flex-start; }
-.au-vmc__row--vision  { justify-content: flex-end; }
-
-/* The large circle */
-.au-vmc__circle {
-  flex-shrink: 0;
-  width: 170px;
-  height: 170px;
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .6rem;
-  box-shadow: 0 16px 48px rgba(0,0,0,.18);
-}
-.au-vmc__circle svg {
-  width: 46px;
-  height: 46px;
-}
-.au-vmc__circle span {
+/* Sub-heading */
+.au-vmc__title {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: 1.35rem;
+  font-size: clamp(2rem, 4vw, 2.8rem);
   font-weight: 600;
-  letter-spacing: .02em;
+  color: var(--au-text);
+  text-align: center;
+  margin: 0;
+  font-variant: small-caps;
+  letter-spacing: .04em;
 }
 
-/* Navy circle (Mission) */
-.au-vmc__circle--navy {
+/* Each block */
+.au-vmc__block {
+  width: 88%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.au-vmc__block--left  { align-self: flex-start; }
+.au-vmc__block--right { align-self: flex-end; }
+
+/* Pill header */
+.au-vmc__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .65rem 2rem;
+  border-radius: 50px;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  width: fit-content;
+  letter-spacing: .01em;
+}
+.au-vmc__pill svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+.au-vmc__pill--navy {
   background: var(--au-navy);
   color: #fff;
-  border: 3px solid rgba(255,255,255,.12);
+  box-shadow: 5px 5px 0 rgba(13,26,58,.35), 0 8px 28px rgba(13,26,58,.18);
 }
-/* Amber/Gold circle (Vision) */
-.au-vmc__circle--amber {
+.au-vmc__pill--amber {
   background: var(--au-amber2);
   color: var(--au-navy);
-  border: 3px solid rgba(255,255,255,.3);
+  box-shadow: 5px 5px 0 rgba(184,134,11,.5), 0 8px 28px rgba(184,134,11,.2);
 }
 
-/* Description text box */
-.au-vmc__desc {
-  flex: 1;
-  max-width: 300px;
+/* Bullet list */
+.au-vmc__list {
+  list-style: none;
+  padding: 0 .4rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
 }
-.au-vmc__desc p {
+.au-vmc__list li {
   font-family: 'Inter', sans-serif;
   font-size: .9rem;
   color: var(--au-muted);
-  line-height: 1.85;
-  margin: 0;
+  line-height: 1.72;
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
 }
-.au-vmc__desc--right { text-align: left; }
-.au-vmc__desc--left  { text-align: right; }
-
-/* S-curve dashed connector SVG */
-.au-vmc__connector {
-  width: 100%;
-  height: 70px;
-  padding: 0 10px;
-}
-.au-vmc__connector svg {
-  width: 100%;
-  height: 100%;
+.au-vmc__list li::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--au-amber);
+  flex-shrink: 0;
+  margin-top: .52rem;
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -710,10 +713,8 @@
   .au-story__inner { grid-template-columns: 1fr; }
   .au-story__images { order: -1; height: 220px; }
 
-  .au-vm-card { grid-template-columns: 1fr; }
-  .au-vm-divider { width: 100%; height: 1px; margin: 1.4rem 0; align-self: auto; }
-  .au-vm-col { padding: 0; }
-  .au-vm-col:first-child { padding-left: 0; }
+  .au-vmc__block { width: 100%; }
+  .au-vmc__block--left, .au-vmc__block--right { align-self: stretch; }
 
   .au-values-pill { flex-wrap: wrap; gap: 1.4rem; }
   .au-val-item { min-width: 80px; }
