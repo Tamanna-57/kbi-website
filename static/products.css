@@ -16,9 +16,10 @@
    ============================================================ */
 .prod-hero {
   background: var(--p-navy);
-  padding-top: clamp(90px, 10vw, 110px);
-  padding-bottom: clamp(3rem, 6vw, 5rem);
+  padding-top: 0;
+  padding-bottom: 0;
   overflow: hidden;
+  min-height: 72vh;
 }
 .prod-hero__inner {
   max-width: 1240px;
@@ -26,12 +27,20 @@
   padding: 0 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
+  align-items: stretch;
   gap: clamp(2rem, 5vw, 5rem);
+  min-height: 72vh;
 }
 
 /* Left text — bottom-to-top entrance */
-.prod-hero__text { display: flex; flex-direction: column; gap: 1.2rem; }
+.prod-hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  justify-content: center;
+  padding-top: clamp(90px, 10vw, 110px);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
 
 .prod-hero__eyebrow {
   font-family: 'Inter', sans-serif;
@@ -56,9 +65,9 @@
   animation: prodFadeUp .7s var(--p-ease) .48s forwards;
 }
 
-/* Right image — slides in from right */
+/* Right image — fills full column height */
 .prod-hero__image-wrap {
-  border-radius: 5px; overflow: hidden; aspect-ratio: 4/3;
+  border-radius: 0; overflow: hidden; height: 100%;
   background: rgba(255,255,255,.06);
   opacity: 0; transform: translateX(60px);
   animation: prodSlideLeft .85s var(--p-ease) .55s forwards;
@@ -81,14 +90,15 @@
   display: flex; align-items: center; justify-content: center;
   gap: .6rem; flex-wrap: wrap;
 }
-.prod-filter__pills { display: flex; gap: .55rem; flex-wrap: wrap; justify-content: center; }
+.prod-filter__pills { display: flex; gap: .4rem; flex-wrap: nowrap; justify-content: center; overflow-x: auto; padding-bottom: 2px; }
 .prod-pill {
   font-family: 'Inter', sans-serif;
-  font-size: .88rem; font-weight: 600;
-  padding: .6rem 1.4rem; border-radius: 50px;
+  font-size: .78rem; font-weight: 600;
+  padding: .5rem 1.05rem; border-radius: 50px;
   border: 1.5px solid rgba(13,26,58,.22);
   background: transparent; color: var(--p-navy);
   cursor: pointer; white-space: nowrap;
+  flex-shrink: 0;
   transition: background .22s, color .22s, border-color .22s;
 }
 .prod-pill:hover, .prod-pill.active {

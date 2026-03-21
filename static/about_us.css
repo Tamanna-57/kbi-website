@@ -51,13 +51,20 @@
   min-height: 88vh;
   gap: clamp(2rem, 4vw, 3.5rem);
   padding: 0 clamp(2rem, 5vw, 5rem);
-  padding-top: clamp(95px, 11vw, 115px);
-  padding-bottom: 3rem;
-  align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
+  align-items: stretch;
   overflow: hidden;
 }
 
-.au-hero__text { color: var(--au-white); }
+.au-hero__text {
+  color: var(--au-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: clamp(95px, 11vw, 115px);
+  padding-bottom: 3rem;
+}
 
 .au-hero__eyebrow {
   font-family: 'Inter', sans-serif;
@@ -133,10 +140,9 @@
 
 /* Image — fills the right column fully */
 .au-hero__img-wrap {
-  border-radius: 6px;
+  border-radius: 0;
   overflow: hidden;
-  height: clamp(480px, 72vh, 680px);
-  box-shadow: 0 28px 72px rgba(0,0,0,.42);
+  height: 100%;
   will-change: transform, opacity;
 }
 .au-hero__img-wrap img {
