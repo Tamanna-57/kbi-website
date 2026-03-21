@@ -4,7 +4,7 @@
 @import url('style_kbi.css');
 
 :root {
-  --au-navy:   #0d1a3a;
+  --au-navy:   #132240;
   --au-navy2:  #16213e;
   --au-amber:  #b8860b;
   --au-amber2: #d4a017;
@@ -133,7 +133,7 @@
 
 /* Image — fills the right column fully */
 .au-hero__img-wrap {
-  border-radius: 22px;
+  border-radius: 6px;
   overflow: hidden;
   height: clamp(480px, 72vh, 680px);
   box-shadow: 0 28px 72px rgba(0,0,0,.42);
@@ -218,7 +218,7 @@
 }
 
 .au-img-card {
-  border-radius: 18px;
+  border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 8px 28px rgba(13,26,58,.12);
   transition: transform .4s var(--au-ease), box-shadow .4s var(--au-ease);
@@ -281,7 +281,7 @@
 .au-values-pill {
   width: 100%;
   background: var(--au-navy);
-  border-radius: 18px;
+  border-radius: 6px;
   padding: 2.2rem 1.6rem;
   display: flex;
   align-items: flex-start;
@@ -648,7 +648,7 @@
   flex-direction: column;
   align-items: center;
   padding: 2.2rem 1.4rem;
-  border-radius: 18px;
+  border-radius: 6px;
   background: var(--au-white);
   transition: box-shadow .3s, transform .3s;
 }

@@ -192,6 +192,7 @@ class MachineCardManager {
     }
 
     setupSearchEvents() {
+        if (!this.searchInput) return;
         let searchTimeout;
         this.searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);

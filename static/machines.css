@@ -4,8 +4,8 @@
 @import url('style_kbi.css');
 
 :root {
-  --m-navy:   #0d1a3a;
-  --m-navy2:  #16213e;
+  --m-navy:   #132240;
+  --m-navy2:  #1a2d50;
   --m-amber:  #b8860b;
   --m-amber2: #d4a017;
   --m-white:  #ffffff;
@@ -108,7 +108,7 @@
 
 /* ── Right image ── */
 .mach-hero__img-wrap {
-  border-radius: 20px;
+  border-radius: 6px;
   overflow: hidden;
   height: clamp(420px, 60vh, 600px);
   box-shadow: 0 32px 80px rgba(0,0,0,.45);
@@ -234,7 +234,7 @@
 .machine-card {
   position: relative;
   background: var(--m-white);
-  border-radius: 16px;
+  border-radius: 5px;
   overflow: hidden;
   border: 1.5px solid rgba(13,26,58,.1);
   box-shadow: 0 4px 18px rgba(13,26,58,.06);
@@ -252,7 +252,7 @@
   transform-origin: top center;
   transition: transform .42s var(--m-ease);
   z-index: 1;
-  border-radius: 16px;
+  border-radius: 5px;
 }
 
 .machine-card:hover::before {

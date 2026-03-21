@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
      FILTER + SEARCH
      ============================================================ */
   function applyFilters() {
-    const term  = searchInput.value.trim().toLowerCase();
+    const term  = searchInput ? searchInput.value.trim().toLowerCase() : '';
     const cards = track.querySelectorAll('.prod-card');
     let visible = 0;
 
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* Search */
-  searchInput.addEventListener('input', () => {
+  if (searchInput) searchInput.addEventListener('input', () => {
     activeIndex = 0;
     applyFilters();
   });

@@ -6,8 +6,8 @@
 @import url('style_kbi.css');
 
 :root {
-  --p-navy:    #0d1a3a;
-  --p-navy2:   #162c54;
+  --p-navy:    #132240;
+  --p-navy2:   #1a3062;
   --p-amber:   #b8860b;
   --p-amber2:  #d4a017;
   --p-light:   #f0f5fb;
@@ -214,10 +214,10 @@
 
 /* Alternating bg: every odd text col slightly lighter */
 .proc-ed:nth-child(even) .proc-ed__text-col {
-  background: #0f2040;
+  background: #1a2d50;
 }
 .proc-ed:nth-child(even) .proc-ed__img-col {
-  background: #0f2040;
+  background: #1a2d50;
 }
 
 /* Process number */
@@ -280,7 +280,7 @@
   background: rgba(184,134,11,.12);
   border: 1px solid rgba(184,134,11,.25);
   padding: .28rem .75rem;
-  border-radius: 20px;
+  border-radius: 6px;
 }
 
 /* Equipment list */
@@ -328,7 +328,7 @@
 .proc-quality {
   background:
     radial-gradient(ellipse at 50% 0%, rgba(184,134,11,.12) 0%, transparent 55%),
-    linear-gradient(180deg, #0f2040 0%, var(--p-navy) 100%);
+    linear-gradient(180deg, #1a2d50 0%, var(--p-navy) 100%);
   padding: 6rem 2rem;
   border-top: 1px solid rgba(255,255,255,.06);
 }
@@ -345,7 +345,7 @@
   text-align: center;
   padding: 2.8rem 2rem;
   border: 1px solid rgba(255,255,255,.09);
-  border-radius: 20px;
+  border-radius: 6px;
   background: rgba(255,255,255,.04);
   transition: background .3s, transform .3s, box-shadow .3s;
 }
@@ -359,7 +359,7 @@
 .proc-quality-item__icon {
   width: 64px;
   height: 64px;
-  border-radius: 16px;
+  border-radius: 5px;
   background: rgba(184,134,11,.18);
   display: flex;
   align-items: center;

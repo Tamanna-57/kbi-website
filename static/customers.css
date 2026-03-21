@@ -67,7 +67,7 @@
 
 .cust-card__inner {
   background: var(--cu-white);
-  border-radius: 22px;
+  border-radius: 6px;
   padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 4vw, 3rem);
   box-shadow:
     0 20px 60px rgba(13,26,58,.1),

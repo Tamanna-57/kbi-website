@@ -286,7 +286,7 @@
 .ch-award-card {
   background: rgba(255,255,255,.05);
   border: 1px solid rgba(255,255,255,.1);
-  border-radius: 18px;
+  border-radius: 6px;
   padding: 2.2rem 2rem 2rem;
   transition:
     background .3s var(--ch-ease),

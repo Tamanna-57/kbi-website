@@ -202,7 +202,7 @@
 /* — Newsletter Card ————————————————————————————————— */
 .cu-newsletter {
   background: linear-gradient(160deg, #0d1a3a 0%, #162c54 100%);
-  border-radius: 16px;
+  border-radius: 5px;
   padding: 2.4rem 2.2rem;
   display: flex;
   flex-direction: column;
@@ -273,7 +273,7 @@
 
 .cu-info-card {
   background: var(--cu-white);
-  border-radius: 16px;
+  border-radius: 5px;
   padding: 2.2rem 2rem 2rem;
   display: flex;
   flex-direction: column;
