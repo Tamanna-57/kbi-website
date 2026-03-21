@@ -116,7 +116,9 @@
   height: 520px;
   perspective: 1200px;
   overflow: hidden;
+  cursor: grab;
 }
+.prod-track-wrap:active { cursor: grabbing; }
 
 /* Track — absolute center anchor */
 .prod-track {
@@ -191,7 +193,8 @@
 .prod-card__desc-wrap {
   max-height: 0;
   overflow: hidden;
-  transition: max-height .4s var(--p-ease), opacity .35s ease, margin-top .35s ease;
+  /* Fast collapse when leaving center */
+  transition: max-height .12s ease, opacity .1s ease, margin-top .12s ease;
   opacity: 0;
   margin-top: 0;
 }
@@ -199,6 +202,8 @@
   max-height: 160px;
   opacity: 1;
   margin-top: .65rem;
+  /* Smooth reveal when arriving at center */
+  transition: max-height .45s var(--p-ease), opacity .4s ease .1s, margin-top .4s var(--p-ease);
 }
 
 .prod-card__desc {

@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     visCards.forEach((card, i) => {
       const rel = i - activeIndex;
       const { tx, sc, ry, op, z } = getTransform(rel);
-      card.style.transform = `translate(-50%, -50%) translateX(${tx}px) scale(${sc}) rotateY(${ry}deg)`;
+      card.style.transform = `translateX(${tx}px) scale(${sc}) rotateY(${ry}deg)`;
       card.style.opacity   = op;
       card.style.zIndex    = z;
       card.classList.toggle('prod-card--active', rel === 0);
@@ -170,16 +170,46 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowRight') step( 1);
   });
 
+  /* Touch drag */
   let touchX = 0;
   trackWrap.addEventListener('touchstart', e => {
     touchX = e.touches[0].clientX;
+    clearInterval(autoTimer);
   }, { passive: true });
   trackWrap.addEventListener('touchend', e => {
     const dx = touchX - e.changedTouches[0].clientX;
     if (Math.abs(dx) > 40) step(dx > 0 ? 1 : -1);
+    startAuto();
   });
 
-  track.addEventListener('click', e => {
+  /* Mouse drag — allows direction reversal */
+  let dragStartX = null;
+  let wasDragging = false;
+
+  trackWrap.addEventListener('mousedown', e => {
+    dragStartX = e.clientX;
+    wasDragging = false;
+    clearInterval(autoTimer);
+    trackWrap.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (dragStartX === null) return;
+    if (Math.abs(e.clientX - dragStartX) > 8) wasDragging = true;
+  });
+
+  window.addEventListener('mouseup', e => {
+    if (dragStartX !== null) {
+      const dx = dragStartX - e.clientX;
+      if (wasDragging && Math.abs(dx) > 40) step(dx > 0 ? 1 : -1);
+      dragStartX = null;
+      startAuto();
+    }
+    trackWrap.style.cursor = 'grab';
+  });
+
+  trackWrap.addEventListener('click', e => {
+    if (wasDragging) { wasDragging = false; return; }
     const card = e.target.closest('.prod-card:not(.hidden)');
     if (!card) return;
     const idx = getVisibleCards().indexOf(card);
@@ -193,7 +223,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetAuto()  { clearInterval(autoTimer); startAuto(); }
 
   trackWrap.addEventListener('mouseenter', () => clearInterval(autoTimer));
-  trackWrap.addEventListener('mouseleave', startAuto);
+  trackWrap.addEventListener('mouseleave', () => {
+    dragStartX = null;
+    trackWrap.style.cursor = 'grab';
+    startAuto();
+  });
 
   /* ============================================================
      INIT
