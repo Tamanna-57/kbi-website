@@ -3,6 +3,8 @@
    RIL Innovation editorial alternating layout
    ════════════════════════════════════════════════════ */
 
+@import url('style_kbi.css');
+
 :root {
   --p-navy:    #0d1a3a;
   --p-navy2:   #162c54;
@@ -62,11 +64,11 @@
 
 .proc-hero__title {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: clamp(3rem, 7vw, 5.5rem);
-  font-weight: 700;
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  font-weight: 500;
   color: #fff;
-  line-height: 1.06;
-  letter-spacing: -.02em;
+  line-height: 1.1;
+  letter-spacing: -.01em;
   margin-bottom: 1.2rem;
 }
 
@@ -158,7 +160,7 @@
 .proc-ed {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 580px;
+  min-height: 420px;
 }
 
 /* Flip: image goes to the right (via order) */
@@ -168,6 +170,7 @@
 /* Image column */
 .proc-ed__img-col {
   overflow: hidden;
+  max-height: 440px;
 }
 
 .proc-ed__img-col picture,
@@ -310,7 +313,7 @@
   background:
     radial-gradient(ellipse at 50% 0%, rgba(184,134,11,.12) 0%, transparent 55%),
     linear-gradient(180deg, #0f2040 0%, var(--p-navy) 100%);
-  padding: 5rem 2rem;
+  padding: 6rem 2rem;
   border-top: 1px solid rgba(255,255,255,.06);
 }
 
@@ -324,44 +327,47 @@
 
 .proc-quality-item {
   text-align: center;
-  padding: 2rem 1.5rem;
-  border: 1px solid rgba(255,255,255,.07);
-  border-radius: 16px;
-  background: rgba(255,255,255,.03);
-  transition: background .3s, transform .3s;
+  padding: 2.8rem 2rem;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 20px;
+  background: rgba(255,255,255,.04);
+  transition: background .3s, transform .3s, box-shadow .3s;
 }
 
 .proc-quality-item:hover {
-  background: rgba(255,255,255,.06);
-  transform: translateY(-4px);
+  background: rgba(255,255,255,.08);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.25);
 }
 
 .proc-quality-item__icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: rgba(184,134,11,.15);
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: rgba(184,134,11,.18);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.2rem;
+  margin: 0 auto 1.5rem;
   color: var(--p-amber2);
+  border: 1px solid rgba(184,134,11,.25);
 }
-.proc-quality-item__icon svg { width: 22px; height: 22px; }
+.proc-quality-item__icon svg { width: 28px; height: 28px; }
 
 .proc-quality-item h3 {
   font-family: 'EB Garamond', Georgia, serif;
-  font-size: 1.2rem;
+  font-size: 1.55rem;
   font-weight: 600;
   color: #fff;
-  margin-bottom: .6rem;
+  margin-bottom: .75rem;
+  letter-spacing: .01em;
 }
 
 .proc-quality-item p {
   font-family: 'Inter', sans-serif;
-  font-size: .83rem;
-  color: rgba(255,255,255,.5);
-  line-height: 1.65;
+  font-size: .88rem;
+  color: rgba(255,255,255,.6);
+  line-height: 1.7;
 }
 
 /* ── RESPONSIVE ───────────────────────────────────── */
