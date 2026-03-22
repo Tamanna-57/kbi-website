@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ============================================================
      AUTO-PLAY
      ============================================================ */
-  function startAuto() { autoTimer = setInterval(() => step(1), 3000); }
+  function startAuto() { autoTimer = setInterval(() => step(1), 2200); }
   function resetAuto()  { clearInterval(autoTimer); startAuto(); }
 
   trackWrap.addEventListener('mouseenter', () => clearInterval(autoTimer));

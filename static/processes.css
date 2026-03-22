@@ -35,14 +35,25 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
+  /* Scale up slightly to crop the dark vignette edges from the AI-generated video */
+  transform: scale(1.12);
 }
 
 .proc-hero__overlay {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(160deg, rgba(13,26,58,.82) 0%, rgba(13,26,58,.55) 100%);
   z-index: 1;
+  /* Layered: blue ambient glow at center + top/bottom dark fade + bottom darkens Veo watermark */
+  background:
+    radial-gradient(ellipse 75% 55% at 50% 52%,
+      rgba(30, 80, 170, .32) 0%,
+      transparent 68%),
+    linear-gradient(180deg,
+      rgba(10, 20, 50, .78) 0%,
+      rgba(13, 26, 58, .38) 28%,
+      rgba(13, 26, 58, .30) 55%,
+      rgba(13, 26, 58, .60) 80%,
+      rgba(5,  12, 28, .97) 100%);
 }
 
 .proc-hero__content {
@@ -163,6 +174,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 480px;
+  position: relative;
+  z-index: 1;
+  transition: box-shadow .32s var(--p-ease), z-index 0s;
+}
+.proc-ed:hover {
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, .55),
+    0 4px 20px rgba(13, 26, 58, .6),
+    inset 0 0 0 1px rgba(255,255,255,.06);
+  z-index: 2;
 }
 
 /* Flip: image goes to the right (via order) */
@@ -175,17 +196,43 @@
   position: relative;
 }
 
-/* Subtle amber colour grade overlay */
+/* Colour grade + depth shadow on image col */
 .proc-ed__img-col::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg,
-    rgba(13,26,58,.22) 0%,
-    rgba(184,134,11,.08) 100%);
+  background:
+    linear-gradient(135deg,
+      rgba(13, 26, 58, .30) 0%,
+      rgba(184,134, 11, .06) 100%);
   pointer-events: none;
   z-index: 1;
+  transition: background .32s var(--p-ease);
 }
+.proc-ed:hover .proc-ed__img-col::after {
+  background:
+    linear-gradient(135deg,
+      rgba(13, 26, 58, .12) 0%,
+      rgba(184,134, 11, .10) 100%);
+}
+
+/* Blue glow accent bar at top of each article */
+.proc-ed::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(60, 120, 220, .60) 25%,
+    rgba(100, 180, 255, .80) 50%,
+    rgba(60, 120, 220, .60) 75%,
+    transparent 100%);
+  z-index: 5;
+  opacity: 0;
+  transition: opacity .35s var(--p-ease);
+}
+.proc-ed:hover::before { opacity: 1; }
 
 .proc-ed__img-col picture,
 .proc-ed__img-col img {

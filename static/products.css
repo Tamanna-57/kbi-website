@@ -147,9 +147,9 @@
   cursor: pointer;
   user-select: none;
   transition:
-    transform .5s cubic-bezier(.25,.46,.45,.94),
-    opacity   .5s ease,
-    box-shadow .5s ease;
+    transform .38s cubic-bezier(.25,.46,.45,.94),
+    opacity   .38s ease,
+    box-shadow .38s ease;
   will-change: transform, opacity;
 }
 
