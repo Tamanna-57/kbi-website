@@ -20,17 +20,18 @@ document.addEventListener('DOMContentLoaded', () => {
      3D TRANSFORM MAP
      rel position → visual properties
      ============================================================ */
+  // 3D cover-flow: center prominent, sides scale + rotate to peek from edges
   const TRANSFORM_MAP = {
-     0:  { tx:    0, sc: 1.22, ry:   0, op: 1.00, z: 10 },
-     1:  { tx:  310, sc: 0.88, ry:  -8, op: 0.65, z:  7 },
-    '-1':{ tx: -310, sc: 0.88, ry:   8, op: 0.65, z:  7 },
-     2:  { tx:  580, sc: 0.72, ry: -16, op: 0.38, z:  4 },
-    '-2':{ tx: -580, sc: 0.72, ry:  16, op: 0.38, z:  4 },
+     0:  { tx:    0, sc: 1.10, ry:   0, op: 1.00, z: 10 },
+     1:  { tx:  285, sc: 0.82, ry: -10, op: 0.72, z:  7 },
+    '-1':{ tx: -285, sc: 0.82, ry:  10, op: 0.72, z:  7 },
+     2:  { tx:  520, sc: 0.66, ry: -18, op: 0.42, z:  4 },
+    '-2':{ tx: -520, sc: 0.66, ry:  18, op: 0.42, z:  4 },
   };
 
   function getTransform(rel) {
     const abs = Math.abs(rel);
-    if (abs > 2) return { tx: rel > 0 ? 860 : -860, sc: 0.5, ry: rel > 0 ? -24 : 24, op: 0, z: 1 };
+    if (abs > 2) return { tx: rel > 0 ? 780 : -780, sc: 0.52, ry: rel > 0 ? -24 : 24, op: 0, z: 1 };
     return TRANSFORM_MAP[rel] || TRANSFORM_MAP[String(rel)];
   }
 
@@ -219,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ============================================================
      AUTO-PLAY
      ============================================================ */
-  function startAuto() { autoTimer = setInterval(() => step(1), 4000); }
+  function startAuto() { autoTimer = setInterval(() => step(1), 3000); }
   function resetAuto()  { clearInterval(autoTimer); startAuto(); }
 
   trackWrap.addEventListener('mouseenter', () => clearInterval(autoTimer));

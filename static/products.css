@@ -106,16 +106,18 @@
    PRODUCTS CAROUSEL
    ============================================================ */
 .prod-section {
-  padding: clamp(2.5rem, 5vw, 4.5rem) 0 3rem;
+  padding: 2.5rem 0 2.5rem;
   background: var(--p-light);
   position: relative;
+  overflow: hidden;
 }
 
-/* Stage — perspective container */
+/* Stage — full-width perspective container */
 .prod-track-wrap {
   position: relative;
-  height: 520px;
-  perspective: 1200px;
+  width: 100%;
+  height: 540px;
+  perspective: 1400px;
   overflow: hidden;
   cursor: grab;
 }
@@ -133,10 +135,10 @@
 /* Individual card — JS drives all 3D transforms */
 .prod-card {
   position: absolute;
-  width: 260px;
-  height: 400px;
-  top: -200px;
-  left: -130px;
+  width: 280px;
+  height: 420px;
+  top: -210px;
+  left: -140px;
   border-radius: 6px;
   overflow: hidden;
   background: #fff;
@@ -152,12 +154,15 @@
 }
 
 .prod-card--active {
-  box-shadow: 0 28px 65px rgba(13,26,58,.4), 0 8px 20px rgba(13,26,58,.2);
+  box-shadow:
+    0 32px 72px rgba(13,26,58,.45),
+    0 8px 24px rgba(13,26,58,.25),
+    0 0 0 1px rgba(13,26,58,.06);
 }
 
 /* Image wrapper */
 .prod-card__img-wrap {
-  width: 100%; height: 190px;
+  width: 100%; height: 200px;
   overflow: hidden;
   border-radius: 6px 6px 0 0;
   background: #eef0f5;
@@ -242,8 +247,8 @@
   background: var(--p-gold);
   transform: translateY(-50%) scale(1.08);
 }
-.prod-arrow--left  { left: 1rem; }
-.prod-arrow--right { right: 1rem; }
+.prod-arrow--left  { left: 1.5rem; }
+.prod-arrow--right { right: 1.5rem; }
 .prod-arrow.hidden { opacity: 0; pointer-events: none; }
 
 /* Dot indicators */
@@ -277,7 +282,7 @@
 @media (max-width: 600px) {
   .prod-filter__inner { flex-direction: column; align-items: flex-start; }
   .prod-search-input { width: 100%; }
-  .prod-track-wrap { height: 420px; }
-  .prod-card { width: 210px; height: 340px; top: -170px; left: -105px; }
-  .prod-card__img-wrap { height: 150px; }
+  .prod-track-wrap { height: 430px; }
+  .prod-card { width: 220px; height: 350px; top: -175px; left: -110px; }
+  .prod-card__img-wrap { height: 155px; }
 }
