@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeFilters = new Set(['all']);
   let activeIndex   = 0;
   let autoTimer     = null;
+  let lastDir       = 1;   // track last step direction for wrap-snap
 
   /* ============================================================
      3D TRANSFORM MAP
@@ -134,23 +135,62 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ============================================================
      CAROUSEL LOGIC
      ============================================================ */
-  function goTo(idx) {
+  function goTo(idx, dir) {
     const visCards = getVisibleCards();
     if (!visCards.length) return;
-    activeIndex = ((idx % visCards.length) + visCards.length) % visCards.length;
+    const newIdx = ((idx % visCards.length) + visCards.length) % visCards.length;
+    // Determine direction if not specified (e.g. when clicking a dot)
+    if (dir === undefined) {
+      const diff = newIdx - activeIndex;
+      const n = visCards.length;
+      // shortest-path direction
+      dir = (diff > 0 ? 1 : -1);
+      if (Math.abs(diff) > n / 2) dir = -dir;
+    }
+    lastDir = dir;
+    activeIndex = newIdx;
     updateCarousel();
     resetAuto();
   }
 
-  function step(dir) { goTo(activeIndex + dir); }
+  function step(dir) { goTo(activeIndex + dir, dir); }
 
   function updateCarousel() {
     const visCards = getVisibleCards();
     const dots = dotsEl ? dotsEl.querySelectorAll('.prod-carousel-dot') : [];
+    const n = visCards.length;
+    const dir = lastDir;
 
     visCards.forEach((card, i) => {
-      const rel = i - activeIndex;
+      // ── Shortest-path rel: avoids giant wrap-around jumps ──────
+      let rel = i - activeIndex;
+      if (rel > Math.floor(n / 2))  rel -= n;
+      else if (rel < -Math.ceil(n / 2)) rel += n;
+
+      const prevTx = card._tx;   // last applied translateX
       const { tx, sc, ry, op, z } = getTransform(rel);
+
+      // ── Snap to correct off-screen side before CSS transition ──
+      // If stepping forward (dir=1) but this card's tx is INCREASING a lot
+      // (means it would animate backward/rightward), snap it to the far-right
+      // invisible position first, then let it slide left into view.
+      // Vice-versa for backward stepping.
+      if (prevTx !== undefined) {
+        const wrongWayForward  = dir > 0  && (tx - prevTx) >  600;
+        const wrongWayBackward = dir < 0  && (prevTx - tx) >  600;
+
+        if (wrongWayForward || wrongWayBackward) {
+          const snapTx = dir > 0 ? 900 : -900;
+          const snapRy = dir > 0 ? -26 : 26;
+          card.style.transition = 'none';
+          card.style.transform  = `translateX(${snapTx}px) scale(0.50) rotateY(${snapRy}deg)`;
+          card.style.opacity    = '0';
+          card.offsetHeight;          // force reflow — flushes the snap
+          card.style.transition = ''; // restore CSS transition
+        }
+      }
+
+      card._tx = tx;
       card.style.transform = `translateX(${tx}px) scale(${sc}) rotateY(${ry}deg)`;
       card.style.opacity   = op;
       card.style.zIndex    = z;
