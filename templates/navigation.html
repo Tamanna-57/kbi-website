@@ -142,14 +142,15 @@
     transform: translate(-50%, 8px) scale(.98);
     transform-origin: top center;
     min-width: 480px;
-    background: #ffffff;
+    background: rgba(15,23,42,.98);
     border-radius: 8px;
     padding: 1.4rem 1.6rem 1.5rem;
-    box-shadow: 0 14px 30px rgba(15,23,42,.25);
-    border: 1px solid rgba(148,163,184,.4);
+    box-shadow: 0 14px 40px rgba(0,0,0,.5);
+    border: 1px solid rgba(148,163,184,.2);
     opacity: 0; pointer-events: none;
     transition: opacity 260ms, transform 260ms, visibility 260ms;
     visibility: hidden;
+    z-index: 200;
   }
   .nav-item { position: relative; }
   .nav-item.has-dropdown:hover .mega-menu,
@@ -162,16 +163,16 @@
   }
   .mega-heading {
     font-size: .72rem; text-transform: uppercase; letter-spacing: .18em;
-    color: #6b7280; margin: 0 0 .65rem;
+    color: rgba(208,212,228,.45); margin: 0 0 .65rem;
   }
   .mega-col ul { list-style: none; padding: 0; margin: 0; }
   .mega-col li + li { margin-top: .35rem; }
   .mega-col a {
-    font-size: .84rem; color: #111827; opacity: .9; text-decoration: none;
+    font-size: .84rem; color: rgba(255,255,255,.85); opacity: .9; text-decoration: none;
     display: block;
     transition: opacity 150ms, transform 150ms, padding-left 150ms;
   }
-  .mega-col a:hover { opacity: 1; padding-left: 4px; }
+  .mega-col a:hover { opacity: 1; padding-left: 4px; color: #fff; }
 
   /* Mobile nav */
   .mobile-nav {

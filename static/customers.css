@@ -20,7 +20,7 @@
 
 /* ── Page wrapper ── */
 .cust-page {
-  background: var(--cu-bg);
+  background: var(--cu-navy);
   min-height: 100vh;
   padding-top: clamp(100px, 11vw, 120px);
   padding-bottom: 5rem;
@@ -36,9 +36,9 @@
   left: 0;
   width: 320px;
   height: 380px;
-  background: var(--cu-shape);
+  background: rgba(255,255,255,.04);
   clip-path: polygon(0 0, 100% 0, 32% 100%, 0 100%);
-  opacity: .5;
+  opacity: 1;
   pointer-events: none;
 }
 .cust-page::after {
@@ -48,9 +48,9 @@
   right: 0;
   width: 320px;
   height: 380px;
-  background: var(--cu-shape2);
+  background: rgba(255,255,255,.04);
   clip-path: polygon(68% 0, 100% 0, 100% 100%, 0 100%);
-  opacity: .5;
+  opacity: 1;
   pointer-events: none;
 }
 
@@ -238,11 +238,12 @@
 }
 
 .cust-stat {
-  background: var(--cu-navy);
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(148,163,184,.15);
   border-radius: 6px;
   padding: 1.8rem 1rem;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(13,26,58,.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
   transition: transform .25s var(--cu-ease);
 }
 .cust-stat:hover { transform: translateY(-4px); }
