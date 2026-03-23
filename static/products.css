@@ -78,7 +78,7 @@
    FILTER BAR
    ============================================================ */
 .prod-filter {
-  position: sticky; top: 68px; z-index: 90;
+  position: sticky; top: 76px; z-index: 90;
   background: #fff; border-bottom: 1px solid rgba(13,26,58,.1);
   padding: 1.1rem 0;
 }
