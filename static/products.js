@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
      ============================================================ */
   // 3D cover-flow: center prominent, sides scale + rotate to peek from edges
   const TRANSFORM_MAP = {
-     0:  { tx:    0, sc: 1.10, ry:   0, op: 1.00, z: 10 },
-     1:  { tx:  285, sc: 0.82, ry: -10, op: 0.72, z:  7 },
-    '-1':{ tx: -285, sc: 0.82, ry:  10, op: 0.72, z:  7 },
-     2:  { tx:  520, sc: 0.66, ry: -18, op: 0.42, z:  4 },
-    '-2':{ tx: -520, sc: 0.66, ry:  18, op: 0.42, z:  4 },
+     0:  { tx:    0, sc: 1.00, ry:   0, op: 1.00, z: 10 },
+     1:  { tx:  310, sc: 0.82, ry: -10, op: 0.72, z:  7 },
+    '-1':{ tx: -310, sc: 0.82, ry:  10, op: 0.72, z:  7 },
+     2:  { tx:  570, sc: 0.66, ry: -18, op: 0.42, z:  4 },
+    '-2':{ tx: -570, sc: 0.66, ry:  18, op: 0.42, z:  4 },
   };
 
   function getTransform(rel) {

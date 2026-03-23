@@ -359,7 +359,7 @@
   gap: 1.1rem;
 }
 .au-vmc__block--left  { align-self: flex-start; }
-.au-vmc__block--right { align-self: flex-end; }
+.au-vmc__block--right { align-self: flex-start; }
 
 /* Pill header */
 .au-vmc__pill {
