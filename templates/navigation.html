@@ -143,20 +143,30 @@
     transform-origin: top center;
     min-width: 480px;
     background: rgba(15,23,42,.98);
-    border-radius: 8px;
+    border-radius: 0 0 8px 8px;
     padding: 1.4rem 1.6rem 1.5rem;
     box-shadow: 0 14px 40px rgba(0,0,0,.5);
     border: 1px solid rgba(148,163,184,.2);
+    border-top: none;
     opacity: 0; pointer-events: none;
-    transition: opacity 260ms, transform 260ms, visibility 260ms;
+    transition: opacity 200ms 220ms, transform 200ms 220ms, visibility 200ms 220ms;
     visibility: hidden;
     z-index: 200;
   }
   .nav-item { position: relative; }
+  .nav-item.has-dropdown::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: -20px;
+    right: -20px;
+    height: 14px;
+  }
   .nav-item.has-dropdown:hover .mega-menu,
   .nav-item.has-dropdown:focus-within .mega-menu {
-    opacity: 1; transform: translate(-50%, 10px) scale(1);
+    opacity: 1; transform: translate(-50%, 2px) scale(1);
     pointer-events: auto; visibility: visible;
+    transition: opacity 200ms, transform 200ms, visibility 200ms;
   }
   .mega-inner {
     display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.5rem;
