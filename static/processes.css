@@ -275,7 +275,7 @@
   font-weight: 700;
   line-height: 1;
   color: rgba(255,255,255,.06);
-  display: block;
+  display: none;
   margin-bottom: -.5rem;
   letter-spacing: -.04em;
 }
