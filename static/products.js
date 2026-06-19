@@ -15,25 +15,24 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeFilters = new Set(['all']);
   let activeIndex   = 0;
   let autoTimer     = null;
-  let lastDir       = 1;   // track last step direction for wrap-snap
 
   /* ============================================================
      3D TRANSFORM MAP
      rel position → visual properties
      ============================================================ */
-  // 3D cover-flow: center prominent, sides scale + rotate to peek from edges
-  const TRANSFORM_MAP = {
-     0:  { tx:    0, sc: 1.00, ry:   0, op: 1.00, z: 10 },
-     1:  { tx:  310, sc: 0.82, ry: -10, op: 0.72, z:  7 },
-    '-1':{ tx: -310, sc: 0.82, ry:  10, op: 0.72, z:  7 },
-     2:  { tx:  570, sc: 0.66, ry: -18, op: 0.42, z:  4 },
-    '-2':{ tx: -570, sc: 0.66, ry:  18, op: 0.42, z:  4 },
-  };
+  // 3D cover-flow: center prominent, sides scale + rotate to peek from edges.
+  // |rel| >= 3 = parked off-stage (fully transparent) on its own side.
+  const FAR_TX = 820;
 
   function getTransform(rel) {
-    const abs = Math.abs(rel);
-    if (abs > 2) return { tx: rel > 0 ? 780 : -780, sc: 0.52, ry: rel > 0 ? -24 : 24, op: 0, z: 1 };
-    return TRANSFORM_MAP[rel] || TRANSFORM_MAP[String(rel)];
+    switch (rel) {
+      case  0: return { tx:    0, sc: 1.00, ry:   0, op: 1.00, z: 10 };
+      case  1: return { tx:  310, sc: 0.82, ry: -10, op: 0.72, z:  7 };
+      case -1: return { tx: -310, sc: 0.82, ry:  10, op: 0.72, z:  7 };
+      case  2: return { tx:  570, sc: 0.66, ry: -18, op: 0.42, z:  4 };
+      case -2: return { tx: -570, sc: 0.66, ry:  18, op: 0.42, z:  4 };
+      default: return { tx: rel > 0 ? FAR_TX : -FAR_TX, sc: 0.52, ry: rel > 0 ? -24 : 24, op: 0, z: 1 };
+    }
   }
 
   function getVisibleCards() {
@@ -83,29 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCarousel();
   }
 
-  /* Pills */
+  /* Pills — single selection: one category active at a time */
   pills.forEach(pill => {
     pill.addEventListener('click', () => {
-      const cat = pill.dataset.category;
-      if (cat === 'all') {
-        activeFilters = new Set(['all']);
-        pills.forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-      } else {
-        activeFilters.delete('all');
-        document.querySelector('.prod-pill[data-category="all"]').classList.remove('active');
-        if (activeFilters.has(cat)) {
-          activeFilters.delete(cat);
-          pill.classList.remove('active');
-        } else {
-          activeFilters.add(cat);
-          pill.classList.add('active');
-        }
-        if (activeFilters.size === 0) {
-          activeFilters.add('all');
-          document.querySelector('.prod-pill[data-category="all"]').classList.add('active');
-        }
-      }
+      activeFilters = new Set([pill.dataset.category]);
+      pills.forEach(p => p.classList.toggle('active', p === pill));
       activeIndex = 0;
       applyFilters();
     });
@@ -135,62 +116,34 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ============================================================
      CAROUSEL LOGIC
      ============================================================ */
-  function goTo(idx, dir) {
+  function goTo(idx) {
     const visCards = getVisibleCards();
     if (!visCards.length) return;
-    const newIdx = ((idx % visCards.length) + visCards.length) % visCards.length;
-    // Determine direction if not specified (e.g. when clicking a dot)
-    if (dir === undefined) {
-      const diff = newIdx - activeIndex;
-      const n = visCards.length;
-      // shortest-path direction
-      dir = (diff > 0 ? 1 : -1);
-      if (Math.abs(diff) > n / 2) dir = -dir;
-    }
-    lastDir = dir;
-    activeIndex = newIdx;
+    activeIndex = ((idx % visCards.length) + visCards.length) % visCards.length;
     updateCarousel();
     resetAuto();
   }
 
-  function step(dir) { goTo(activeIndex + dir, dir); }
+  function step(dir) { goTo(activeIndex + dir); }
 
   function updateCarousel() {
     const visCards = getVisibleCards();
     const dots = dotsEl ? dotsEl.querySelectorAll('.prod-carousel-dot') : [];
     const n = visCards.length;
-    const dir = lastDir;
 
     visCards.forEach((card, i) => {
-      // ── Shortest-path rel: avoids giant wrap-around jumps ──────
+      // ── Shortest-path rel: each card glides to its new slot the short way ──
       let rel = i - activeIndex;
-      if (rel > Math.floor(n / 2))  rel -= n;
-      else if (rel < -Math.ceil(n / 2)) rel += n;
+      if (rel >  n / 2) rel -= n;
+      else if (rel < -n / 2) rel += n;
 
-      const prevTx = card._tx;   // last applied translateX
       const { tx, sc, ry, op, z } = getTransform(rel);
 
-      // ── Snap to correct off-screen side before CSS transition ──
-      // If stepping forward (dir=1) but this card's tx is INCREASING a lot
-      // (means it would animate backward/rightward), snap it to the far-right
-      // invisible position first, then let it slide left into view.
-      // Vice-versa for backward stepping.
-      if (prevTx !== undefined) {
-        const wrongWayForward  = dir > 0  && (tx - prevTx) >  600;
-        const wrongWayBackward = dir < 0  && (prevTx - tx) >  600;
-
-        if (wrongWayForward || wrongWayBackward) {
-          const snapTx = dir > 0 ? 900 : -900;
-          const snapRy = dir > 0 ? -26 : 26;
-          card.style.transition = 'none';
-          card.style.transform  = `translateX(${snapTx}px) scale(0.50) rotateY(${snapRy}deg)`;
-          card.style.opacity    = '0';
-          card.offsetHeight;          // force reflow — flushes the snap
-          card.style.transition = ''; // restore CSS transition
-        }
-      }
-
-      card._tx = tx;
+      // Cards deep in the back are invisible and swap sides as the loop wraps;
+      // disabling their transition keeps that swap unseen. Every on-stage card
+      // (|rel| <= 3) animates, so a step is always a single smooth glide — no
+      // teleporting, no forced reflow, no alternating jumps.
+      card.style.transition = Math.abs(rel) > 3 ? 'none' : '';
       card.style.transform = `translateX(${tx}px) scale(${sc}) rotateY(${ry}deg)`;
       card.style.opacity   = op;
       card.style.zIndex    = z;

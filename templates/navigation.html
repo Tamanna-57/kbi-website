@@ -83,7 +83,8 @@
     opacity: .5; font-size: .7rem;
     transition: transform 260ms cubic-bezier(0.22,0.61,0.36,1), opacity 260ms;
   }
-  .nav-item.has-dropdown:hover .chevron { transform: rotate(180deg); opacity: .9; }
+  .nav-item.has-dropdown.open .chevron,
+  .nav-item.has-dropdown:focus-within .chevron { transform: rotate(180deg); opacity: .9; }
 
   /* Icons */
   .nav-icons { display: flex; align-items: center; gap: .6rem; }
@@ -149,7 +150,11 @@
     border: 1px solid rgba(148,163,184,.2);
     border-top: none;
     opacity: 0; pointer-events: none;
-    transition: opacity 200ms 220ms, transform 200ms 220ms, visibility 200ms 220ms;
+    /* Snappy, symmetric fade — closes as fast as it opens so adjacent
+       menus never linger and overlap when moving quickly across the nav. */
+    transition: opacity 170ms cubic-bezier(0.22,0.61,0.36,1),
+                transform 170ms cubic-bezier(0.22,0.61,0.36,1),
+                visibility 170ms cubic-bezier(0.22,0.61,0.36,1);
     visibility: hidden;
     z-index: 200;
   }
@@ -162,11 +167,12 @@
     right: -20px;
     height: 30px;
   }
-  .nav-item.has-dropdown:hover .mega-menu,
+  /* Driven by JS (.open) so only one menu is ever visible at a time;
+     :focus-within keeps it keyboard-accessible. */
+  .nav-item.has-dropdown.open .mega-menu,
   .nav-item.has-dropdown:focus-within .mega-menu {
     opacity: 1; transform: translate(-50%, 28px) scale(1);
     pointer-events: auto; visibility: visible;
-    transition: opacity 200ms, transform 200ms, visibility 200ms;
   }
   .mega-inner {
     display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.5rem;
@@ -440,6 +446,30 @@
       searchBtn?.setAttribute("aria-expanded", "false");
     });
   }
+
+  // ---- Desktop mega-menu: one open at a time, no overlap on fast hover ----
+  const dropdownItems = document.querySelectorAll(".nav-item.has-dropdown");
+  let dropdownCloseTimer = null;
+
+  function closeAllDropdowns(except) {
+    dropdownItems.forEach(item => {
+      if (item !== except) item.classList.remove("open");
+    });
+  }
+
+  dropdownItems.forEach(item => {
+    // Opening one instantly closes the rest, so two menus never co-exist.
+    item.addEventListener("mouseenter", () => {
+      clearTimeout(dropdownCloseTimer);
+      closeAllDropdowns(item);
+      item.classList.add("open");
+    });
+    // Small grace period so brushing the gap to the panel doesn't flicker.
+    item.addEventListener("mouseleave", () => {
+      clearTimeout(dropdownCloseTimer);
+      dropdownCloseTimer = setTimeout(() => item.classList.remove("open"), 110);
+    });
+  });
 
   // ---- Mobile nav ----
   const hamburger = document.getElementById("hamburger");
