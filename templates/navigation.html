@@ -453,7 +453,21 @@
 
   function closeAllDropdowns(except) {
     dropdownItems.forEach(item => {
-      if (item !== except) item.classList.remove("open");
+      if (item !== except && item.classList.contains("open")) {
+        // Hide the outgoing panel INSTANTLY (no fade). The panels are wide and
+        // centered under closely-spaced items, so if the old one is still
+        // fading while the new one appears they overlap. Killing its transition
+        // for this one removal guarantees only one panel is ever on screen.
+        const menu = item.querySelector(".mega-menu");
+        if (menu) {
+          menu.style.transition = "none";
+          item.classList.remove("open");
+          void menu.offsetWidth;        // flush the instant hide
+          menu.style.transition = "";   // restore the fade for next time
+        } else {
+          item.classList.remove("open");
+        }
+      }
     });
   }
 
