@@ -36,10 +36,11 @@
                 <div class="cust-grid">
                     {% for c in customers %}
                     <div class="cust-cell" data-edit-card data-collection="customers" data-id="{{ c.id }}" data-name="{{ c.name }}">
-                        <span class="img-slot cust-cell__img-slot" data-image-slot>
+                        <span class="img-slot cust-cell__img-slot" data-image-slot data-original-image="{{ c.image }}">
                             <img src="{{ c.image }}" alt="{{ c.name }}" data-edit-image{% if not c.image %} hidden{% endif %}>
                             {% if is_admin %}
                             <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+                            <button type="button" class="img-revert" data-edit-only hidden title="Revert to last saved image">↶ Revert</button>
                             <button type="button" class="img-uploader"{% if c.image %} hidden{% endif %}><span class="img-uploader__icon">&#43;</span><span class="img-uploader__text">Logo</span></button>
                             {% endif %}
                         </span>

@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
    ANIMATED STAT COUNTERS
 ───────────────────────────────────────────────────── */
 function initCounters() {
+  // Counter animation rewrites textContent — which would clobber whatever
+  // the admin just typed into the editable stat numbers. Skip it for admins.
+  if (document.getElementById('adminBar')) return;
   const nums = document.querySelectorAll('.cust-stat__num[data-target]');
   if (!nums.length) return;
 
