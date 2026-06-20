@@ -112,7 +112,8 @@ def customers():
 
 @app.route('/products')
 def products():
-    return render_template('products.html', active_page='products')
+    items = get_store().list_items('products')
+    return render_template('products.html', active_page='products', products=items)
 
 @app.route('/machines')
 def machines():
@@ -125,7 +126,8 @@ def certifications():
 
 @app.route('/processes')
 def processes():
-    return render_template('processes.html', active_page='processes')
+    items = get_store().list_items('processes')
+    return render_template('processes.html', active_page='processes', processes=items)
 
 @app.route('/contact_us')
 def contact():
@@ -181,9 +183,8 @@ def submit_contact():
 EDITABLE_FIELDS = {
     'machines': {'category', 'category_label', 'name', 'description',
                  'image', 'features', 'quantity', 'details'},
-    'products': {'category', 'category_label', 'name', 'description', 'image',
-                 'features', 'specifications', 'details'},
-    'processes': {'name', 'description', 'image', 'steps', 'details'},
+    'products': {'category', 'category_label', 'name', 'description', 'image'},
+    'processes': {'num', 'name', 'description', 'image', 'features', 'equipment'},
     'team': {'name', 'role', 'image', 'bio'},
     'news': {'title', 'date', 'summary', 'image', 'body'},
 }

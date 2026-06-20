@@ -71,7 +71,7 @@
       {% endif %}
       <div class="machines-grid" id="machinesGrid">
         {% for m in machines %}
-        <div class="machine-card" data-category="{{ m.category }}" data-name="{{ m.name }}" data-id="{{ m.id }}">
+        <div class="machine-card" data-edit-card data-category="{{ m.category }}" data-name="{{ m.name }}" data-id="{{ m.id }}">
           <div class="machine-image img-slot" data-image-slot>
             <img src="{{ m.image }}" alt="{{ m.name }}" data-edit-image{% if not m.image %} hidden{% endif %}>
             {% if is_admin %}

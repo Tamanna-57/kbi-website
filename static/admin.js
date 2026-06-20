@@ -52,7 +52,7 @@
   function setEditMode(on) {
     document.body.classList.toggle('edit-mode', on);
     document.querySelectorAll('[data-edit-only]').forEach(el => { el.hidden = !on; });
-    document.querySelectorAll('.machine-card').forEach(card => decorateCard(card, on));
+    document.querySelectorAll('[data-edit-card]').forEach(card => decorateCard(card, on));
     sessionStorage.setItem(STORAGE_KEY, on ? '1' : '0');
   }
 
@@ -80,11 +80,11 @@
   function makeListItem(list) {
     const sel = itemSelector(list);
     let node;
-    if (sel === 'li' || sel === '') {
-      node = document.createElement('li');
-    } else {
+    if (sel.startsWith('.')) {
       node = document.createElement('span');
-      node.className = sel.replace(/^\./, '');  // ".feature-tag" -> "feature-tag"
+      node.className = sel.slice(1);          // ".feature-tag" -> class feature-tag
+    } else {
+      node = document.createElement(sel || 'li');  // bare tag: "li", "span", …
     }
     node.contentEditable = 'true';
     return node;
@@ -267,36 +267,36 @@
   });
 
   // ---- event wiring -------------------------------------------------
-  // Stop card-expand clicks while editing (capture phase, before machines.js).
-  const grid = document.getElementById('machinesGrid');
-  if (grid) {
-    grid.addEventListener('click', (e) => {
-      if (!document.body.classList.contains('edit-mode')) return;
+  // Document-level capture so it works on every page and runs before any
+  // page script (e.g. machines.js card-expand) sees the click.
+  document.addEventListener('click', (e) => {
+    if (!document.body.classList.contains('edit-mode')) return;
 
-      const delBtn = e.target.closest('.img-del');
-      if (delBtn) {
-        deleteImage(delBtn.closest('[data-image-slot]'));
-        return;
-      }
-      const uploader = e.target.closest('.img-uploader');
-      if (uploader) {
-        pendingSlot = uploader.closest('[data-image-slot]');
-        fileInput.click();
-        return;
-      }
-      const actionBtn = e.target.closest('[data-action]');
-      if (actionBtn) {
-        const card = actionBtn.closest('.machine-card');
-        if (actionBtn.dataset.action === 'save') saveCard(card);
-        else if (actionBtn.dataset.action === 'delete') deleteCard(card);
-        return;
-      }
-      // Any other click inside a card while editing: don't let it expand.
-      if (e.target.closest('.machine-card') && !e.target.closest('.edit-add-chip')) {
-        e.stopPropagation();
-      }
-    }, true);
-  }
+    const delBtn = e.target.closest('.img-del');
+    if (delBtn) {
+      deleteImage(delBtn.closest('[data-image-slot]'));
+      return;
+    }
+    const uploader = e.target.closest('.img-uploader');
+    if (uploader) {
+      pendingSlot = uploader.closest('[data-image-slot]');
+      fileInput.click();
+      return;
+    }
+    const actionBtn = e.target.closest('[data-action]');
+    if (actionBtn) {
+      const card = actionBtn.closest('[data-edit-card]');
+      if (actionBtn.dataset.action === 'save') saveCard(card);
+      else if (actionBtn.dataset.action === 'delete') deleteCard(card);
+      return;
+    }
+    // Other clicks inside a card while editing must not trigger page
+    // behaviours like card-expand; let buttons/chips/inputs through.
+    if (e.target.closest('[data-edit-card]') &&
+        !e.target.closest('.edit-add-chip, button, select, input, a')) {
+      e.stopPropagation();
+    }
+  }, true);
 
   // "Add" buttons declare their blank-item defaults in data-new-item (JSON).
   document.querySelectorAll('[data-add-item]').forEach(btn => {
