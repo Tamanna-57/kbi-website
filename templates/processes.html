@@ -58,158 +58,49 @@
     </section>
 
     <!-- ── EDITORIAL SECTIONS ────────────────────────── -->
+    {% if is_admin %}
+    <div class="admin-grid-actions" data-edit-only hidden style="max-width:1200px;margin:0 auto;padding:20px 5vw 0;">
+        <button type="button" class="admin-btn admin-btn--add" data-add-item
+          data-new-item='{"num":"00","name":"New Process","description":"Description goes here.","image":"/static/pics/process_Tooling.webp","features":[],"equipment":[]}'>+ Add process</button>
+    </div>
+    {% endif %}
     <div class="proc-editorial-list" id="proc-list">
 
-        <!-- 01 — Tooling (img left, text right) -->
-        <article class="proc-ed">
-            <div class="proc-ed__img-col">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/process_Tooling.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/process_Tooling.png') }}" alt="Tooling Process">
-                </picture>
+        {% for p in processes %}
+        <article class="proc-ed{% if loop.index % 2 == 0 %} proc-ed--flip{% endif %}" data-edit-card data-id="{{ p.id }}" data-name="{{ p.name }}">
+            <div class="proc-ed__img-col img-slot" data-image-slot>
+                <img src="{{ p.image }}" alt="{{ p.name }} Process" data-edit-image{% if not p.image %} hidden{% endif %}>
+                {% if is_admin %}
+                <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+                <button type="button" class="img-uploader"{% if p.image %} hidden{% endif %}>
+                  <span class="img-uploader__icon">&#43;</span>
+                  <span class="img-uploader__text">Upload image</span>
+                </button>
+                {% endif %}
             </div>
             <div class="proc-ed__text-col">
-                <span class="proc-ed__num">01</span>
-                <h2 class="proc-ed__title">Tooling</h2>
+                <span class="proc-ed__num" data-edit-field="num">{{ p.num }}</span>
+                <h2 class="proc-ed__title" data-edit-field="name">{{ p.name }}</h2>
                 <div class="proc-ed__rule"></div>
-                <p class="proc-ed__desc">Our tooling department creates precision dies, jigs, and fixtures using advanced CNC machines and skilled craftsmen. We manufacture custom tooling solutions for in-house component manufacturing across automotive and industrial sectors.</p>
-                <div class="proc-ed__features">
-                    <span>CNC Machining</span>
-                    <span>Die Making</span>
-                    <span>Jig &amp; Fixtures</span>
+                <p class="proc-ed__desc" data-edit-field="description">{{ p.description }}</p>
+                <div class="proc-ed__features" data-edit-list="features" data-edit-item="span" data-add-label="tag">
+                    {% for f in p.features %}<span>{{ f }}</span>{% endfor %}
                 </div>
                 <div class="proc-ed__machines">
                     <p class="proc-ed__machines-head">Equipment</p>
-                    <ul>
-                        <li>CNC Milling Machines</li>
-                        <li>CNC Lathes</li>
-                        <li>VMC Machines</li>
-                        <li>CNC Wire Cut</li>
-                        <li>Assembly Station</li>
-                        <li>Surface Grinders</li>
+                    <ul data-edit-list="equipment" data-edit-item="li" data-add-label="equipment">
+                        {% for e in p.equipment %}<li>{{ e }}</li>{% endfor %}
                     </ul>
                 </div>
+                {% if is_admin %}
+                <div class="card-edit-toolbar" data-edit-only hidden>
+                    <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+                    <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
+                </div>
+                {% endif %}
             </div>
         </article>
-
-        <!-- 02 — Machining (text left, img right — flip) -->
-        <article class="proc-ed proc-ed--flip">
-            <div class="proc-ed__img-col">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/process_Machining.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/process_Machining.png') }}" alt="Machining Process">
-                </picture>
-            </div>
-            <div class="proc-ed__text-col">
-                <span class="proc-ed__num">02</span>
-                <h2 class="proc-ed__title">Machining</h2>
-                <div class="proc-ed__rule"></div>
-                <p class="proc-ed__desc">Our machining division specialises in precision turning, milling, and drilling operations. We produce high-quality components for automotive, agricultural, and industrial machinery with tight tolerances.</p>
-                <div class="proc-ed__features">
-                    <span>CNC Turning</span>
-                    <span>Milling</span>
-                    <span>Boring</span>
-                </div>
-                <div class="proc-ed__machines">
-                    <p class="proc-ed__machines-head">Equipment</p>
-                    <ul>
-                        <li>CNC Turning Centers</li>
-                        <li>MNTR</li>
-                        <li>VMC</li>
-                        <li>Conventional Lathes</li>
-                        <li>Drilling Machines</li>
-                    </ul>
-                </div>
-            </div>
-        </article>
-
-        <!-- 03 — Press Operations (img left, text right) -->
-        <article class="proc-ed">
-            <div class="proc-ed__img-col">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/process_Pressing.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/process_Pressing.png') }}" alt="Press Operations">
-                </picture>
-            </div>
-            <div class="proc-ed__text-col">
-                <span class="proc-ed__num">03</span>
-                <h2 class="proc-ed__title">Press Operations</h2>
-                <div class="proc-ed__rule"></div>
-                <p class="proc-ed__desc">Our press shop is equipped with various capacity presses for stamping, forming, and deep drawing operations. We handle both high-volume production and prototype development with consistent precision.</p>
-                <div class="proc-ed__features">
-                    <span>Stamping</span>
-                    <span>Forming</span>
-                    <span>Deep Drawing</span>
-                </div>
-                <div class="proc-ed__machines">
-                    <p class="proc-ed__machines-head">Equipment</p>
-                    <ul>
-                        <li>Pneumatic Presses (Up to 600 Ton)</li>
-                        <li>Mechanical Presses</li>
-                        <li>Hydraulic Presses</li>
-                        <li>Transfer Presses</li>
-                    </ul>
-                </div>
-            </div>
-        </article>
-
-        <!-- 04 — Cutting (text left, img right — flip) -->
-        <article class="proc-ed proc-ed--flip">
-            <div class="proc-ed__img-col">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/process_Cutting.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/process_Cutting.png') }}" alt="Cutting Process">
-                </picture>
-            </div>
-            <div class="proc-ed__text-col">
-                <span class="proc-ed__num">04</span>
-                <h2 class="proc-ed__title">Cutting</h2>
-                <div class="proc-ed__rule"></div>
-                <p class="proc-ed__desc">Our subtractive manufacturing process uses force or other techniques to divide a metal sheet into desired shapes or sizes with high accuracy and clean edges, readying components for the next stage.</p>
-                <div class="proc-ed__features">
-                    <span>Gas Cutting</span>
-                    <span>Shearing</span>
-                </div>
-                <div class="proc-ed__machines">
-                    <p class="proc-ed__machines-head">Equipment</p>
-                    <ul>
-                        <li>Oxyfuel Cutting Machines</li>
-                        <li>Chopsaw</li>
-                        <li>Shearing Machines</li>
-                    </ul>
-                </div>
-            </div>
-        </article>
-
-        <!-- 05 — Welding (img left, text right) -->
-        <article class="proc-ed">
-            <div class="proc-ed__img-col">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/process_Welding.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/process_Welding.png') }}" alt="Welding Process">
-                </picture>
-            </div>
-            <div class="proc-ed__text-col">
-                <span class="proc-ed__num">05</span>
-                <h2 class="proc-ed__title">Welding</h2>
-                <div class="proc-ed__rule"></div>
-                <p class="proc-ed__desc">Our welding joins two or more metal pieces by melting them together to create a strong, fused bond. With multiple welding techniques and certified welders, we ensure structural integrity across all assemblies.</p>
-                <div class="proc-ed__features">
-                    <span>Arc Welding</span>
-                    <span>Gas Welding</span>
-                    <span>Tacking</span>
-                </div>
-                <div class="proc-ed__machines">
-                    <p class="proc-ed__machines-head">Equipment</p>
-                    <ul>
-                        <li>Projection Welding</li>
-                        <li>Spot Welding</li>
-                        <li>SMAW</li>
-                        <li>MIG Welding</li>
-                    </ul>
-                </div>
-            </div>
-        </article>
+        {% endfor %}
 
     </div><!-- /proc-editorial-list -->
 
@@ -248,6 +139,8 @@
     </section>
 
     {% include 'footer.html' %}
+    {% set admin_collection = 'processes' %}
+    {% include 'admin_bar.html' %}
     <script src="{{ url_for('static', filename='processes.js') }}"></script>
 </body>
 </html>

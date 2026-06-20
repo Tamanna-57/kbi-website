@@ -1,3 +1,4 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,121 +21,41 @@
             <div class="cust-card__inner">
 
                 <div class="cust-heading">
-                    <h1>Clients We Are Proud Of</h1>
+                    {{ e.text('customers.heading.title', 'Clients We Are Proud Of', tag='h1') }}
                     <div class="cust-heading__underline"></div>
-                    <p>Trusted by India's leading OEMs across automotive, agriculture, defence, and infrastructure sectors.</p>
+                    {{ e.text('customers.heading.sub', "Trusted by India's leading OEMs across automotive, agriculture, defence, and infrastructure sectors.", tag='p') }}
                 </div>
 
+                {% if is_admin %}
+                <div class="admin-grid-actions" data-edit-only hidden style="margin-bottom:18px;">
+                    <button type="button" class="admin-btn admin-btn--add" data-add-item data-collection="customers"
+                      data-new-item='{"name":"New Client","tag":"Sector / description","image":"/static/pics/KBI_logo.png"}'>+ Add client</button>
+                </div>
+                {% endif %}
+
                 <div class="cust-grid">
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/maruti_suzuki_img.png') }}" alt="Maruti Suzuki">
-                        <span class="cust-cell__name">Maruti Suzuki</span>
+                    {% for c in customers %}
+                    <div class="cust-cell" data-edit-card data-collection="customers" data-id="{{ c.id }}" data-name="{{ c.name }}">
+                        <span class="img-slot cust-cell__img-slot" data-image-slot>
+                            <img src="{{ c.image }}" alt="{{ c.name }}" data-edit-image{% if not c.image %} hidden{% endif %}>
+                            {% if is_admin %}
+                            <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+                            <button type="button" class="img-uploader"{% if c.image %} hidden{% endif %}><span class="img-uploader__icon">&#43;</span><span class="img-uploader__text">Logo</span></button>
+                            {% endif %}
+                        </span>
+                        <span class="cust-cell__name" data-edit-field="name">{{ c.name }}</span>
                         <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Maruti Suzuki</span>
-                            <span class="cust-cell__fill-tag">India's Leading Carmaker</span>
+                            <span class="cust-cell__fill-name">{{ c.name }}</span>
+                            <span class="cust-cell__fill-tag" data-edit-field="tag">{{ c.tag }}</span>
                         </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/volvo_eicher.webp') }}" alt="Volvo Eicher">
-                        <span class="cust-cell__name">Volvo Eicher</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Volvo Eicher</span>
-                            <span class="cust-cell__fill-tag">Commercial Vehicles Leader</span>
+                        {% if is_admin %}
+                        <div class="card-edit-toolbar" data-edit-only hidden style="position:absolute;bottom:6px;left:6px;right:6px;z-index:5;">
+                            <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+                            <button type="button" class="admin-btn admin-btn--del" data-action="delete">Del</button>
                         </div>
+                        {% endif %}
                     </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/havells_img.png') }}" alt="Havells">
-                        <span class="cust-cell__name">Havells</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Havells</span>
-                            <span class="cust-cell__fill-tag">Electrical Equipment Giant</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/kobelco_img.png') }}" alt="Kobelco">
-                        <span class="cust-cell__name">Kobelco</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Kobelco</span>
-                            <span class="cust-cell__fill-tag">Construction Excellence</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/kubota_img.png') }}" alt="Escorts Kubota">
-                        <span class="cust-cell__name">Escorts Kubota</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Escorts Kubota</span>
-                            <span class="cust-cell__fill-tag">Agricultural Innovation</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/New_Holland_img.png') }}" alt="New Holland">
-                        <span class="cust-cell__name">New Holland</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">New Holland</span>
-                            <span class="cust-cell__fill-tag">Global Agri Powerhouse</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/carraro_img.png') }}" alt="Carraro">
-                        <span class="cust-cell__name">Carraro</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Carraro</span>
-                            <span class="cust-cell__fill-tag">The Driveline Experts</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/Mahindra_Defence_img.jpg') }}" alt="Mahindra Defence">
-                        <span class="cust-cell__name">Mahindra Defence</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Mahindra Defence</span>
-                            <span class="cust-cell__fill-tag">Defence Solutions</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/caparo_img.png') }}" alt="Caparo Maruti">
-                        <span class="cust-cell__name">Caparo Maruti</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Caparo Maruti</span>
-                            <span class="cust-cell__fill-tag">Automotive Precision</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/eulermotors_img.jpg') }}" alt="Euler Motors">
-                        <span class="cust-cell__name">Euler Motors</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Euler Motors</span>
-                            <span class="cust-cell__fill-tag">EV Mobility Pioneer</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/Delton Cables.png') }}" alt="Delton Cables">
-                        <span class="cust-cell__name">Delton Cables</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Delton Cables</span>
-                            <span class="cust-cell__fill-tag">Power Cable Solutions</span>
-                        </div>
-                    </div>
-
-                    <div class="cust-cell">
-                        <img src="{{ url_for('static', filename='pics/cords_cables.webp') }}" alt="Cords Cables">
-                        <span class="cust-cell__name">Cords Cables</span>
-                        <div class="cust-cell__fill">
-                            <span class="cust-cell__fill-name">Cords Cables</span>
-                            <span class="cust-cell__fill-tag">Power Connectivity</span>
-                        </div>
-                    </div>
-
+                    {% endfor %}
                 </div><!-- /cust-grid -->
             </div><!-- /cust-card__inner -->
         </div><!-- /cust-card -->
@@ -142,26 +63,28 @@
         <!-- Stats row -->
         <div class="cust-stats">
             <div class="cust-stat">
-                <span class="cust-stat__num" data-target="20" data-suffix="+">20+</span>
-                <span class="cust-stat__lbl">Active Clients</span>
+                {{ e.text('customers.stat1.num', '20+', tag='span', cls='cust-stat__num') }}
+                {{ e.text('customers.stat1.lbl', 'Active Clients', tag='span', cls='cust-stat__lbl') }}
             </div>
             <div class="cust-stat">
-                <span class="cust-stat__num" data-target="40" data-suffix="+">40+</span>
-                <span class="cust-stat__lbl">Years of Trust</span>
+                {{ e.text('customers.stat2.num', '40+', tag='span', cls='cust-stat__num') }}
+                {{ e.text('customers.stat2.lbl', 'Years of Trust', tag='span', cls='cust-stat__lbl') }}
             </div>
             <div class="cust-stat">
-                <span class="cust-stat__num" data-target="5" data-suffix="+">5+</span>
-                <span class="cust-stat__lbl">Certifications</span>
+                {{ e.text('customers.stat3.num', '5+', tag='span', cls='cust-stat__num') }}
+                {{ e.text('customers.stat3.lbl', 'Certifications', tag='span', cls='cust-stat__lbl') }}
             </div>
             <div class="cust-stat">
-                <span class="cust-stat__num" data-target="2" data-suffix="">2</span>
-                <span class="cust-stat__lbl">Plants</span>
+                {{ e.text('customers.stat4.num', '2', tag='span', cls='cust-stat__num') }}
+                {{ e.text('customers.stat4.lbl', 'Plants', tag='span', cls='cust-stat__lbl') }}
             </div>
         </div>
 
     </main>
 
     {% include 'footer.html' %}
+    {% set admin_collection = 'customers' %}
+    {% include 'admin_bar.html' %}
     <script src="{{ url_for('static', filename='customers.js') }}"></script>
 </body>
 </html>

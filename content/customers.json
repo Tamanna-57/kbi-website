@@ -1,0 +1,74 @@
+[
+  {
+    "id": "maruti-suzuki",
+    "name": "Maruti Suzuki",
+    "tag": "India's Leading Carmaker",
+    "image": "/static/pics/maruti_suzuki_img.png"
+  },
+  {
+    "id": "volvo-eicher",
+    "name": "Volvo Eicher",
+    "tag": "Commercial Vehicles Leader",
+    "image": "/static/pics/volvo_eicher.webp"
+  },
+  {
+    "id": "havells",
+    "name": "Havells",
+    "tag": "Electrical Equipment Giant",
+    "image": "/static/pics/havells_img.png"
+  },
+  {
+    "id": "kobelco",
+    "name": "Kobelco",
+    "tag": "Construction Excellence",
+    "image": "/static/pics/kobelco_img.png"
+  },
+  {
+    "id": "escorts-kubota",
+    "name": "Escorts Kubota",
+    "tag": "Agricultural Innovation",
+    "image": "/static/pics/kubota_img.png"
+  },
+  {
+    "id": "new-holland",
+    "name": "New Holland",
+    "tag": "Global Agri Powerhouse",
+    "image": "/static/pics/New_Holland_img.png"
+  },
+  {
+    "id": "carraro",
+    "name": "Carraro",
+    "tag": "The Driveline Experts",
+    "image": "/static/pics/carraro_img.png"
+  },
+  {
+    "id": "mahindra-defence",
+    "name": "Mahindra Defence",
+    "tag": "Defence Solutions",
+    "image": "/static/pics/Mahindra_Defence_img.jpg"
+  },
+  {
+    "id": "caparo-maruti",
+    "name": "Caparo Maruti",
+    "tag": "Automotive Precision",
+    "image": "/static/pics/caparo_img.png"
+  },
+  {
+    "id": "euler-motors",
+    "name": "Euler Motors",
+    "tag": "EV Mobility Pioneer",
+    "image": "/static/pics/eulermotors_img.jpg"
+  },
+  {
+    "id": "delton-cables",
+    "name": "Delton Cables",
+    "tag": "Power Cable Solutions",
+    "image": "/static/pics/Delton Cables.png"
+  },
+  {
+    "id": "cords-cables",
+    "name": "Cords Cables",
+    "tag": "Power Connectivity",
+    "image": "/static/pics/cords_cables.webp"
+  }
+]

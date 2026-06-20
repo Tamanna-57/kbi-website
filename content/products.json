@@ -1,0 +1,98 @@
+[
+  {
+    "id": "world-wide-axle",
+    "category": "axles,tractor",
+    "category_label": "Axles · Tractors",
+    "name": "World Wide Axle",
+    "description": "World Wide axles have 2 sliders attached to them, engineered for torque transmission and long-term durability across heavy-duty tractor applications.",
+    "image": "/static/pics/products_axle.jpg"
+  },
+  {
+    "id": "chassis",
+    "category": "cabin_assembly,tractor",
+    "category_label": "Cabin Assembly · Tractors",
+    "name": "Chassis",
+    "description": "KBI provides customized chassis solutions enabling OEMs in commercial vehicle and construction sectors to achieve higher efficiency, safety, and productivity.",
+    "image": "/static/pics/chassis.webp"
+  },
+  {
+    "id": "pedals",
+    "category": "pedals,tractor,car",
+    "category_label": "Pedals · Tractors · Cars",
+    "name": "Pedals",
+    "description": "We specialize in the fabrication of various pedals for numerous clients across automotive and agricultural sectors with precision tolerances.",
+    "image": "/static/pics/products_pedal.jpg"
+  },
+  {
+    "id": "galvanised-steel-tapes",
+    "category": "wires",
+    "category_label": "Cable Accessories",
+    "name": "Galvanised Steel Tapes",
+    "description": "Tapes widely used as protective covers for residential underground wiring — resistant to corrosion, mechanical damage, and environmental stress.",
+    "image": "/static/pics/Galvanized_Steel_Tape.png"
+  },
+  {
+    "id": "galvanised-wires-strips",
+    "category": "wires",
+    "category_label": "Cable Accessories",
+    "name": "Galvanised Wires & Strips",
+    "description": "Wires and strips used as electromagnetic shields for underground cables, providing protection against mechanical and chemical damage.",
+    "image": "/static/pics/galvanized-wire-strips.png"
+  },
+  {
+    "id": "bracket-assembly-steering-mounting",
+    "category": "cabin_assembly,tractor",
+    "category_label": "Cabin Assembly",
+    "name": "Bracket Assembly Steering Mounting",
+    "description": "Designed and manufactured to endure heavy-duty applications, ensuring structural stability and long service life in demanding environments.",
+    "image": "/static/pics/Bracket assembly steering mounting.webp"
+  },
+  {
+    "id": "bracket-seat-belt",
+    "category": "car,cabin_assembly",
+    "category_label": "Cars · Cabin Assembly",
+    "name": "Bracket Seat Belt",
+    "description": "Engineered for operator safety, comfort, and ergonomics by following global standards. Each product undergoes rigorous validation and testing.",
+    "image": "/static/pics/Bracket Seat Belt.webp"
+  },
+  {
+    "id": "dash-panel",
+    "category": "car,cabin_assembly",
+    "category_label": "Cars · Cabin Assembly",
+    "name": "Dash Panel",
+    "description": "Precision-formed dash panels delivering structural integrity, aesthetic finish, and fitment accuracy across major OEM platforms.",
+    "image": "/static/pics/Dash Panel.webp"
+  },
+  {
+    "id": "hydraulic-elbow",
+    "category": "excavator,tubular",
+    "category_label": "Excavator Parts · Tubular",
+    "name": "Hydraulic Elbow",
+    "description": "KBI's hydraulic elbows combine strength, precision, and durability — playing a critical role in ensuring reliability of heavy equipment in the field.",
+    "image": "/static/pics/Elbow.webp"
+  },
+  {
+    "id": "tube-exhaust",
+    "category": "excavator",
+    "category_label": "Excavator Parts",
+    "name": "Tube Exhaust",
+    "description": "High-temperature resistant exhaust tube assemblies engineered for excavator applications, built to withstand harsh operating conditions.",
+    "image": "/static/pics/Tube Exhaust.webp"
+  },
+  {
+    "id": "bracket-wiper",
+    "category": "car",
+    "category_label": "Cars",
+    "name": "Bracket Wiper",
+    "description": "Precision-stamped wiper bracket assemblies that ensure secure fitment and reliable wiper operation across a range of passenger vehicle platforms.",
+    "image": "/static/pics/Bracket Wiper.webp"
+  },
+  {
+    "id": "running-board",
+    "category": "tractor",
+    "category_label": "Tractor Parts",
+    "name": "Running Board",
+    "description": "Robust running boards for agricultural tractors, manufactured with high-tensile steel to provide safe access and structural support in rugged field conditions.",
+    "image": "/static/pics/Running Board.webp"
+  }
+]

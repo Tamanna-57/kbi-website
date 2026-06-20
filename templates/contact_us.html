@@ -1,3 +1,4 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,13 +27,13 @@
         </div>
 
         <div class="cu-hero__content">
-            <h1 class="cu-hero__title">Contact Us</h1>
+            {{ e.text('contact.hero.title', 'Contact Us', tag='h1', cls='cu-hero__title') }}
             <div class="cu-hero__wave" aria-hidden="true">
                 <svg viewBox="0 0 140 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4 9 C20 2, 36 16, 52 9 S84 2, 100 9 S132 16, 136 9" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round" fill="none"/>
                 </svg>
             </div>
-            <p class="cu-hero__sub">We'd love to hear from you. Get in touch and let's discuss how we can help your business grow.</p>
+            {{ e.text('contact.hero.sub', "We'd love to hear from you. Get in touch and let's discuss how we can help your business grow.", tag='p', cls='cu-hero__sub') }}
         </div>
 
         <!-- Right decorative chevrons -->
@@ -76,10 +77,8 @@
 
                 <!-- Newsletter Card -->
                 <aside class="cu-newsletter">
-                    <h3 class="cu-newsletter__title">Our Newsletters</h3>
-                    <p class="cu-newsletter__body">
-                        Stay updated with KBI's latest products, certifications, and manufacturing insights delivered straight to your inbox.
-                    </p>
+                    {{ e.text('contact.newsletter.title', 'Our Newsletters', tag='h3', cls='cu-newsletter__title') }}
+                    {{ e.text('contact.newsletter.body', "Stay updated with KBI's latest products, certifications, and manufacturing insights delivered straight to your inbox.", tag='p', cls='cu-newsletter__body') }}
                     <input type="email" class="cu-newsletter__input" placeholder="Email" aria-label="Newsletter email">
                     <button class="cu-newsletter__btn">Subscribe</button>
                 </aside>
@@ -100,11 +99,8 @@
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/>
                         </svg>
                     </div>
-                    <h4 class="cu-info-card__head">(+91) 981 118 1125</h4>
-                    <p class="cu-info-card__body">
-                        Main: +91 9811181125<br>
-                        HR Dept: +91 8587000740
-                    </p>
+                    {{ e.text('contact.phone.head', '(+91) 981 118 1125', tag='h4', cls='cu-info-card__head') }}
+                    {{ e.rich('contact.phone.body', 'Main: +91 9811181125<br>\n                        HR Dept: +91 8587000740', tag='p', cls='cu-info-card__body') }}
                 </div>
 
                 <!-- Email -->
@@ -115,12 +111,8 @@
                             <polyline points="2,4 12,13 22,4"/>
                         </svg>
                     </div>
-                    <h4 class="cu-info-card__head">info@khandelwalbusar.com</h4>
-                    <p class="cu-info-card__body">
-                        General: info@khandelwalbusar.com<br>
-                        Autocomp: business@khandelwalbusar.com<br>
-                        GST/GWS: alwar@khandelwalbusar.com
-                    </p>
+                    {{ e.text('contact.email.head', 'info@khandelwalbusar.com', tag='h4', cls='cu-info-card__head') }}
+                    {{ e.rich('contact.email.body', 'General: info@khandelwalbusar.com<br>\n                        Autocomp: business@khandelwalbusar.com<br>\n                        GST/GWS: alwar@khandelwalbusar.com', tag='p', cls='cu-info-card__body') }}
                 </div>
 
                 <!-- Address -->
@@ -131,13 +123,8 @@
                             <circle cx="12" cy="10" r="3"/>
                         </svg>
                     </div>
-                    <h4 class="cu-info-card__head">Faridabad &amp; Alwar</h4>
-                    <p class="cu-info-card__body">
-                        Plot 112, Sec-59, HSIIDC<br>
-                        Faridabad – 121004, Haryana<br><br>
-                        Plot A22, MIA<br>
-                        Alwar – 301001, Rajasthan
-                    </p>
+                    {{ e.text('contact.address.head', 'Faridabad & Alwar', tag='h4', cls='cu-info-card__head') }}
+                    {{ e.rich('contact.address.body', 'Plot 112, Sec-59, HSIIDC<br>\n                        Faridabad – 121004, Haryana<br><br>\n                        Plot A22, MIA<br>\n                        Alwar – 301001, Rajasthan', tag='p', cls='cu-info-card__body') }}
                 </div>
 
             </div>
@@ -149,7 +136,7 @@
         <div class="cu-container">
             <div class="cu-maps__grid">
                 <div class="cu-map-item">
-                    <p class="cu-map-item__label">Faridabad Unit</p>
+                    {{ e.text('contact.map.faridabad', 'Faridabad Unit', tag='p', cls='cu-map-item__label') }}
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3512.6087452930224!2d77.30365768120048!3d28.310173913553385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdb05a9c6f243%3A0x5c92c46ec3ec3dd3!2sKhandelwal%20Busar%20Industries%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1752573598148!5m2!1sen!2sin"
                         allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
@@ -157,7 +144,7 @@
                     </iframe>
                 </div>
                 <div class="cu-map-item">
-                    <p class="cu-map-item__label">Alwar Unit</p>
+                    {{ e.text('contact.map.alwar', 'Alwar Unit', tag='p', cls='cu-map-item__label') }}
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m25!1m12!1m3!1d21343.24931775208!2d76.6198681627595!3d27.55765908500915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m10!3e6!4m4!1s0x39729a0232bd9ed5%3A0x4908eef38d108033!3m2!1d27.5528901!2d76.63467729999999!4m3!3m2!1d27.5529907!2d76.6345735!5e0!3m2!1sen!2sin!4v1753381110940!5m2!1sen!2sin"
                         allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
@@ -169,6 +156,7 @@
     </section>
 
     {% include 'footer.html' %}
+    {% include 'admin_bar.html' %}
     <script src="{{ url_for('static', filename='contact_us.js') }}"></script>
 </body>
 </html>

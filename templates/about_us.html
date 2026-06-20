@@ -1,3 +1,4 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,29 +19,29 @@
   ═══════════════════════════════════════════════════ -->
   <section class="au-hero">
     <div class="au-hero__text">
-      <p class="au-hero__eyebrow">About Us</p>
-      <h1 class="au-hero__title">40+ Years of<br>Manufacturing<br>Excellence</h1>
-      <p class="au-hero__desc">From a small Faridabad workshop in 1981 to a trusted partner of India's largest OEMs — KBI manufactures precision sheet metal, fabrication components, and galvanized cable inputs that keep industries moving.</p>
+      {{ e.text('about.hero.eyebrow', 'About Us', tag='p', cls='au-hero__eyebrow') }}
+      {{ e.rich('about.hero.title', '40+ Years of<br>Manufacturing<br>Excellence', tag='h1', cls='au-hero__title') }}
+      {{ e.text('about.hero.desc', "From a small Faridabad workshop in 1981 to a trusted partner of India's largest OEMs — KBI manufactures precision sheet metal, fabrication components, and galvanized cable inputs that keep industries moving.", tag='p', cls='au-hero__desc') }}
       <div class="au-hero__stats">
         <div class="au-hero__stat">
-          <span class="au-hero__stat-num">1981</span>
-          <span class="au-hero__stat-lbl">Founded</span>
+          {{ e.text('about.hero.stat1.num', '1981', tag='span', cls='au-hero__stat-num') }}
+          {{ e.text('about.hero.stat1.lbl', 'Founded', tag='span', cls='au-hero__stat-lbl') }}
         </div>
         <div class="au-hero__stat-divider"></div>
         <div class="au-hero__stat">
-          <span class="au-hero__stat-num">30+</span>
-          <span class="au-hero__stat-lbl">OEM Clients</span>
+          {{ e.text('about.hero.stat2.num', '30+', tag='span', cls='au-hero__stat-num') }}
+          {{ e.text('about.hero.stat2.lbl', 'OEM Clients', tag='span', cls='au-hero__stat-lbl') }}
         </div>
         <div class="au-hero__stat-divider"></div>
         <div class="au-hero__stat">
-          <span class="au-hero__stat-num">2</span>
-          <span class="au-hero__stat-lbl">Plants</span>
+          {{ e.text('about.hero.stat3.num', '2', tag='span', cls='au-hero__stat-num') }}
+          {{ e.text('about.hero.stat3.lbl', 'Plants', tag='span', cls='au-hero__stat-lbl') }}
         </div>
       </div>
       <a href="#story" class="au-hero__btn">Our Story</a>
     </div>
     <div class="au-hero__img-wrap reveal-au">
-      <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="KBI Facility">
+      {{ e.image('about.hero.image', '/static/pics/real_front_2.png', alt='KBI Facility') }}
     </div>
   </section>
 
@@ -51,25 +52,25 @@
     <div class="au-story__inner">
 
       <div class="au-story__text reveal-au">
-        <p class="au-section-tag">Our Story</p>
-        <h2 class="au-story__heading">Built on<br>Precision &amp;<br>Partnership</h2>
+        {{ e.text('about.story.tag', 'Our Story', tag='p', cls='au-section-tag') }}
+        {{ e.rich('about.story.heading', 'Built on<br>Precision &amp;<br>Partnership', tag='h2', cls='au-story__heading') }}
         <div class="au-story__divider"></div>
-        <p class="au-story__body">KBI was founded in <strong>1981</strong> in Faridabad, Haryana as Kochar Agro Industries — immediately partnering with Maruti Suzuki India Limited. Over four decades, we have grown into a reliable manufacturer of sheet metal and fabrication components for the automobile industry.</p>
-        <p class="au-story__body">Our second plant in <strong>Alwar, Rajasthan</strong> produces galvanized steel tape, wire, and strip for power and telecom cable applications — serving India's infrastructure backbone.</p>
+        {{ e.rich('about.story.body1', 'KBI was founded in <strong>1981</strong> in Faridabad, Haryana as Kochar Agro Industries — immediately partnering with Maruti Suzuki India Limited. Over four decades, we have grown into a reliable manufacturer of sheet metal and fabrication components for the automobile industry.', tag='p', cls='au-story__body') }}
+        {{ e.rich('about.story.body2', "Our second plant in <strong>Alwar, Rajasthan</strong> produces galvanized steel tape, wire, and strip for power and telecom cable applications — serving India's infrastructure backbone.", tag='p', cls='au-story__body') }}
         <a href="#journey" class="au-story__link">See Our Journey →</a>
       </div>
 
       <!-- Wide rectangular images with curved edges -->
       <div class="au-story__images reveal-au reveal-au--delay">
         <div class="au-img-card au-img-card--tall">
-          <img src="{{ url_for('static', filename='pics/real_shop_floor.png') }}" alt="Shop floor">
+          {{ e.image('about.story.img1', '/static/pics/real_shop_floor.png', alt='Shop floor') }}
         </div>
         <div class="au-img-stack">
           <div class="au-img-card au-img-card--wide">
-            <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="KBI building">
+            {{ e.image('about.story.img2', '/static/pics/real_front_2.png', alt='KBI building') }}
           </div>
           <div class="au-img-card au-img-card--wide">
-            <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Quality check">
+            {{ e.image('about.story.img3', '/static/pics/real_quality.png', alt='Quality check') }}
           </div>
         </div>
       </div>
@@ -82,24 +83,28 @@
   ═══════════════════════════════════════════════════ -->
   <section id="latest-news" class="au-news">
     <div class="au-news__inner">
-      <p class="au-section-tag au-section-tag--amber reveal-au">Company</p>
-      <h2 class="au-news__heading reveal-au">Latest News</h2>
+      {{ e.text('about.news.tag', 'Company', tag='p', cls='au-section-tag au-section-tag--amber reveal-au') }}
+      {{ e.text('about.news.heading', 'Latest News', tag='h2', cls='au-news__heading reveal-au') }}
+      {% if is_admin %}
+      <div class="admin-grid-actions" data-edit-only hidden style="margin-bottom:14px;">
+        <button type="button" class="admin-btn admin-btn--add" data-add-item data-collection="news"
+          data-new-item='{"date":"MON 2025","title":"New announcement headline"}'>+ Add news</button>
+      </div>
+      {% endif %}
       <div class="au-news__list reveal-au">
-        <div class="au-news__item">
+        {% for n in news %}
+        <div class="au-news__item" data-edit-card data-collection="news" data-id="{{ n.id }}" data-name="{{ n.title }}">
           <div class="au-news__divider"></div>
-          <span class="au-news__date">MAR 2025</span>
-          <p class="au-news__title">KBI Renews ISO 9001:2015 Quality Management Certification</p>
+          <span class="au-news__date" data-edit-field="date">{{ n.date }}</span>
+          <p class="au-news__title" data-edit-field="title">{{ n.title }}</p>
+          {% if is_admin %}
+          <div class="card-edit-toolbar" data-edit-only hidden>
+            <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+            <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
+          </div>
+          {% endif %}
         </div>
-        <div class="au-news__item">
-          <div class="au-news__divider"></div>
-          <span class="au-news__date">JAN 2025</span>
-          <p class="au-news__title">Capacity Expansion at Alwar Plant — New Pressing Lines Added</p>
-        </div>
-        <div class="au-news__item">
-          <div class="au-news__divider"></div>
-          <span class="au-news__date">DEC 2024</span>
-          <p class="au-news__title">New Long-Term Supply Agreement with Leading Automotive OEM</p>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -110,41 +115,41 @@
   <section class="au-identity">
     <div class="au-identity__inner">
 
-      <p class="au-identity__label reveal-au">About Us</p>
-      <h2 class="au-identity__heading reveal-au">Our Identity,<br>Vision and Values</h2>
+      {{ e.text('about.identity.label', 'About Us', tag='p', cls='au-identity__label reveal-au') }}
+      {{ e.rich('about.identity.heading', 'Our Identity,<br>Vision and Values', tag='h2', cls='au-identity__heading reveal-au') }}
 
       <div class="au-values-pill reveal-au">
         <div class="au-val-item">
           <div class="au-val-item__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
           </div>
-          <span>Quality First</span>
+          {{ e.rich('about.value1', 'Quality First', tag='span') }}
         </div>
         <div class="au-val-item">
           <div class="au-val-item__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
           </div>
-          <span>Trust &amp;<br>Transparency</span>
+          {{ e.rich('about.value2', 'Trust &amp;<br>Transparency', tag='span') }}
         </div>
         <div class="au-val-item">
           <div class="au-val-item__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.07-6.07l-.7.7M6.64 17.36l-.7.7M17.36 17.36l.7.7M6.64 6.64l-.7-.7M12 7a5 5 0 100 10A5 5 0 0012 7z"/></svg>
           </div>
-          <span>Precision</span>
+          {{ e.rich('about.value3', 'Precision', tag='span') }}
         </div>
         <div class="au-val-item">
           <div class="au-val-item__icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
           </div>
-          <span>Innovation</span>
+          {{ e.rich('about.value4', 'Innovation', tag='span') }}
         </div>
       </div>
 
       <!-- Mission & Vision — paired feature cards -->
       <div class="au-vmc reveal-au">
 
-        <h3 class="au-vmc__title">Mission &amp; Vision</h3>
-        <p class="au-vmc__intro">Two commitments anchor every decision we make — the components we deliver today, and the company we are building for tomorrow.</p>
+        {{ e.text('about.vmc.title', 'Mission & Vision', tag='h3', cls='au-vmc__title') }}
+        {{ e.text('about.vmc.intro', 'Two commitments anchor every decision we make — the components we deliver today, and the company we are building for tomorrow.', tag='p', cls='au-vmc__intro') }}
 
         <div class="au-vmc__grid">
 
@@ -159,12 +164,7 @@
                 <h4 class="au-vmc-card__title">Mission</h4>
               </div>
             </div>
-            <ul class="au-vmc-card__list">
-              <li>Deliver world-class components through advanced manufacturing processes.</li>
-              <li>Maintain a skilled workforce with an uncompromising commitment to quality.</li>
-              <li>Achieve consistent, on-time delivery for every OEM partner.</li>
-              <li>Continuously improve through precision engineering and innovation.</li>
-            </ul>
+            {{ e.rich('about.mission.list', '<li>Deliver world-class components through advanced manufacturing processes.</li><li>Maintain a skilled workforce with an uncompromising commitment to quality.</li><li>Achieve consistent, on-time delivery for every OEM partner.</li><li>Continuously improve through precision engineering and innovation.</li>', tag='ul', cls='au-vmc-card__list') }}
           </article>
 
           <!-- Vision — light card -->
@@ -178,12 +178,7 @@
                 <h4 class="au-vmc-card__title">Vision</h4>
               </div>
             </div>
-            <ul class="au-vmc-card__list">
-              <li>Become India's preferred manufacturer of precision sheet-metal components.</li>
-              <li>Serve leading OEMs across automotive, agriculture &amp; infrastructure sectors.</li>
-              <li>Drive innovation in fabrication and galvanized steel products.</li>
-              <li>Build lasting partnerships founded on trust and manufacturing excellence.</li>
-            </ul>
+            {{ e.rich('about.vision.list', "<li>Become India's preferred manufacturer of precision sheet-metal components.</li><li>Serve leading OEMs across automotive, agriculture &amp; infrastructure sectors.</li><li>Drive innovation in fabrication and galvanized steel products.</li><li>Build lasting partnerships founded on trust and manufacturing excellence.</li>", tag='ul', cls='au-vmc-card__list') }}
           </article>
 
         </div>
@@ -197,8 +192,8 @@
   ═══════════════════════════════════════════════════ -->
   <section id="journey" class="au-journey">
     <div class="au-journey__header">
-      <p class="au-section-tag au-section-tag--amber">Our Journey</p>
-      <h2 class="au-journey__heading">Milestones That Shaped KBI</h2>
+      {{ e.text('about.journey.tag', 'Our Journey', tag='p', cls='au-section-tag au-section-tag--amber') }}
+      {{ e.text('about.journey.heading', 'Milestones That Shaped KBI', tag='h2', cls='au-journey__heading') }}
     </div>
 
     <div class="au-journey__scroll-wrap">
@@ -210,10 +205,10 @@
           <div class="au-htl__top-cell au-htl__top-cell--filled">
             <div class="au-htl-card">
               <div class="au-htl-card__img">
-                <img src="{{ url_for('static', filename='pics/maruti_suzuki_img.png') }}" alt="Maruti Suzuki">
+                {{ e.image('about.journey.m1981.img', '/static/pics/maruti_suzuki_img.png', alt='Maruti Suzuki') }}
               </div>
-              <p class="au-htl-card__title">Established</p>
-              <p class="au-htl-card__desc">Partnered with Maruti Suzuki India Limited</p>
+              {{ e.text('about.journey.m1981.title', 'Established', tag='p', cls='au-htl-card__title') }}
+              {{ e.text('about.journey.m1981.desc', 'Partnered with Maruti Suzuki India Limited', tag='p', cls='au-htl-card__desc') }}
             </div>
           </div>
           <!-- 1995 empty -->
@@ -222,10 +217,10 @@
           <div class="au-htl__top-cell au-htl__top-cell--filled">
             <div class="au-htl-card">
               <div class="au-htl-card__img">
-                <img src="{{ url_for('static', filename='pics/real_front.png') }}" alt="KBI building">
+                {{ e.image('about.journey.m2005.img', '/static/pics/real_front.png', alt='KBI building') }}
               </div>
-              <p class="au-htl-card__title">Family Takeover</p>
-              <p class="au-htl-card__desc">Khandelwal family acquired KBI</p>
+              {{ e.text('about.journey.m2005.title', 'Family Takeover', tag='p', cls='au-htl-card__title') }}
+              {{ e.text('about.journey.m2005.desc', 'Khandelwal family acquired KBI', tag='p', cls='au-htl-card__desc') }}
             </div>
           </div>
           <!-- 2007 empty -->
@@ -234,10 +229,10 @@
           <div class="au-htl__top-cell au-htl__top-cell--filled">
             <div class="au-htl-card">
               <div class="au-htl-card__img">
-                <img src="{{ url_for('static', filename='pics/Galvanized_Steel_Tape.png') }}" alt="Galvanized steel">
+                {{ e.image('about.journey.m2008.img', '/static/pics/Galvanized_Steel_Tape.png', alt='Galvanized steel') }}
               </div>
-              <p class="au-htl-card__title">Alwar Expansion</p>
-              <p class="au-htl-card__desc">New plant for galvanized steel tape &amp; wire</p>
+              {{ e.text('about.journey.m2008.title', 'Alwar Expansion', tag='p', cls='au-htl-card__title') }}
+              {{ e.rich('about.journey.m2008.desc', 'New plant for galvanized steel tape &amp; wire', tag='p', cls='au-htl-card__desc') }}
             </div>
           </div>
           <!-- 2022 empty -->
@@ -246,10 +241,10 @@
           <div class="au-htl__top-cell au-htl__top-cell--filled">
             <div class="au-htl-card">
               <div class="au-htl-card__img">
-                <img src="{{ url_for('static', filename='pics/Mahindra_Defence_img.jpg') }}" alt="Mahindra Defence">
+                {{ e.image('about.journey.m2023.img', '/static/pics/Mahindra_Defence_img.jpg', alt='Mahindra Defence') }}
               </div>
-              <p class="au-htl-card__title">Defence Sector</p>
-              <p class="au-htl-card__desc">Partnered with Mahindra Defence Systems</p>
+              {{ e.text('about.journey.m2023.title', 'Defence Sector', tag='p', cls='au-htl-card__title') }}
+              {{ e.text('about.journey.m2023.desc', 'Partnered with Mahindra Defence Systems', tag='p', cls='au-htl-card__desc') }}
             </div>
           </div>
           <!-- 2024 empty -->
@@ -280,10 +275,10 @@
           <div class="au-htl__bot-cell au-htl__bot-cell--filled">
             <div class="au-htl-card au-htl-card--bot">
               <div class="au-htl-card__img">
-                <img src="{{ url_for('static', filename='pics/volvo_eicher.webp') }}" alt="VECV">
+                {{ e.image('about.journey.m1995.img', '/static/pics/volvo_eicher.webp', alt='VECV') }}
               </div>
-              <p class="au-htl-card__title">Major Milestone</p>
-              <p class="au-htl-card__desc">VECV &amp; Escorts Kubota association</p>
+              {{ e.text('about.journey.m1995.title', 'Major Milestone', tag='p', cls='au-htl-card__title') }}
+              {{ e.rich('about.journey.m1995.desc', 'VECV &amp; Escorts Kubota association', tag='p', cls='au-htl-card__desc') }}
             </div>
           </div>
           <!-- 2005 empty -->
@@ -292,10 +287,10 @@
           <div class="au-htl__bot-cell au-htl__bot-cell--filled">
             <div class="au-htl-card au-htl-card--bot">
               <div class="au-htl-card__img">
-                <img src="{{ url_for('static', filename='pics/New_Holland_img.png') }}" alt="CNH">
+                {{ e.image('about.journey.m2007.img', '/static/pics/New_Holland_img.png', alt='CNH') }}
               </div>
-              <p class="au-htl-card__title">CNH Industrial</p>
-              <p class="au-htl-card__desc">Global agri &amp; construction equipment leader</p>
+              {{ e.text('about.journey.m2007.title', 'CNH Industrial', tag='p', cls='au-htl-card__title') }}
+              {{ e.rich('about.journey.m2007.desc', 'Global agri &amp; construction equipment leader', tag='p', cls='au-htl-card__desc') }}
             </div>
           </div>
           <!-- 2008 empty -->
@@ -304,10 +299,10 @@
           <div class="au-htl__bot-cell au-htl__bot-cell--filled">
             <div class="au-htl-card au-htl-card--bot">
               <div class="au-htl-card__img">
-                <img src="{{ url_for('static', filename='pics/kobelco_img.png') }}" alt="Kobelco">
+                {{ e.image('about.journey.m2022.img', '/static/pics/kobelco_img.png', alt='Kobelco') }}
               </div>
-              <p class="au-htl-card__title">Bold Expansion</p>
-              <p class="au-htl-card__desc">Kobelco India — leading excavator maker</p>
+              {{ e.text('about.journey.m2022.title', 'Bold Expansion', tag='p', cls='au-htl-card__title') }}
+              {{ e.rich('about.journey.m2022.desc', 'Kobelco India — leading excavator maker', tag='p', cls='au-htl-card__desc') }}
             </div>
           </div>
           <!-- 2023 empty -->
@@ -316,10 +311,10 @@
           <div class="au-htl__bot-cell au-htl__bot-cell--filled">
             <div class="au-htl-card au-htl-card--bot">
               <div class="au-htl-card__img">
-                <img src="{{ url_for('static', filename='pics/eulermotors_img.jpg') }}" alt="Euler Motors">
+                {{ e.image('about.journey.m2024.img', '/static/pics/eulermotors_img.jpg', alt='Euler Motors') }}
               </div>
-              <p class="au-htl-card__title">Future-Ready</p>
-              <p class="au-htl-card__desc">Euler Motors — entering EV components</p>
+              {{ e.text('about.journey.m2024.title', 'Future-Ready', tag='p', cls='au-htl-card__title') }}
+              {{ e.rich('about.journey.m2024.desc', 'Euler Motors — entering EV components', tag='p', cls='au-htl-card__desc') }}
             </div>
           </div>
         </div>
@@ -333,43 +328,44 @@
   ═══════════════════════════════════════════════════ -->
   <section class="au-team">
     <div class="au-team__inner">
-      <p class="au-section-tag reveal-au">Meet Our Team</p>
-      <h2 class="au-team__heading reveal-au">Our Team</h2>
+      {{ e.text('about.team.tag', 'Meet Our Team', tag='p', cls='au-section-tag reveal-au') }}
+      {{ e.text('about.team.heading', 'Our Team', tag='h2', cls='au-team__heading reveal-au') }}
+
+      {% if is_admin %}
+      <div class="admin-grid-actions" data-edit-only hidden style="margin-bottom:16px;">
+        <button type="button" class="admin-btn admin-btn--add" data-add-item data-collection="team"
+          data-new-item='{"name":"New Member","role":"Role / title","bio":"Short biography goes here.","image":"/static/pics/KBI_logo.png"}'>+ Add team member</button>
+      </div>
+      {% endif %}
 
       <div class="au-team-grid">
-
-        <div class="au-member reveal-au">
-          <div class="au-member__photo-wrap">
-            <img src="{{ url_for('static', filename='pics/Amit.jpg') }}" alt="Amit Kapoor">
+        {% for m in team %}
+        <div class="au-member reveal-au" data-edit-card data-collection="team" data-id="{{ m.id }}" data-name="{{ m.name }}">
+          <div class="au-member__photo-wrap img-slot" data-image-slot>
+            <img src="{{ m.image }}" alt="{{ m.name }}" data-edit-image{% if not m.image %} hidden{% endif %}>
+            {% if is_admin %}
+            <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+            <button type="button" class="img-uploader"{% if m.image %} hidden{% endif %}><span class="img-uploader__icon">&#43;</span><span class="img-uploader__text">Upload photo</span></button>
+            {% endif %}
           </div>
-          <h3 class="au-member__name">Amit Kapoor</h3>
-          <p class="au-member__role">Chief Executive Officer — Autocomponents</p>
-          <p class="au-member__bio">26+ years in Business Development, Green Field Projects, and Plant Operations. Previously with Action Construction Equipment, FLSmidth, and Kirby Building Systems.</p>
-        </div>
-
-        <div class="au-member reveal-au reveal-au--d1">
-          <div class="au-member__photo-wrap">
-            <img src="{{ url_for('static', filename='pics/Vipin.jpg') }}" alt="Vipin Dixit">
+          <h3 class="au-member__name" data-edit-field="name">{{ m.name }}</h3>
+          <p class="au-member__role" data-edit-field="role">{{ m.role }}</p>
+          <p class="au-member__bio" data-edit-field="bio">{{ m.bio }}</p>
+          {% if is_admin %}
+          <div class="card-edit-toolbar" data-edit-only hidden>
+            <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+            <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
           </div>
-          <h3 class="au-member__name">Vipin Dixit</h3>
-          <p class="au-member__role">Business Manager — Autocomponents</p>
-          <p class="au-member__bio">15 years heading Quality across sheet metal and fabrication. Awarded Best Kaizen Improvement by Escorts Kubota in 2022.</p>
+          {% endif %}
         </div>
-
-        <div class="au-member reveal-au reveal-au--d2">
-          <div class="au-member__photo-wrap">
-            <img src="{{ url_for('static', filename='pics/Narender.jpeg') }}" alt="Narender Garg">
-          </div>
-          <h3 class="au-member__name">Narender Garg</h3>
-          <p class="au-member__role">Business Manager — GST &amp; GWS</p>
-          <p class="au-member__bio">23+ years with KBI, leading Galvanised Steel Tape, Wire &amp; Strip marketing for power and telecom cable applications.</p>
-        </div>
-
+        {% endfor %}
       </div>
     </div>
   </section>
 
   {% include 'footer.html' %}
+  {% set admin_collection = 'team' %}
+  {% include 'admin_bar.html' %}
   <script src="{{ url_for('static', filename='about_us.js') }}"></script>
 </body>
 </html>

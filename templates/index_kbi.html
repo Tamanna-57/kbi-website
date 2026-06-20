@@ -1,3 +1,4 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,9 +25,9 @@
         </div>
         <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1 class="hero-title">Building the Future<br>of Manufacturing</h1>
+            {{ e.rich('home.hero.title', 'Building the Future<br>of Manufacturing', tag='h1', cls='hero-title') }}
             <div class="hero-line"></div>
-            <p class="hero-subtitle">Since 1981, KBI has powered India's automobiles, power and telecom infrastructure with precision sheet metal, fabrication and cable input solutions.</p>
+            {{ e.text('home.hero.subtitle', "Since 1981, KBI has powered India's automobiles, power and telecom infrastructure with precision sheet metal, fabrication and cable input solutions.", tag='p', cls='hero-subtitle') }}
             <div class="hero-btns">
                 <a href="/about_us" class="hero-btn">About Us <span>→</span></a>
                 <a href="#technologies" class="hero-btn">Our Technologies <span>→</span></a>
@@ -48,22 +49,22 @@
     <section class="we-care-banner">
         <div class="we-care-inner">
             <div class="we-care-copy">
-                <span class="we-care-kicker">We Care for Quality, People &amp; Planet</span>
-                <h2>KBI is committed to responsible,<br>future-ready manufacturing.</h2>
-                <p>From Faridabad to Alwar, we invest in safer workplaces, reliable supply chains and continuous improvement so that every component we ship strengthens the trust of OEMs and end-customers across India.</p>
+                {{ e.text('home.wecare.kicker', 'We Care for Quality, People & Planet', tag='span', cls='we-care-kicker') }}
+                {{ e.rich('home.wecare.title', 'KBI is committed to responsible,<br>future-ready manufacturing.', tag='h2') }}
+                {{ e.text('home.wecare.body', 'From Faridabad to Alwar, we invest in safer workplaces, reliable supply chains and continuous improvement so that every component we ship strengthens the trust of OEMs and end-customers across India.', tag='p') }}
             </div>
             <div class="we-care-pills">
                 <a href="/certifications" class="we-care-pill active">
-                    <span class="pill-label">Sustainability</span>
-                    <span class="pill-desc">Reducing waste &amp; rework on every line.</span>
+                    {{ e.text('home.wecare.pill1.label', 'Sustainability', tag='span', cls='pill-label') }}
+                    {{ e.text('home.wecare.pill1.desc', 'Reducing waste & rework on every line.', tag='span', cls='pill-desc') }}
                 </a>
                 <a href="/processes" class="we-care-pill">
-                    <span class="pill-label">Innovation</span>
-                    <span class="pill-desc">Investing in modern presses &amp; CNCs.</span>
+                    {{ e.text('home.wecare.pill2.label', 'Innovation', tag='span', cls='pill-label') }}
+                    {{ e.text('home.wecare.pill2.desc', 'Investing in modern presses & CNCs.', tag='span', cls='pill-desc') }}
                 </a>
                 <a href="/about_us" class="we-care-pill">
-                    <span class="pill-label">Our Impact</span>
-                    <span class="pill-desc">Enabling India's mobility &amp; connectivity.</span>
+                    {{ e.text('home.wecare.pill3.label', 'Our Impact', tag='span', cls='pill-label') }}
+                    {{ e.text('home.wecare.pill3.desc', "Enabling India's mobility & connectivity.", tag='span', cls='pill-desc') }}
                 </a>
             </div>
         </div>
@@ -142,8 +143,8 @@
             <!-- Left text -->
             <div class="kbi-intro-left slide-up-reveal">
                 <img src="{{ url_for('static', filename='pics/KBI_logo.png') }}" alt="KBI Logo" class="kbi-intro-logo">
-                <h2 class="kbi-intro-title">Khandelwal Busar Industries</h2>
-                <p class="kbi-intro-desc">Established in 1981, KBI is a key manufacturer of sheet metal &amp; fabrication components for the automobile industry and of power and telecom cable inputs. With plants in <strong>Faridabad, Haryana</strong> and <strong>Alwar, Rajasthan</strong>, we serve India's leading OEMs with precision, consistency and commitment.</p>
+                {{ e.text('home.intro.title', 'Khandelwal Busar Industries', tag='h2', cls='kbi-intro-title') }}
+                {{ e.rich('home.intro.desc', "Established in 1981, KBI is a key manufacturer of sheet metal &amp; fabrication components for the automobile industry and of power and telecom cable inputs. With plants in <strong>Faridabad, Haryana</strong> and <strong>Alwar, Rajasthan</strong>, we serve India's leading OEMs with precision, consistency and commitment.", tag='p', cls='kbi-intro-desc') }}
                 <a href="/about_us" class="kbi-intro-link">
                     <span>read more</span> <span class="kbi-intro-arrow">→</span>
                 </a>
@@ -153,16 +154,16 @@
             <div class="kbi-intro-right slide-up-reveal">
                 <div class="kbi-carousel">
                     <div class="kbi-carousel-slide active">
-                        <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="KBI Faridabad Plant">
+                        {{ e.image('home.intro.img1', '/static/pics/real_front_2.png', alt='KBI Faridabad Plant') }}
                     </div>
                     <div class="kbi-carousel-slide">
-                        <img src="{{ url_for('static', filename='pics/real_shop_floor.png') }}" alt="KBI Shop Floor">
+                        {{ e.image('home.intro.img2', '/static/pics/real_shop_floor.png', alt='KBI Shop Floor') }}
                     </div>
                     <div class="kbi-carousel-slide">
-                        <img src="{{ url_for('static', filename='pics/real_leadership.png') }}" alt="KBI Leadership">
+                        {{ e.image('home.intro.img3', '/static/pics/real_leadership.png', alt='KBI Leadership') }}
                     </div>
                     <div class="kbi-carousel-slide">
-                        <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Quality Assurance">
+                        {{ e.image('home.intro.img4', '/static/pics/real_quality.png', alt='Quality Assurance') }}
                     </div>
                 </div>
             </div>
@@ -177,9 +178,9 @@
     ══════════════════════════════════════ -->
     <section class="products-showcase" id="our-products">
         <div class="products-showcase-header">
-            <span class="products-showcase-kicker">⚡ OUR PRODUCTS</span>
-            <h2 class="products-showcase-title">Engineered for<br>Excellence</h2>
-            <p class="products-showcase-sub">Precision components trusted by India's leading OEMs across automotive, telecom and power sectors.</p>
+            {{ e.text('home.products.kicker', '⚡ OUR PRODUCTS', tag='span', cls='products-showcase-kicker') }}
+            {{ e.rich('home.products.title', 'Engineered for<br>Excellence', tag='h2', cls='products-showcase-title') }}
+            {{ e.text('home.products.sub', "Precision components trusted by India's leading OEMs across automotive, telecom and power sectors.", tag='p', cls='products-showcase-sub') }}
         </div>
 
         <div class="products-track-wrap" id="productsTrackWrap">
@@ -265,7 +266,7 @@
     ══════════════════════════════════════ -->
     <section class="customers-marquee-section" id="customers-ticker">
         <div class="customers-marquee-header">
-            <span class="customers-marquee-kicker">Our Valuable Customers</span>
+            {{ e.text('home.customers.kicker', 'Our Valuable Customers', tag='span', cls='customers-marquee-kicker') }}
         </div>
         <div class="marquee-outer">
             <div class="marquee-track">
@@ -330,70 +331,44 @@
 
             <!-- Left: heading -->
             <div class="ril-u-left">
-                <p class="ril-u-eyebrow">Company</p>
-                <h2 class="ril-u-title">Updates &amp;<br>Notices</h2>
+                {{ e.text('home.updates.eyebrow', 'Company', tag='p', cls='ril-u-eyebrow') }}
+                {{ e.rich('home.updates.title', 'Updates &amp;<br>Notices', tag='h2', cls='ril-u-title') }}
             </div>
 
             <!-- Vertical divider -->
             <div></div>
 
-            <!-- Middle: Latest News notices -->
+            <!-- Middle: Latest News notices (from the News collection — edit on About) -->
             <div class="ril-u-col">
                 <h3 class="ril-u-col__heading">Latest News</h3>
+                {% for n in news %}
                 <div class="ril-u-divider"></div>
                 <div class="ril-notice">
-                    <span class="ril-notice__date">MAR 2025</span>
-                    <p class="ril-notice__title">KBI Renews ISO 9001:2015 Quality Management Certification</p>
+                    <span class="ril-notice__date">{{ n.date }}</span>
+                    <p class="ril-notice__title">{{ n.title }}</p>
                 </div>
-                <div class="ril-u-divider"></div>
-                <div class="ril-notice">
-                    <span class="ril-notice__date">JAN 2025</span>
-                    <p class="ril-notice__title">Capacity Expansion at Alwar Plant — New Pressing Lines Added</p>
-                </div>
-                <div class="ril-u-divider"></div>
-                <div class="ril-notice">
-                    <span class="ril-notice__date">DEC 2024</span>
-                    <p class="ril-notice__title">New Long-Term Supply Agreement with Leading Automotive OEM</p>
-                </div>
+                {% endfor %}
                 <a href="/about_us" class="ril-u-btn">know more →</a>
             </div>
 
             <!-- Vertical divider -->
             <div></div>
 
-            <!-- Right: Certifications -->
+            <!-- Right: Certifications (from the Certifications collection) -->
             <div class="ril-u-col">
                 <h3 class="ril-u-col__heading">Certifications</h3>
+                {% for c in certifications %}
                 <div class="ril-u-divider"></div>
                 <div class="ril-doc">
                     <div class="ril-doc__thumb">
-                        <img src="{{ url_for('static', filename='pics/iso_9001.jpg') }}" alt="ISO 9001">
+                        <img src="{{ c.image }}" alt="{{ c.badge }}">
                     </div>
                     <div>
-                        <p class="ril-doc__name">ISO 9001:2015</p>
-                        <span class="ril-doc__sub">Quality Management System</span>
+                        <p class="ril-doc__name">{{ c.badge }}</p>
+                        <span class="ril-doc__sub">{{ c.heading }}</span>
                     </div>
                 </div>
-                <div class="ril-u-divider"></div>
-                <div class="ril-doc">
-                    <div class="ril-doc__thumb">
-                        <img src="{{ url_for('static', filename='pics/iso_14001.jpg') }}" alt="ISO 14001">
-                    </div>
-                    <div>
-                        <p class="ril-doc__name">ISO 14001:2015</p>
-                        <span class="ril-doc__sub">Environmental Management</span>
-                    </div>
-                </div>
-                <div class="ril-u-divider"></div>
-                <div class="ril-doc">
-                    <div class="ril-doc__thumb">
-                        <img src="{{ url_for('static', filename='pics/iso_45001.jpg') }}" alt="ISO 45001">
-                    </div>
-                    <div>
-                        <p class="ril-doc__name">ISO 45001:2018</p>
-                        <span class="ril-doc__sub">Occupational Health &amp; Safety</span>
-                    </div>
-                </div>
+                {% endfor %}
                 <a href="/certifications" class="ril-u-btn">know more →</a>
             </div>
 
@@ -404,9 +379,9 @@
          CTA
     ══════════════════════════════════════ -->
     <section class="cta-section" id="contact">
-        <span class="section-label centered">🤝 Work With Us</span>
-        <h2 class="section-title centered">Ready to Partner with KBI?</h2>
-        <p style="color:var(--color-text-muted);max-width:480px;margin:.75rem auto 0;font-size:.98rem;line-height:1.7;text-align:center;">Join the many OEMs across India who trust KBI for precision components, on-time delivery and consistent quality.</p>
+        {{ e.text('home.cta.label', '🤝 Work With Us', tag='span', cls='section-label centered') }}
+        {{ e.text('home.cta.title', 'Ready to Partner with KBI?', tag='h2', cls='section-title centered') }}
+        <p style="color:var(--color-text-muted);max-width:480px;margin:.75rem auto 0;font-size:.98rem;line-height:1.7;text-align:center;" data-block="home.cta.desc" data-block-text>{{ block_value('home.cta.desc', 'Join the many OEMs across India who trust KBI for precision components, on-time delivery and consistent quality.') }}</p>
         <div class="cta-btns">
             <a href="/contact_us" class="cta-btn primary">Get In Touch</a>
             <a href="https://storage.googleapis.com/kbi-catalogues/product_catalogue.pdf" target="_blank" rel="noopener noreferrer" class="cta-btn outline">Download Catalogue</a>
@@ -414,6 +389,7 @@
     </section>
 
     {% include 'footer.html' %}
+    {% include 'admin_bar.html' %}
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
