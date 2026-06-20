@@ -72,31 +72,37 @@
     if (on) addListControls(card); else removeListControls(card);
   }
 
-  // ---- editable list (features / details) controls ------------------
+  // ---- editable list (features / details / steps…) controls ---------
+  // Each list declares how to add items:
+  //   data-edit-list="<field>"  data-edit-item="<css>"  data-add-label="<word>"
+  function itemSelector(list) { return list.dataset.editItem || 'li'; }
+
+  function makeListItem(list) {
+    const sel = itemSelector(list);
+    let node;
+    if (sel === 'li' || sel === '') {
+      node = document.createElement('li');
+    } else {
+      node = document.createElement('span');
+      node.className = sel.replace(/^\./, '');  // ".feature-tag" -> "feature-tag"
+    }
+    node.contentEditable = 'true';
+    return node;
+  }
+
   function addListControls(card) {
     card.querySelectorAll('[data-edit-list]').forEach(list => {
-      if (list.parentElement.querySelector('.edit-add-chip')) return;
-      const isTags = list.classList.contains('machine-features');
+      if (list.nextElementSibling && list.nextElementSibling.classList.contains('edit-add-chip')) return;
       const chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'edit-add-chip';
-      chip.textContent = isTags ? '+ tag' : '+ detail';
-      chip.title = 'Add an item (clear an item’s text to remove it)';
+      chip.textContent = '+ ' + (list.dataset.addLabel || 'item');
+      chip.title = 'Add an item (clear an item’s text to remove it on save)';
       chip.addEventListener('click', () => {
-        let node;
-        if (isTags) {
-          node = document.createElement('span');
-          node.className = 'feature-tag';
-          node.contentEditable = 'true';
-          list.appendChild(node);
-        } else {
-          node = document.createElement('li');
-          node.contentEditable = 'true';
-          list.appendChild(node);
-        }
+        const node = makeListItem(list);
+        list.appendChild(node);
         node.focus();
       });
-      // Place the chip right after the list element.
       list.insertAdjacentElement('afterend', chip);
     });
   }
@@ -105,52 +111,47 @@
     card.querySelectorAll('.edit-add-chip').forEach(c => c.remove());
   }
 
-  // ---- gather + save a card ----------------------------------------
-  function readField(card, name) {
-    const el = card.querySelector(`[data-edit-field="${name}"]`);
-    return el ? el.textContent.trim() : '';
-  }
-
-  function readList(card, name) {
-    const list = card.querySelector(`[data-edit-list="${name}"]`);
-    if (!list) return [];
-    const sel = name === 'features' ? '.feature-tag' : 'li';
-    return Array.from(list.querySelectorAll(sel))
-                .map(el => el.textContent.trim())
-                .filter(Boolean);
+  // ---- generic, attribute-driven field collection ------------------
+  // Works for any content type: pages only need the right data-* markup.
+  function collectCard(card) {
+    const data = {};
+    card.querySelectorAll('[data-edit-field]').forEach(el => {
+      let val = el.textContent.trim();
+      if (el.dataset.editType === 'number') {
+        const n = parseInt(val, 10);
+        val = Number.isNaN(n) ? 0 : n;
+      }
+      data[el.dataset.editField] = val;
+    });
+    card.querySelectorAll('[data-edit-list]').forEach(list => {
+      const items = Array.from(list.querySelectorAll(itemSelector(list)))
+                         .map(el => el.textContent.trim())
+                         .filter(Boolean);
+      data[list.dataset.editList] = items;
+    });
+    const sel = card.querySelector('[data-edit-category]');
+    if (sel) data.category = sel.value;
+    const img = card.querySelector('[data-edit-image]');
+    if (img) data.image = img.getAttribute('src') || '';
+    return data;
   }
 
   function pruneEmpty(card) {
-    card.querySelectorAll('[data-edit-list] .feature-tag, [data-edit-list] li')
-        .forEach(el => { if (!el.textContent.trim()) el.remove(); });
-  }
-
-  function collectMachine(card) {
-    const sel = card.querySelector('[data-edit-category]');
-    const qty = parseInt(readField(card, 'quantity'), 10);
-    const img = card.querySelector('[data-edit-image]');
-    return {
-      category: sel ? sel.value : card.dataset.category,
-      category_label: readField(card, 'category_label'),
-      name: readField(card, 'name'),
-      description: readField(card, 'description'),
-      quantity: Number.isNaN(qty) ? 0 : qty,
-      image: img ? img.getAttribute('src') : '',
-      features: readList(card, 'features'),
-      details: readList(card, 'details'),
-    };
+    card.querySelectorAll('[data-edit-list]').forEach(list => {
+      list.querySelectorAll(itemSelector(list))
+          .forEach(el => { if (!el.textContent.trim()) el.remove(); });
+    });
   }
 
   async function saveCard(card) {
     const id = card.dataset.id;
-    const data = collectMachine(card);
+    const data = collectCard(card);
     try {
       const saved = await api('PUT', `/api/${COLLECTION}/${id}`, data);
-      // Reflect canonical values back onto the card.
-      card.dataset.name = saved.name;
-      card.dataset.category = saved.category;
+      card.dataset.name = saved.name || saved.title || '';
+      if (saved.category) card.dataset.category = saved.category;
       pruneEmpty(card);
-      toast('Saved “' + saved.name + '”', 'success');
+      toast('Saved “' + (saved.name || saved.title || 'item') + '”', 'success');
     } catch (err) {
       toast('Save failed: ' + err.message, 'error');
     }
@@ -169,13 +170,7 @@
     }
   }
 
-  async function addMachine() {
-    const blank = {
-      category: 'presses', category_label: 'Presses',
-      name: 'New machine', description: 'Description goes here.',
-      quantity: 1, image: '/static/pics/process_Pressing.webp',
-      features: [], details: [],
-    };
+  async function addItem(blank) {
     try {
       await api('POST', `/api/${COLLECTION}`, blank);
       sessionStorage.setItem(STORAGE_KEY, '1');  // stay in edit mode after reload
@@ -186,31 +181,89 @@
     }
   }
 
-  // ---- image replace ------------------------------------------------
-  let pendingImageTarget = null;
+  // ---- image slots: delete + in-place upload (instant save) ---------
+  // A single reusable file picker; we remember which slot triggered it.
+  let pendingSlot = null;
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
   fileInput.accept = 'image/*';
   fileInput.style.display = 'none';
   document.body.appendChild(fileInput);
 
-  fileInput.addEventListener('change', async () => {
-    const file = fileInput.files[0];
-    if (!file || !pendingImageTarget) return;
+  // Persist a single field of the card this slot belongs to, immediately.
+  async function persistImage(slot, url) {
+    const card = slot.closest('[data-id]');
+    if (!card) return;  // brand-new unsaved card: value stays in the DOM only
+    await api('PUT', `/api/${COLLECTION}/${card.dataset.id}`, { image: url });
+  }
+
+  function showUploader(slot, show) {
+    const img = slot.querySelector('[data-edit-image]');
+    const uploader = slot.querySelector('.img-uploader');
+    const del = slot.querySelector('.img-del');
+    if (uploader) uploader.hidden = !show;
+    if (img) img.hidden = show;          // hide the image while the uploader shows
+    if (del) del.hidden = show;          // no delete button when there's no image
+  }
+
+  async function deleteImage(slot) {
+    const img = slot.querySelector('[data-edit-image]');
+    if (img) img.removeAttribute('src');
+    showUploader(slot, true);
+    try {
+      await persistImage(slot, '');
+      toast('Image removed — upload a new one', 'success');
+    } catch (err) {
+      toast('Could not remove image: ' + err.message, 'error');
+    }
+  }
+
+  async function uploadToSlot(slot, file) {
+    if (!file) return;
+    const uploader = slot.querySelector('.img-uploader');
+    if (uploader) uploader.classList.add('busy');
     const fd = new FormData();
     fd.append('image', file);
     try {
       const res = await fetch('/api/upload', { method: 'POST', body: fd });
       if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || res.statusText);
       const { url } = await res.json();
-      pendingImageTarget.setAttribute('src', url);
-      toast('Image uploaded — remember to Save', 'success');
+      const img = slot.querySelector('[data-edit-image]');
+      if (img) img.setAttribute('src', url);
+      showUploader(slot, false);
+      await persistImage(slot, url);
+      toast('Image updated', 'success');
     } catch (err) {
       toast('Upload failed: ' + err.message, 'error');
     } finally {
-      fileInput.value = '';
-      pendingImageTarget = null;
+      if (uploader) uploader.classList.remove('busy');
     }
+  }
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    const slot = pendingSlot;
+    fileInput.value = '';
+    pendingSlot = null;
+    if (file && slot) uploadToSlot(slot, file);
+  });
+
+  // Drag-and-drop straight onto an uploader zone.
+  document.addEventListener('dragover', (e) => {
+    const up = e.target.closest && e.target.closest('.img-uploader');
+    if (up) { e.preventDefault(); up.classList.add('dragover'); }
+  });
+  document.addEventListener('dragleave', (e) => {
+    const up = e.target.closest && e.target.closest('.img-uploader');
+    if (up) up.classList.remove('dragover');
+  });
+  document.addEventListener('drop', (e) => {
+    const up = e.target.closest && e.target.closest('.img-uploader');
+    if (!up) return;
+    e.preventDefault();
+    up.classList.remove('dragover');
+    const slot = up.closest('[data-image-slot]');
+    if (slot && e.dataTransfer.files[0]) uploadToSlot(slot, e.dataTransfer.files[0]);
   });
 
   // ---- event wiring -------------------------------------------------
@@ -220,9 +273,14 @@
     grid.addEventListener('click', (e) => {
       if (!document.body.classList.contains('edit-mode')) return;
 
-      const replaceBtn = e.target.closest('.machine-img-replace');
-      if (replaceBtn) {
-        pendingImageTarget = replaceBtn.closest('.machine-image').querySelector('[data-edit-image]');
+      const delBtn = e.target.closest('.img-del');
+      if (delBtn) {
+        deleteImage(delBtn.closest('[data-image-slot]'));
+        return;
+      }
+      const uploader = e.target.closest('.img-uploader');
+      if (uploader) {
+        pendingSlot = uploader.closest('[data-image-slot]');
         fileInput.click();
         return;
       }
@@ -240,8 +298,14 @@
     }, true);
   }
 
-  const addBtn = document.getElementById('addMachineBtn');
-  if (addBtn) addBtn.addEventListener('click', addMachine);
+  // "Add" buttons declare their blank-item defaults in data-new-item (JSON).
+  document.querySelectorAll('[data-add-item]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      let blank = {};
+      try { blank = JSON.parse(btn.dataset.newItem || '{}'); } catch (e) {}
+      addItem(blank);
+    });
+  });
 
   if (toggle) {
     toggle.addEventListener('change', () => setEditMode(toggle.checked));

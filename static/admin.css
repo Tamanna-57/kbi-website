@@ -54,14 +54,35 @@ body.edit-mode .machine-card .machine-details {
 body.edit-mode .machine-card { cursor: default; }
 body.edit-mode .machine-card:hover { transform: none; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
 
-/* Image replace overlay */
-.machine-image { position: relative; }
-.machine-img-replace {
-  position: absolute; bottom: 8px; right: 8px;
-  background: rgba(15,44,77,.9); color: #fff; border: none; border-radius: 6px;
-  padding: 6px 12px; font-size: .8rem; font-weight: 600; cursor: pointer;
+/* Editable image slot — delete (×) overlay + in-place uploader ------ */
+.img-slot { position: relative; }
+
+/* Small circular delete button, top-right of the image, edit mode only */
+.img-del {
+  position: absolute; top: 8px; right: 8px; z-index: 3;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(155,28,28,.92); color: #fff; border: 2px solid #fff;
+  font-size: 1.1rem; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3); transition: transform .12s, background .12s;
 }
-.machine-img-replace:hover { background: #0f2c4d; }
+.img-del:hover { background: #7a1414; transform: scale(1.1); }
+
+/* Upload drop-zone that appears where the image was */
+.img-uploader {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; border: 2px dashed #1a7a4a; background: #f0f8f3; color: #1a7a4a;
+  font-family: inherit; font-weight: 600; cursor: pointer; transition: background .15s, border-color .15s;
+}
+.img-uploader:hover, .img-uploader.dragover { background: #e2f1e9; border-color: #14613b; }
+/* The uploader is an edit-time affordance only. */
+body:not(.edit-mode) .img-uploader { display: none !important; }
+.img-uploader__icon { font-size: 2rem; line-height: 1; }
+.img-uploader__text { font-size: .9rem; }
+.img-uploader.busy { opacity: .6; pointer-events: none; }
+/* When an uploader sits over an empty slot, give it a minimum height. */
+.img-slot > img[hidden] + .img-del + .img-uploader { position: relative; min-height: 200px; }
 
 /* Per-card edit toolbar */
 .machine-edit-toolbar {

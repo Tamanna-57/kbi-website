@@ -207,12 +207,129 @@ class FirestoreStore(ContentStore):
         return True
 
 
+class GCSJsonStore(ContentStore):
+    """Production backend that keeps each collection as one JSON object in a
+    Cloud Storage bucket (``content/<collection>.json``).
+
+    This is the "no database" option: the same bucket also holds uploaded
+    images (under ``uploads/``), so production needs exactly one bucket and no
+    Firestore. Writes use a read-modify-write guarded by the blob's generation
+    so two near-simultaneous saves can't silently clobber each other.
+    """
+
+    def __init__(self, bucket_name, prefix="content/"):
+        from google.cloud import storage  # imported lazily
+
+        self._client = storage.Client()
+        self._bucket = self._client.bucket(bucket_name)
+        self._prefix = prefix
+        self._lock = threading.Lock()
+
+    def _blob(self, collection):
+        return self._bucket.blob(f"{self._prefix}{collection}.json")
+
+    def _read(self, collection):
+        """Return ``(items, generation)``; generation is None if absent."""
+        blob = self._blob(collection)
+        if not blob.exists():
+            return [], None
+        blob.reload()
+        data = blob.download_as_text()
+        return (json.loads(data) if data.strip() else []), blob.generation
+
+    def _write(self, collection, items, generation):
+        blob = self._blob(collection)
+        payload = json.dumps(items, ensure_ascii=False, indent=2)
+        # Guard against lost updates: only write if the object is unchanged
+        # since we read it (generation match), or still absent (gen 0).
+        if generation is None:
+            blob.upload_from_string(payload, content_type="application/json",
+                                    if_generation_match=0)
+        else:
+            blob.upload_from_string(payload, content_type="application/json",
+                                    if_generation_match=generation)
+
+    def _mutate(self, collection, mutator):
+        """Read-modify-write with a few retries on generation conflicts."""
+        from google.api_core import exceptions as gcx
+
+        for _ in range(5):
+            items, generation = self._read(collection)
+            result, new_items = mutator(items)
+            try:
+                self._write(collection, new_items, generation)
+                return result
+            except gcx.PreconditionFailed:
+                continue  # someone else wrote; retry with fresh data
+        raise RuntimeError(f"Could not write {collection}: too much contention")
+
+    def list_items(self, collection):
+        self._check_collection(collection)
+        with self._lock:
+            return self._read(collection)[0]
+
+    def get_item(self, collection, item_id):
+        self._check_collection(collection)
+        for item in self.list_items(collection):
+            if item.get("id") == item_id:
+                return item
+        return None
+
+    def add_item(self, collection, data):
+        self._check_collection(collection)
+
+        def mutator(items):
+            existing = {it.get("id") for it in items}
+            new_id = self._make_id(data)
+            while new_id in existing:
+                new_id = f"{new_id}-{uuid.uuid4().hex[:4]}"
+            item = dict(data)
+            item["id"] = new_id
+            return item, items + [item]
+
+        with self._lock:
+            return self._mutate(collection, mutator)
+
+    def update_item(self, collection, item_id, data):
+        self._check_collection(collection)
+
+        def mutator(items):
+            for idx, item in enumerate(items):
+                if item.get("id") == item_id:
+                    merged = dict(item)
+                    merged.update(data)
+                    merged["id"] = item_id
+                    new_items = list(items)
+                    new_items[idx] = merged
+                    return merged, new_items
+            return None, items
+
+        with self._lock:
+            return self._mutate(collection, mutator)
+
+    def delete_item(self, collection, item_id):
+        self._check_collection(collection)
+
+        def mutator(items):
+            kept = [it for it in items if it.get("id") != item_id]
+            return (len(kept) != len(items)), kept
+
+        with self._lock:
+            return self._mutate(collection, mutator)
+
+
 _store_singleton = None
 _store_lock = threading.Lock()
 
 
 def get_store():
-    """Return the process-wide content store, building it on first use."""
+    """Return the process-wide content store, building it on first use.
+
+    Selection order:
+      * ``USE_FIRESTORE=1``      -> Firestore (optional, not the default)
+      * ``GCS_BUCKET`` is set    -> GCS JSON objects (production default)
+      * otherwise                -> local JSON files (development)
+    """
     global _store_singleton
     if _store_singleton is not None:
         return _store_singleton
@@ -220,6 +337,8 @@ def get_store():
         if _store_singleton is None:
             if os.environ.get("USE_FIRESTORE") == "1":
                 _store_singleton = FirestoreStore()
+            elif os.environ.get("GCS_BUCKET"):
+                _store_singleton = GCSJsonStore(os.environ["GCS_BUCKET"])
             else:
                 _store_singleton = JSONFileStore()
     return _store_singleton
