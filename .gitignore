@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 .env
+
+# Runtime admin block overrides (not source; lives in GCS in prod)
+content/blocks.json
