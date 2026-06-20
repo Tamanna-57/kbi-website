@@ -1,17 +1,36 @@
 import os
+import secrets
 
-from flask import Flask, render_template
-
-from flask import Flask, request, jsonify, render_template_string
+from flask import (Flask, render_template, request, jsonify,
+                   render_template_string, redirect, url_for, session)
 from flask_mail import Mail, Message
 from flask_cors import CORS
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
+
+import auth
+from content_store import get_store, COLLECTIONS
+from image_store import get_image_store, UnsupportedImageError
+
 app = Flask(__name__)
 
 CORS(app)  # Enable CORS for frontend requests
 
 load_dotenv()
+
+# --- Session / admin auth configuration ---------------------------------
+# A signing key is required for the shared-admin login session. In production
+# set SECRET_KEY; locally a random per-process key is fine (logs out on restart).
+app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(32)
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=7)
+# Cap uploads at 8 MB to keep image handling sane.
+app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
+
+
+@app.context_processor
+def inject_admin_flag():
+    """Expose ``is_admin`` to every template so pages can show edit controls."""
+    return {"is_admin": auth.is_admin()}
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Change based on your email provider
 app.config['MAIL_PORT'] = 587
@@ -97,7 +116,8 @@ def products():
 
 @app.route('/machines')
 def machines():
-    return render_template('machines.html', active_page='machines')
+    items = get_store().list_items('machines')
+    return render_template('machines.html', active_page='machines', machines=items)
 
 @app.route('/certifications')
 def certifications():
@@ -150,6 +170,102 @@ def submit_contact():
         return jsonify({'success': False, 'message': str(e) or 'Failed to send message. Please try again.'}), 500
 
 
+
+
+# ════════════════════════════════════════════════════════════════════════
+#  ADMIN  —  shared-login auth + content management API
+# ════════════════════════════════════════════════════════════════════════
+
+# Editable fields per content type, used to validate/whitelist incoming data.
+# Phase 1 implements "machines"; the others are listed for when they're wired up.
+EDITABLE_FIELDS = {
+    'machines': {'category', 'category_label', 'name', 'description',
+                 'image', 'features', 'quantity', 'details'},
+    'products': {'category', 'category_label', 'name', 'description', 'image',
+                 'features', 'specifications', 'details'},
+    'processes': {'name', 'description', 'image', 'steps', 'details'},
+    'team': {'name', 'role', 'image', 'bio'},
+    'news': {'title', 'date', 'summary', 'image', 'body'},
+}
+
+
+def _clean_payload(collection, data):
+    """Keep only whitelisted, non-id fields for the given collection."""
+    allowed = EDITABLE_FIELDS.get(collection, set())
+    return {k: v for k, v in (data or {}).items() if k in allowed}
+
+
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    next_url = request.values.get('next') or url_for('index')
+    if auth.is_admin():
+        return redirect(next_url)
+    if request.method == 'POST':
+        if auth.check_password(request.form.get('password')):
+            auth.login()
+            return redirect(next_url)
+        return render_template('admin_login.html',
+                               error='Incorrect password.', next_url=next_url), 401
+    return render_template('admin_login.html', next_url=next_url)
+
+
+@app.route('/admin/logout')
+def admin_logout():
+    auth.logout()
+    return redirect(url_for('index'))
+
+
+# --- Content CRUD API (admin only) --------------------------------------
+@app.route('/api/<collection>', methods=['GET'])
+def api_list(collection):
+    if collection not in COLLECTIONS:
+        return jsonify({'error': 'unknown collection'}), 404
+    return jsonify(get_store().list_items(collection))
+
+
+@app.route('/api/<collection>', methods=['POST'])
+@auth.login_required
+def api_create(collection):
+    if collection not in COLLECTIONS:
+        return jsonify({'error': 'unknown collection'}), 404
+    payload = _clean_payload(collection, request.get_json(silent=True))
+    item = get_store().add_item(collection, payload)
+    return jsonify(item), 201
+
+
+@app.route('/api/<collection>/<item_id>', methods=['PUT', 'PATCH'])
+@auth.login_required
+def api_update(collection, item_id):
+    if collection not in COLLECTIONS:
+        return jsonify({'error': 'unknown collection'}), 404
+    payload = _clean_payload(collection, request.get_json(silent=True))
+    item = get_store().update_item(collection, item_id, payload)
+    if item is None:
+        return jsonify({'error': 'not found'}), 404
+    return jsonify(item)
+
+
+@app.route('/api/<collection>/<item_id>', methods=['DELETE'])
+@auth.login_required
+def api_delete(collection, item_id):
+    if collection not in COLLECTIONS:
+        return jsonify({'error': 'unknown collection'}), 404
+    if not get_store().delete_item(collection, item_id):
+        return jsonify({'error': 'not found'}), 404
+    return jsonify({'deleted': item_id})
+
+
+@app.route('/api/upload', methods=['POST'])
+@auth.login_required
+def api_upload():
+    file = request.files.get('image') or request.files.get('file')
+    if file is None or not file.filename:
+        return jsonify({'error': 'no file provided'}), 400
+    try:
+        url = get_image_store().save(file)
+    except UnsupportedImageError as exc:
+        return jsonify({'error': str(exc)}), 400
+    return jsonify({'url': url})
 
 
 if __name__ == '__main__':

@@ -1,0 +1,91 @@
+/* ════════════════════════════════════════════════════════════════
+   KBI Admin — edit-mode UI (only loaded for logged-in admins)
+   ════════════════════════════════════════════════════════════════ */
+
+.admin-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+  display: flex; align-items: center; gap: 18px;
+  padding: 10px 20px; background: #0f2c4d; color: #fff;
+  font-family: 'Inter', system-ui, sans-serif; font-size: .9rem;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.25);
+}
+.admin-bar__brand { font-weight: 700; letter-spacing: .02em; }
+.admin-bar__toggle { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.admin-bar__toggle input { width: 16px; height: 16px; cursor: pointer; }
+.admin-bar__status { color: #9fc4e8; font-size: .82rem; }
+.admin-bar__logout { margin-left: auto; color: #cfe2f5; text-decoration: none; font-weight: 600; }
+.admin-bar__logout:hover { color: #fff; text-decoration: underline; }
+
+/* Push page content up so the fixed bar never hides the footer. */
+body.has-admin-bar { padding-bottom: 56px; }
+
+/* Buttons --------------------------------------------------------- */
+.admin-btn {
+  border: none; border-radius: 6px; padding: 7px 14px; cursor: pointer;
+  font-family: inherit; font-size: .85rem; font-weight: 600; transition: background .15s, opacity .15s;
+}
+.admin-btn--add  { background: #1a7a4a; color: #fff; }
+.admin-btn--add:hover { background: #14613b; }
+.admin-btn--save { background: #1a4a7a; color: #fff; }
+.admin-btn--save:hover { background: #0f2c4d; }
+.admin-btn--del  { background: #fff; color: #9b1c1c; border: 1px solid #e3b7b7; }
+.admin-btn--del:hover { background: #fde8e8; }
+.admin-btn:disabled { opacity: .5; cursor: default; }
+
+.admin-grid-actions { margin-bottom: 20px; }
+
+/* Edit-mode field affordances ------------------------------------ */
+body.edit-mode [data-edit-field],
+body.edit-mode [data-edit-list] .feature-tag,
+body.edit-mode [data-edit-list] li {
+  outline: 1px dashed #1a4a7a; outline-offset: 3px; border-radius: 4px;
+  cursor: text; transition: background .15s;
+}
+body.edit-mode [data-edit-field]:focus,
+body.edit-mode [data-edit-list] .feature-tag:focus,
+body.edit-mode [data-edit-list] li:focus {
+  outline: 2px solid #1a7a4a; background: #f0f8f3;
+}
+
+/* In edit mode the details panel must be visible to edit it. */
+body.edit-mode .machine-card .machine-details {
+  max-height: none !important; opacity: 1 !important; padding: 20px !important; overflow: visible !important;
+}
+body.edit-mode .machine-card { cursor: default; }
+body.edit-mode .machine-card:hover { transform: none; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+
+/* Image replace overlay */
+.machine-image { position: relative; }
+.machine-img-replace {
+  position: absolute; bottom: 8px; right: 8px;
+  background: rgba(15,44,77,.9); color: #fff; border: none; border-radius: 6px;
+  padding: 6px 12px; font-size: .8rem; font-weight: 600; cursor: pointer;
+}
+.machine-img-replace:hover { background: #0f2c4d; }
+
+/* Per-card edit toolbar */
+.machine-edit-toolbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 12px 16px; border-top: 1px solid #e5e9f0; background: #f7f9fc;
+}
+.machine-cat-select { padding: 6px 8px; border: 1px solid #ccd; border-radius: 6px; font-family: inherit; font-size: .85rem; }
+
+/* "+ add" chips for editable lists */
+.edit-add-chip {
+  border: 1px dashed #1a7a4a; background: #f0f8f3; color: #1a7a4a;
+  border-radius: 6px; padding: 4px 10px; font-size: .8rem; font-weight: 600; cursor: pointer;
+  margin-left: 6px;
+}
+.machine-details .edit-add-chip { margin: 8px 0 0; display: inline-block; }
+
+/* Toast notifications -------------------------------------------- */
+.admin-toast {
+  position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: #1a1a1a; color: #fff; padding: 12px 22px; border-radius: 8px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: .9rem; z-index: 10000;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  box-shadow: 0 8px 30px rgba(0,0,0,.3); max-width: 80vw;
+}
+.admin-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.admin-toast.error { background: #9b1c1c; }
+.admin-toast.success { background: #1a7a4a; }

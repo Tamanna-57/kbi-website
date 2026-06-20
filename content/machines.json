@@ -1,0 +1,194 @@
+[
+  {
+    "id": "hps-line-press",
+    "category": "presses",
+    "category_label": "Presses",
+    "name": "HPS Line Press",
+    "description": "Suitable for high-tonnage sheet metal forming, deep drawing, and structural part stamping",
+    "image": "/static/pics/process_Pressing.webp",
+    "features": [
+      "600 Ton",
+      "Precision Control",
+      "Auto-Cycle"
+    ],
+    "quantity": 4,
+    "details": [
+      "Max force: 600 tons",
+      "Bed size: 3000 × 1600 mm",
+      "Shut Height: 900 mm",
+      "Power: 45 kW"
+    ]
+  },
+  {
+    "id": "hydraulic-press",
+    "category": "presses",
+    "category_label": "Presses",
+    "name": "Hydraulic Press",
+    "description": "Ideal for deep drawing, die forming, punching, and precision metal forming processes",
+    "image": "/static/pics/hydraulic_press.webp",
+    "features": [
+      "600 Ton",
+      "Precision Control",
+      "Auto-Cycle"
+    ],
+    "quantity": 3,
+    "details": [
+      "Max force: 600 tons",
+      "Bed size: 2000 × 1000 mm",
+      "Shut Height: 800 mm",
+      "Power: 20 kW"
+    ]
+  },
+  {
+    "id": "lps-line-press",
+    "category": "presses",
+    "category_label": "Presses",
+    "name": "LPS Line Press",
+    "description": "Suitable for medium-capacity sheet metal stamping, blanking, and bending operations",
+    "image": "/static/pics/lps.webp",
+    "features": [
+      "250 Ton",
+      "Precision Control",
+      "Auto-Cycle"
+    ],
+    "quantity": 20,
+    "details": [
+      "Max force: 250 tons",
+      "Bed size: 1500 × 1000 mm",
+      "Shut Height: 400 mm",
+      "Power: 20 kW"
+    ]
+  },
+  {
+    "id": "mig-welder",
+    "category": "welding",
+    "category_label": "Welding",
+    "name": "MIG Welder",
+    "description": "Professional MIG welding for high-quality metal joining in automotive and fabrication applications",
+    "image": "/static/pics/process_Welding.webp",
+    "features": [
+      "50–400 A",
+      "CO₂ & Argon",
+      "Auto-Feed"
+    ],
+    "quantity": 40,
+    "details": [
+      "Output: 50–400 A",
+      "Duty cycle: 60% at 250 A",
+      "Wire diameter: 0.8–1.2 mm",
+      "Input: 380 V"
+    ]
+  },
+  {
+    "id": "cnc-wirecut-ultra-cut-f2",
+    "category": "cutting",
+    "category_label": "Cutting",
+    "name": "CNC Wirecut Ultra‑Cut F2",
+    "description": "Precisely cuts conductive materials with a thin wire for intricate shapes and tight tolerances",
+    "image": "/static/pics/wirecut.webp",
+    "features": [
+      "CNC Control",
+      "Auto-Focus"
+    ],
+    "quantity": 1,
+    "details": [
+      "X-travel: 600 mm",
+      "Y-travel: 400 mm",
+      "Z-travel: 300 mm"
+    ]
+  },
+  {
+    "id": "cnc-turning-machine",
+    "category": "machining",
+    "category_label": "Machining",
+    "name": "CNC Turning Machine",
+    "description": "Subtractive manufacturing using a rotating cutting tool to remove material from the workpiece exterior",
+    "image": "/static/pics/turning.webp",
+    "features": [
+      "4000 RPM",
+      "8-Station Turret",
+      "Delta CNC"
+    ],
+    "quantity": 1,
+    "details": [
+      "Max dia: 200 mm",
+      "Max length: 300 mm",
+      "Motor: 4 kW"
+    ]
+  },
+  {
+    "id": "multi-spindle-drilling",
+    "category": "drilling",
+    "category_label": "Drilling",
+    "name": "Multi Spindle Drilling",
+    "description": "Multiple spindles arranged horizontally to drill several holes simultaneously in a single pass",
+    "image": "/static/pics/horizontal_multispindle_drilling.webp",
+    "features": [
+      "5+5 Spindles",
+      "Hydraulic Feed",
+      "Variable Speed"
+    ],
+    "quantity": 4,
+    "details": [
+      "Spindle Taper: ER Collet",
+      "Motor: 5+5 HP",
+      "Centre Distance: 40–250 mm"
+    ]
+  },
+  {
+    "id": "horizontal-boring-machine",
+    "category": "machining",
+    "category_label": "Machining",
+    "name": "Horizontal Boring Machine",
+    "description": "Enlarges and precisely shapes existing holes in large workpieces with high dimensional accuracy",
+    "image": "/static/pics/boringmachine.webp",
+    "features": [
+      "20–1500 RPM",
+      "Table 400×1500 mm"
+    ],
+    "quantity": 3,
+    "details": [
+      "Spindle dia: 30–100 mm",
+      "Speed: 20–1500 RPM",
+      "Table travel: 300 mm"
+    ]
+  },
+  {
+    "id": "band-saw-machine",
+    "category": "cutting",
+    "category_label": "Cutting",
+    "name": "Band Saw Machine",
+    "description": "Continuous toothed metal band stretched between wheels for precise metal cutting with miter capability",
+    "image": "/static/pics/Handsaw.webp",
+    "features": [
+      "Hydraulic Clamp",
+      "Coolant System",
+      "0°–45° Miter"
+    ],
+    "quantity": 3,
+    "details": [
+      "Capacity: 20–100 mm",
+      "Blade speed: 20–80 m/min",
+      "Motor: 5 HP"
+    ]
+  },
+  {
+    "id": "shot-blasting-machine",
+    "category": "Finishing",
+    "category_label": "Finishing",
+    "name": "Shot Blasting Machine",
+    "description": "Propels abrasive media to clean, strengthen, and polish metal surfaces before coating or assembly",
+    "image": "/static/pics/shotblasting.png",
+    "features": [
+      "2 Blast Wheels",
+      "PLC Control",
+      "Timer Interlocks"
+    ],
+    "quantity": 1,
+    "details": [
+      "Wheel power: 10 HP",
+      "Cycle time: 2–10 min",
+      "Capacity: 100 kg/hanger"
+    ]
+  }
+]
