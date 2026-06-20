@@ -4,5 +4,5 @@ Flask==3.0.0
 Flask-Mail==0.9.1
 Flask-CORS==4.0.0
 dotenv
-google-cloud-firestore==2.16.0
+gunicorn==21.2.0
 google-cloud-storage==2.16.0
