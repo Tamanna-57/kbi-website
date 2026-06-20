@@ -36,16 +36,20 @@ body.has-admin-bar { padding-bottom: 56px; }
 
 /* Edit-mode field affordances ------------------------------------ */
 body.edit-mode [data-edit-field],
+body.edit-mode [data-block-text],
 body.edit-mode [data-edit-list] .feature-tag,
 body.edit-mode [data-edit-list] li {
   outline: 1px dashed #1a4a7a; outline-offset: 3px; border-radius: 4px;
   cursor: text; transition: background .15s;
 }
 body.edit-mode [data-edit-field]:focus,
+body.edit-mode [data-block-text]:focus,
 body.edit-mode [data-edit-list] .feature-tag:focus,
 body.edit-mode [data-edit-list] li:focus {
   outline: 2px solid #1a7a4a; background: #f0f8f3;
 }
+/* Inline image slot used by the editable.image() macro. */
+.block-img-slot { display: inline-block; }
 
 /* In edit mode the details panel must be visible to edit it. */
 body.edit-mode .machine-card .machine-details {

@@ -53,6 +53,8 @@
     document.body.classList.toggle('edit-mode', on);
     document.querySelectorAll('[data-edit-only]').forEach(el => { el.hidden = !on; });
     document.querySelectorAll('[data-edit-card]').forEach(card => decorateCard(card, on));
+    // Free-form page text blocks (outside any card).
+    document.querySelectorAll('[data-block-text]').forEach(el => setEditable(el, on));
     sessionStorage.setItem(STORAGE_KEY, on ? '1' : '0');
   }
 
@@ -190,12 +192,35 @@
   fileInput.style.display = 'none';
   document.body.appendChild(fileInput);
 
-  // Persist a single field of the card this slot belongs to, immediately.
+  // Persist an image change immediately. Block-image slots save to /api/block;
+  // card image slots save to the card's collection item.
   async function persistImage(slot, url) {
+    if (slot.dataset.blockImage) {
+      await api('POST', '/api/block', { key: slot.dataset.blockImage, value: url });
+      return;
+    }
     const card = slot.closest('[data-id]');
     if (!card) return;  // brand-new unsaved card: value stays in the DOM only
     await api('PUT', `/api/${COLLECTION}/${card.dataset.id}`, { image: url });
   }
+
+  // ---- free-form text blocks: save on blur if changed ---------------
+  const blockEditStart = new WeakMap();
+  document.addEventListener('focusin', (e) => {
+    const el = e.target.closest && e.target.closest('[data-block-text]');
+    if (el) blockEditStart.set(el, el.textContent);
+  });
+  document.addEventListener('focusout', (e) => {
+    if (!document.body.classList.contains('edit-mode')) return;
+    const el = e.target.closest && e.target.closest('[data-block-text]');
+    if (!el) return;
+    const before = blockEditStart.get(el);
+    const now = el.textContent;
+    if (before === undefined || before === now) return;  // unchanged
+    api('POST', '/api/block', { key: el.dataset.block, value: now.trim() })
+      .then(() => toast('Saved', 'success'))
+      .catch(err => toast('Save failed: ' + err.message, 'error'));
+  });
 
   function showUploader(slot, show) {
     const img = slot.querySelector('[data-edit-image]');

@@ -1,0 +1,34 @@
+{#
+  Editable-content macros. Import in any page WITH CONTEXT so the macros can
+  see `is_admin` and the `block_value` global:
+
+      {% import 'editable.html' as e with context %}
+
+  Then wrap any page text/image so a logged-in admin can edit it in place:
+
+      {{ e.text('about.hero.title', 'Our Story', tag='h1', cls='hero__title') }}
+      {{ e.image('home.hero.bg', '/static/pics/hero.jpg', alt='Hero', cls='bg') }}
+
+  `key` must be stable and unique across the whole site (use page.section.field).
+  `default` is the current/fallback content shown until someone edits it.
+  The data-* attributes are inert for the public; only admin.js (loaded for
+  admins) acts on them in Edit mode.
+#}
+
+{%- macro text(key, default, tag='span', cls='') -%}
+<{{ tag }}{% if cls %} class="{{ cls }}"{% endif %} data-block="{{ key }}" data-block-text>{{ block_value(key, default) }}</{{ tag }}>
+{%- endmacro -%}
+
+{%- macro image(key, default, alt='', cls='') -%}
+{%- set val = block_value(key, default) -%}
+<span class="img-slot block-img-slot" data-image-slot data-block-image="{{ key }}">
+  <img src="{{ val }}" alt="{{ alt }}"{% if cls %} class="{{ cls }}"{% endif %} data-edit-image{% if not val %} hidden{% endif %}>
+  {%- if is_admin %}
+  <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+  <button type="button" class="img-uploader"{% if val %} hidden{% endif %}>
+    <span class="img-uploader__icon">&#43;</span>
+    <span class="img-uploader__text">Upload image</span>
+  </button>
+  {%- endif %}
+</span>
+{%- endmacro -%}

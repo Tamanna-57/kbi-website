@@ -2,7 +2,7 @@ import os
 import secrets
 
 from flask import (Flask, render_template, request, jsonify,
-                   render_template_string, redirect, url_for, session)
+                   render_template_string, redirect, url_for, session, g)
 from flask_mail import Mail, Message
 from flask_cors import CORS
 from datetime import datetime, timedelta
@@ -31,6 +31,25 @@ app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024
 def inject_admin_flag():
     """Expose ``is_admin`` to every template so pages can show edit controls."""
     return {"is_admin": auth.is_admin()}
+
+
+def block_value(key, default=""):
+    """Return the saved override for an editable block, else its default.
+
+    Templates call this (via the ``editable.html`` macros) to render any
+    page text/image so it can be edited in place. Blocks are loaded once per
+    request and cached on ``flask.g``.
+    """
+    if not hasattr(g, "_blocks"):
+        try:
+            g._blocks = get_store().get_blocks()
+        except Exception:
+            g._blocks = {}
+    val = g._blocks.get(key)
+    return val if (val is not None and val != "") else default
+
+
+app.jinja_env.globals["block_value"] = block_value
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Change based on your email provider
 app.config['MAIL_PORT'] = 587
@@ -254,6 +273,19 @@ def api_delete(collection, item_id):
     if not get_store().delete_item(collection, item_id):
         return jsonify({'error': 'not found'}), 404
     return jsonify({'deleted': item_id})
+
+
+@app.route('/api/block', methods=['POST', 'PUT'])
+@auth.login_required
+def api_block():
+    """Save one editable text/image block: {key, value}."""
+    data = request.get_json(silent=True) or {}
+    key = data.get('key')
+    if not key or not isinstance(key, str):
+        return jsonify({'error': 'missing key'}), 400
+    value = data.get('value', '')
+    result = get_store().update_block(key, value)
+    return jsonify(result)
 
 
 @app.route('/api/upload', methods=['POST'])

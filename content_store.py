@@ -54,6 +54,15 @@ class ContentStore:
     def delete_item(self, collection, item_id):
         raise NotImplementedError
 
+    # -- editable "blocks": free-form per-page text/image overrides -----
+    # Stored as a single flat dict {key: value}. Templates supply a default
+    # value and a stable key; an override here wins when present.
+    def get_blocks(self):
+        raise NotImplementedError
+
+    def update_block(self, key, value):
+        raise NotImplementedError
+
     # -- shared helpers -------------------------------------------------
     @staticmethod
     def _check_collection(collection):
@@ -144,6 +153,28 @@ class JSONFileStore(ContentStore):
             self._write(collection, kept)
             return True
 
+    def _blocks_path(self):
+        return os.path.join(self._dir, "blocks.json")
+
+    def get_blocks(self):
+        path = self._blocks_path()
+        if not os.path.exists(path):
+            return {}
+        with open(path, "r", encoding="utf-8") as fh:
+            return json.load(fh)
+
+    def update_block(self, key, value):
+        with self._lock:
+            blocks = self.get_blocks()
+            blocks[key] = value
+            path = self._blocks_path()
+            tmp = f"{path}.tmp"
+            with open(tmp, "w", encoding="utf-8") as fh:
+                json.dump(blocks, fh, ensure_ascii=False, indent=2)
+                fh.write("\n")
+            os.replace(tmp, path)
+        return {key: value}
+
 
 class FirestoreStore(ContentStore):
     """Production backend backed by Cloud Firestore (Native mode)."""
@@ -205,6 +236,17 @@ class FirestoreStore(ContentStore):
             return False
         ref.delete()
         return True
+
+    def _blocks_ref(self):
+        return self._db.collection(f"{self._prefix}blocks").document("site")
+
+    def get_blocks(self):
+        doc = self._blocks_ref().get()
+        return doc.to_dict() or {} if doc.exists else {}
+
+    def update_block(self, key, value):
+        self._blocks_ref().set({key: value}, merge=True)
+        return {key: value}
 
 
 class GCSJsonStore(ContentStore):
@@ -316,6 +358,44 @@ class GCSJsonStore(ContentStore):
 
         with self._lock:
             return self._mutate(collection, mutator)
+
+    def _blocks_blob(self):
+        return self._bucket.blob(f"{self._prefix}blocks.json")
+
+    def get_blocks(self):
+        blob = self._blocks_blob()
+        if not blob.exists():
+            return {}
+        blob.reload()
+        data = blob.download_as_text()
+        return json.loads(data) if data.strip() else {}
+
+    def update_block(self, key, value):
+        from google.api_core import exceptions as gcx
+
+        with self._lock:
+            for _ in range(5):
+                blob = self._blocks_blob()
+                if blob.exists():
+                    blob.reload()
+                    text = blob.download_as_text()
+                    blocks = json.loads(text) if text.strip() else {}
+                    generation = blob.generation
+                else:
+                    blocks, generation = {}, None
+                blocks[key] = value
+                payload = json.dumps(blocks, ensure_ascii=False, indent=2)
+                try:
+                    if generation is None:
+                        blob.upload_from_string(payload, content_type="application/json",
+                                                if_generation_match=0)
+                    else:
+                        blob.upload_from_string(payload, content_type="application/json",
+                                                if_generation_match=generation)
+                    return {key: value}
+                except gcx.PreconditionFailed:
+                    continue
+            raise RuntimeError("Could not write blocks: too much contention")
 
 
 _store_singleton = None
