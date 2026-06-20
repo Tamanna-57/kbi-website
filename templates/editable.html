@@ -19,6 +19,11 @@
 <{{ tag }}{% if cls %} class="{{ cls }}"{% endif %} data-block="{{ key }}" data-block-text>{{ block_value(key, default) }}</{{ tag }}>
 {%- endmacro -%}
 
+{#- Multi-line / lightly-formatted text (keeps <br> etc.). default may be HTML. -#}
+{%- macro rich(key, default, tag='p', cls='') -%}
+<{{ tag }}{% if cls %} class="{{ cls }}"{% endif %} data-block="{{ key }}" data-block-rich>{{ block_value(key, default)|safe }}</{{ tag }}>
+{%- endmacro -%}
+
 {%- macro image(key, default, alt='', cls='') -%}
 {%- set val = block_value(key, default) -%}
 <span class="img-slot block-img-slot" data-image-slot data-block-image="{{ key }}">

@@ -24,7 +24,8 @@ import uuid
 
 # Content types managed by the CMS. Phase 1 ships "machines"; the others are
 # declared here so they can be wired up by reusing the exact same plumbing.
-COLLECTIONS = ("machines", "products", "processes", "team", "news")
+COLLECTIONS = ("machines", "products", "processes", "certifications",
+               "awards", "customers", "team", "news")
 
 _CONTENT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "content")
 

@@ -127,7 +127,8 @@ def about_us():
 
 @app.route('/customers')
 def customers():
-    return render_template('customers.html', active_page='customers')
+    items = get_store().list_items('customers')
+    return render_template('customers.html', active_page='customers', customers=items)
 
 @app.route('/products')
 def products():
@@ -141,7 +142,9 @@ def machines():
 
 @app.route('/certifications')
 def certifications():
-    return render_template('certifications.html', active_page='certifications')
+    return render_template('certifications.html', active_page='certifications',
+                           certifications=get_store().list_items('certifications'),
+                           awards=get_store().list_items('awards'))
 
 @app.route('/processes')
 def processes():
@@ -204,6 +207,9 @@ EDITABLE_FIELDS = {
                  'image', 'features', 'quantity', 'details'},
     'products': {'category', 'category_label', 'name', 'description', 'image'},
     'processes': {'num', 'name', 'description', 'image', 'features', 'equipment'},
+    'certifications': {'badge', 'heading', 'body', 'image', 'tags'},
+    'awards': {'year', 'title', 'org', 'description'},
+    'customers': {'name', 'tag', 'image'},
     'team': {'name', 'role', 'image', 'bio'},
     'news': {'title', 'date', 'summary', 'image', 'body'},
 }

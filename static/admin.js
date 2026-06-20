@@ -54,7 +54,7 @@
     document.querySelectorAll('[data-edit-only]').forEach(el => { el.hidden = !on; });
     document.querySelectorAll('[data-edit-card]').forEach(card => decorateCard(card, on));
     // Free-form page text blocks (outside any card).
-    document.querySelectorAll('[data-block-text]').forEach(el => setEditable(el, on));
+    document.querySelectorAll('[data-block-text], [data-block-rich]').forEach(el => setEditable(el, on));
     sessionStorage.setItem(STORAGE_KEY, on ? '1' : '0');
   }
 
@@ -145,11 +145,17 @@
     });
   }
 
+  // A card may belong to a different collection than the page default
+  // (pages like Certifications host more than one list).
+  function cardCollection(card) {
+    return (card && card.dataset.collection) || COLLECTION;
+  }
+
   async function saveCard(card) {
     const id = card.dataset.id;
     const data = collectCard(card);
     try {
-      const saved = await api('PUT', `/api/${COLLECTION}/${id}`, data);
+      const saved = await api('PUT', `/api/${cardCollection(card)}/${id}`, data);
       card.dataset.name = saved.name || saved.title || '';
       if (saved.category) card.dataset.category = saved.category;
       pruneEmpty(card);
@@ -164,7 +170,7 @@
     const name = card.dataset.name || 'this item';
     if (!confirm(`Delete “${name}”? This cannot be undone.`)) return;
     try {
-      await api('DELETE', `/api/${COLLECTION}/${id}`);
+      await api('DELETE', `/api/${cardCollection(card)}/${id}`);
       card.remove();
       toast('Deleted', 'success');
     } catch (err) {
@@ -172,9 +178,9 @@
     }
   }
 
-  async function addItem(blank) {
+  async function addItem(blank, collection) {
     try {
-      await api('POST', `/api/${COLLECTION}`, blank);
+      await api('POST', `/api/${collection || COLLECTION}`, blank);
       sessionStorage.setItem(STORAGE_KEY, '1');  // stay in edit mode after reload
       toast('Added — reloading…', 'success');
       setTimeout(() => window.location.reload(), 500);
@@ -201,23 +207,32 @@
     }
     const card = slot.closest('[data-id]');
     if (!card) return;  // brand-new unsaved card: value stays in the DOM only
-    await api('PUT', `/api/${COLLECTION}/${card.dataset.id}`, { image: url });
+    await api('PUT', `/api/${cardCollection(card)}/${card.dataset.id}`, { image: url });
   }
 
   // ---- free-form text blocks: save on blur if changed ---------------
+  // Plain blocks save textContent; rich blocks save innerHTML (keeps line
+  // breaks / simple formatting). A block is identified by data-block=key.
   const blockEditStart = new WeakMap();
+  function blockEl(target) {
+    return target.closest && target.closest('[data-block-text], [data-block-rich]');
+  }
+  function blockContent(el) {
+    return el.hasAttribute('data-block-rich') ? el.innerHTML : el.textContent;
+  }
   document.addEventListener('focusin', (e) => {
-    const el = e.target.closest && e.target.closest('[data-block-text]');
-    if (el) blockEditStart.set(el, el.textContent);
+    const el = blockEl(e.target);
+    if (el) blockEditStart.set(el, blockContent(el));
   });
   document.addEventListener('focusout', (e) => {
     if (!document.body.classList.contains('edit-mode')) return;
-    const el = e.target.closest && e.target.closest('[data-block-text]');
+    const el = blockEl(e.target);
     if (!el) return;
     const before = blockEditStart.get(el);
-    const now = el.textContent;
+    const now = blockContent(el);
     if (before === undefined || before === now) return;  // unchanged
-    api('POST', '/api/block', { key: el.dataset.block, value: now.trim() })
+    const value = el.hasAttribute('data-block-rich') ? now : now.trim();
+    api('POST', '/api/block', { key: el.dataset.block, value: value })
       .then(() => toast('Saved', 'success'))
       .catch(err => toast('Save failed: ' + err.message, 'error'));
   });
@@ -323,12 +338,13 @@
     }
   }, true);
 
-  // "Add" buttons declare their blank-item defaults in data-new-item (JSON).
+  // "Add" buttons declare their blank-item defaults in data-new-item (JSON)
+  // and optionally a target collection in data-collection.
   document.querySelectorAll('[data-add-item]').forEach(btn => {
     btn.addEventListener('click', () => {
       let blank = {};
       try { blank = JSON.parse(btn.dataset.newItem || '{}'); } catch (e) {}
-      addItem(blank);
+      addItem(blank, btn.dataset.collection);
     });
   });
 
