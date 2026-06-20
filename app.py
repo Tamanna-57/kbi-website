@@ -119,7 +119,10 @@ EMAIL_TEMPLATE = """
 
 @app.route('/')
 def index():
-    return render_template('index_kbi.html', active_page='home')
+    store = get_store()
+    return render_template('index_kbi.html', active_page='home',
+                           news=store.list_items('news')[:3],
+                           certifications=store.list_items('certifications')[:3])
 
 @app.route('/about_us')
 def about_us():
