@@ -123,7 +123,9 @@ def index():
 
 @app.route('/about_us')
 def about_us():
-    return render_template('about_us.html', active_page='about_us')
+    return render_template('about_us.html', active_page='about_us',
+                           team=get_store().list_items('team'),
+                           news=get_store().list_items('news'))
 
 @app.route('/customers')
 def customers():
