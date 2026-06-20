@@ -55,6 +55,13 @@
     document.querySelectorAll('[data-edit-card]').forEach(card => decorateCard(card, on));
     // Free-form page text blocks (outside any card).
     document.querySelectorAll('[data-block-text], [data-block-rich]').forEach(el => setEditable(el, on));
+    // Refresh every image slot so revert/delete visibility lines up with the
+    // current src vs. data-original-image.
+    document.querySelectorAll('[data-image-slot]').forEach(slot => {
+      const img = slot.querySelector('[data-edit-image]');
+      const hasImage = img && img.getAttribute('src');
+      showUploader(slot, !hasImage);
+    });
     sessionStorage.setItem(STORAGE_KEY, on ? '1' : '0');
   }
 
@@ -151,7 +158,7 @@
     return (card && card.dataset.collection) || COLLECTION;
   }
 
-  async function saveCard(card) {
+  async function saveCard(card, { silent = false } = {}) {
     const id = card.dataset.id;
     const data = collectCard(card);
     try {
@@ -159,9 +166,11 @@
       card.dataset.name = saved.name || saved.title || '';
       if (saved.category) card.dataset.category = saved.category;
       pruneEmpty(card);
-      toast('Saved “' + (saved.name || saved.title || 'item') + '”', 'success');
+      if (!silent) toast('Saved “' + (saved.name || saved.title || 'item') + '”', 'success');
+      return true;
     } catch (err) {
-      toast('Save failed: ' + err.message, 'error');
+      if (!silent) toast('Save failed: ' + err.message, 'error');
+      return false;
     }
   }
 
@@ -241,9 +250,53 @@
     const img = slot.querySelector('[data-edit-image]');
     const uploader = slot.querySelector('.img-uploader');
     const del = slot.querySelector('.img-del');
+    const revert = slot.querySelector('.img-revert');
+    const inEdit = document.body.classList.contains('edit-mode');
     if (uploader) uploader.hidden = !show;
     if (img) img.hidden = show;          // hide the image while the uploader shows
-    if (del) del.hidden = show;          // no delete button when there's no image
+    if (del) del.hidden = show || !inEdit;     // no delete button when there's no image
+    if (revert) {
+      // revert button is only useful when the current src differs from the
+      // last-saved src; admin.js keeps that in sync via setSlotState().
+      revert.hidden = !inEdit;
+      const saved = slot.dataset.originalImage || '';
+      const current = (img && img.getAttribute('src')) || '';
+      revert.disabled = (saved === current);
+    }
+  }
+
+  // Persist a slot's "last saved" image url so revert knows where to go back.
+  function rememberSavedImage(slot, url) {
+    slot.dataset.originalImage = url || '';
+    refreshRevert(slot);
+  }
+  function refreshRevert(slot) {
+    const revert = slot.querySelector('.img-revert');
+    const img = slot.querySelector('[data-edit-image]');
+    if (!revert || !img) return;
+    const saved = slot.dataset.originalImage || '';
+    const current = img.getAttribute('src') || '';
+    revert.disabled = (saved === current);
+  }
+
+  async function revertImage(slot) {
+    const previous = slot.dataset.originalImage || '';
+    const img = slot.querySelector('[data-edit-image]');
+    if (!img) return;
+    if (previous) {
+      img.setAttribute('src', previous);
+      showUploader(slot, false);
+    } else {
+      img.removeAttribute('src');
+      showUploader(slot, true);
+    }
+    try {
+      await persistImage(slot, previous);
+      toast('Reverted to last saved image', 'success');
+    } catch (err) {
+      toast('Revert failed: ' + err.message, 'error');
+    }
+    refreshRevert(slot);
   }
 
   async function deleteImage(slot) {
@@ -252,7 +305,8 @@
     showUploader(slot, true);
     try {
       await persistImage(slot, '');
-      toast('Image removed — upload a new one', 'success');
+      refreshRevert(slot);  // revert (back to load-time image) is now meaningful
+      toast('Image removed — upload a new one (or hit Revert to undo)', 'success');
     } catch (err) {
       toast('Could not remove image: ' + err.message, 'error');
     }
@@ -272,7 +326,8 @@
       if (img) img.setAttribute('src', url);
       showUploader(slot, false);
       await persistImage(slot, url);
-      toast('Image updated', 'success');
+      refreshRevert(slot);  // current diverges from saved → revert becomes enabled
+      toast('Image updated — hit Revert to undo', 'success');
     } catch (err) {
       toast('Upload failed: ' + err.message, 'error');
     } finally {
@@ -317,6 +372,11 @@
       deleteImage(delBtn.closest('[data-image-slot]'));
       return;
     }
+    const revBtn = e.target.closest('.img-revert');
+    if (revBtn) {
+      revertImage(revBtn.closest('[data-image-slot]'));
+      return;
+    }
     const uploader = e.target.closest('.img-uploader');
     if (uploader) {
       pendingSlot = uploader.closest('[data-image-slot]');
@@ -355,5 +415,23 @@
       toggle.checked = true;
       setEditMode(true);
     }
+  }
+
+  // Page-level "Save all changes" button — runs saveCard() on every editable
+  // card with an id (skips unsaved brand-new ones, which need their own flow).
+  const saveAllBtn = document.getElementById('adminSaveAll');
+  if (saveAllBtn) {
+    saveAllBtn.addEventListener('click', async () => {
+      const cards = Array.from(document.querySelectorAll('[data-edit-card][data-id]'));
+      if (!cards.length) { toast('Nothing to save on this page', ''); return; }
+      saveAllBtn.disabled = true;
+      let ok = 0, fail = 0;
+      for (const card of cards) {
+        if (await saveCard(card, { silent: true })) ok++; else fail++;
+      }
+      saveAllBtn.disabled = false;
+      toast(`Saved ${ok} card${ok === 1 ? '' : 's'}` + (fail ? ` — ${fail} failed` : ''),
+            fail ? 'error' : 'success');
+    });
   }
 })();

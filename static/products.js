@@ -226,6 +226,11 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ============================================================
      INIT
      ============================================================ */
+  // In admin edit mode the carousel is collapsed into a flat grid (see
+  // admin.css). Skip the 3D layout, auto-play and dot indicators so the
+  // admin can scroll and edit every card normally.
+  if (document.body.classList.contains('edit-mode')) return;
+
   buildDots();
   updateCarousel();
   startAuto();

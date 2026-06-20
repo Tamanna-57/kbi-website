@@ -1,3 +1,4 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,9 +21,9 @@
         </video>
         <div class="proc-hero__overlay"></div>
         <div class="proc-hero__content">
-            <p class="proc-hero__eyebrow">⚙ Manufacturing Excellence</p>
-            <h1 class="proc-hero__title">Our Manufacturing<br>Processes</h1>
-            <p class="proc-hero__sub">State-of-the-art technology and precision engineering — five core processes that power India's industry.</p>
+            {{ e.text('processes.hero.eyebrow', '⚙ Manufacturing Excellence', tag='p', cls='proc-hero__eyebrow') }}
+            {{ e.rich('processes.hero.title', 'Our Manufacturing<br>Processes', tag='h1', cls='proc-hero__title') }}
+            {{ e.text('processes.hero.sub', "State-of-the-art technology and precision engineering — five core processes that power India's industry.", tag='p', cls='proc-hero__sub') }}
             <a href="#proc-list" class="proc-hero__cta">Explore Capabilities <span>↓</span></a>
         </div>
     </section>
@@ -31,28 +32,28 @@
     <section class="proc-stats">
         <div class="proc-stats__inner">
             <div class="proc-stat">
-                <span class="proc-stat__num">5</span>
-                <span class="proc-stat__lbl">Core Processes</span>
+                {{ e.text('processes.stat1.num', '5', tag='span', cls='proc-stat__num') }}
+                {{ e.text('processes.stat1.lbl', 'Core Processes', tag='span', cls='proc-stat__lbl') }}
             </div>
             <div class="proc-stat-div"></div>
             <div class="proc-stat">
-                <span class="proc-stat__num">50+</span>
-                <span class="proc-stat__lbl">Machines</span>
+                {{ e.text('processes.stat2.num', '50+', tag='span', cls='proc-stat__num') }}
+                {{ e.text('processes.stat2.lbl', 'Machines', tag='span', cls='proc-stat__lbl') }}
             </div>
             <div class="proc-stat-div"></div>
             <div class="proc-stat">
-                <span class="proc-stat__num">150+</span>
-                <span class="proc-stat__lbl">Skilled Workers</span>
+                {{ e.text('processes.stat3.num', '150+', tag='span', cls='proc-stat__num') }}
+                {{ e.text('processes.stat3.lbl', 'Skilled Workers', tag='span', cls='proc-stat__lbl') }}
             </div>
             <div class="proc-stat-div"></div>
             <div class="proc-stat">
-                <span class="proc-stat__num">40+</span>
-                <span class="proc-stat__lbl">Years Experience</span>
+                {{ e.text('processes.stat4.num', '40+', tag='span', cls='proc-stat__num') }}
+                {{ e.text('processes.stat4.lbl', 'Years Experience', tag='span', cls='proc-stat__lbl') }}
             </div>
             <div class="proc-stat-div"></div>
             <div class="proc-stat">
-                <span class="proc-stat__num">99%</span>
-                <span class="proc-stat__lbl">Quality Rate</span>
+                {{ e.text('processes.stat5.num', '99%', tag='span', cls='proc-stat__num') }}
+                {{ e.text('processes.stat5.lbl', 'Quality Rate', tag='span', cls='proc-stat__lbl') }}
             </div>
         </div>
     </section>
@@ -68,10 +69,11 @@
 
         {% for p in processes %}
         <article class="proc-ed{% if loop.index % 2 == 0 %} proc-ed--flip{% endif %}" data-edit-card data-id="{{ p.id }}" data-name="{{ p.name }}">
-            <div class="proc-ed__img-col img-slot" data-image-slot>
+            <div class="proc-ed__img-col img-slot" data-image-slot data-original-image="{{ p.image }}">
                 <img src="{{ p.image }}" alt="{{ p.name }} Process" data-edit-image{% if not p.image %} hidden{% endif %}>
                 {% if is_admin %}
                 <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+                <button type="button" class="img-revert" data-edit-only hidden title="Revert to last saved image">↶ Revert</button>
                 <button type="button" class="img-uploader"{% if p.image %} hidden{% endif %}>
                   <span class="img-uploader__icon">&#43;</span>
                   <span class="img-uploader__text">Upload image</span>
@@ -111,29 +113,29 @@
                 <div class="proc-quality-item__icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                 </div>
-                <h3>ISO Certified</h3>
-                <p>ISO 9001:2015, 14001:2015 &amp; 45001:2018 certified for quality, environment and safety.</p>
+                {{ e.text('processes.quality1.title', 'ISO Certified', tag='h3') }}
+                {{ e.text('processes.quality1.body', 'ISO 9001:2015, 14001:2015 & 45001:2018 certified for quality, environment and safety.', tag='p') }}
             </div>
             <div class="proc-quality-item">
                 <div class="proc-quality-item__icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </div>
-                <h3>Advanced Testing</h3>
-                <p>State-of-the-art testing for dimensional accuracy and material properties validation.</p>
+                {{ e.text('processes.quality2.title', 'Advanced Testing', tag='h3') }}
+                {{ e.text('processes.quality2.body', 'State-of-the-art testing for dimensional accuracy and material properties validation.', tag='p') }}
             </div>
             <div class="proc-quality-item">
                 <div class="proc-quality-item__icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
                 </div>
-                <h3>Statistical Process Control</h3>
-                <p>Real-time monitoring and data analysis for continuous process optimisation.</p>
+                {{ e.text('processes.quality3.title', 'Statistical Process Control', tag='h3') }}
+                {{ e.text('processes.quality3.body', 'Real-time monitoring and data analysis for continuous process optimisation.', tag='p') }}
             </div>
             <div class="proc-quality-item">
                 <div class="proc-quality-item__icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                 </div>
-                <h3>Quick Turnaround</h3>
-                <p>Efficient processes and skilled workforce ensure fast, on-time delivery every time.</p>
+                {{ e.text('processes.quality4.title', 'Quick Turnaround', tag='h3') }}
+                {{ e.text('processes.quality4.body', 'Efficient processes and skilled workforce ensure fast, on-time delivery every time.', tag='p') }}
             </div>
         </div>
     </section>

@@ -5,6 +5,11 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  /* Scroll-reveal would hide every section behind opacity:0 until you
+     scroll past it — which makes editing impossible. Skip it for admins
+     so every process card is immediately visible and editable. */
+  if (document.getElementById('adminBar')) return;
+
   /* Scroll-reveal for editorial articles and quality items */
   const revealEls = document.querySelectorAll('.proc-ed__text-col, .proc-ed__img-col, .proc-quality-item, .proc-stat');
   if (!('IntersectionObserver' in window)) return;

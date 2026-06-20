@@ -40,18 +40,44 @@ body.edit-mode [data-block-text],
 body.edit-mode [data-block-rich],
 body.edit-mode [data-edit-list] .feature-tag,
 body.edit-mode [data-edit-list] li {
-  outline: 1px dashed #1a4a7a; outline-offset: 3px; border-radius: 4px;
-  cursor: text; transition: background .15s;
+  outline: 1px dashed #f7c948; outline-offset: 3px; border-radius: 4px;
+  cursor: text; transition: outline-color .15s, box-shadow .15s;
 }
+/* On focus: keep the original text colour readable on whatever background
+   the page uses (dark hero, light card, etc.) by NOT replacing the bg with a
+   light tint. Instead just brighten the outline + add a subtle backdrop. */
 body.edit-mode [data-edit-field]:focus,
 body.edit-mode [data-block-text]:focus,
 body.edit-mode [data-block-rich]:focus,
 body.edit-mode [data-edit-list] .feature-tag:focus,
 body.edit-mode [data-edit-list] li:focus {
-  outline: 2px solid #1a7a4a; background: #f0f8f3;
+  outline: 2px solid #f7c948;
+  box-shadow: 0 0 0 4px rgba(247, 201, 72, .18);
+  background: transparent;
 }
-/* Inline image slot used by the editable.image() macro. */
+/* Selection highlight inside editable fields — high-contrast on every
+   background (the browser default washes the underlying colour out
+   on dark heroes, making the typed text disappear). */
+body.edit-mode [data-edit-field]::selection,
+body.edit-mode [data-block-text]::selection,
+body.edit-mode [data-block-rich]::selection,
+body.edit-mode [data-edit-list] *::selection {
+  background: #f7c948; color: #1a1a1a;
+}
+/* Inline image slot used by the editable.image() macro. Default is
+   inline-block to behave as a drop-in <img>; pages that need it to fill a
+   block-level wrapper (e.g. hero) flip it to block via .block-img-slot--fill
+   or `display: block` on the parent. */
 .block-img-slot { display: inline-block; }
+.block-img-slot--fill,
+.mach-hero__img-wrap .block-img-slot,
+.prod-hero__image-wrap .block-img-slot {
+  display: block; width: 100%; height: 100%;
+}
+.mach-hero__img-wrap .block-img-slot > img,
+.prod-hero__image-wrap .block-img-slot > img {
+  width: 100%; height: 100%; display: block;
+}
 
 /* In edit mode the details panel must be visible to edit it. */
 body.edit-mode .machine-card .machine-details {
@@ -119,6 +145,113 @@ body:not(.edit-mode) .img-uploader { display: none !important; }
   margin-left: 6px;
 }
 .machine-details .edit-add-chip { margin: 8px 0 0; display: inline-block; }
+
+/* ════════════════════════════════════════════════════════════════
+   EDIT-MODE LAYOUT OVERRIDES
+   Make every collection on the page visible, expanded, and clickable
+   so the admin can edit, delete, or reorder anything — none of the
+   carousel/scroll-reveal/marquee animations are useful while editing.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Products — collapse the 3D carousel back into a flat grid. */
+body.edit-mode .prod-track-wrap {
+  height: auto !important;
+  perspective: none;
+  overflow: visible;
+  cursor: default;
+}
+body.edit-mode .prod-track {
+  position: static;
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem clamp(1rem, 5vw, 3rem);
+}
+body.edit-mode .prod-card {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  z-index: auto !important;
+}
+body.edit-mode .prod-card__desc-wrap {
+  max-height: none !important;
+  opacity: 1 !important;
+  margin-top: .65rem !important;
+}
+body.edit-mode .prod-arrow,
+body.edit-mode .prod-carousel-dots { display: none !important; }
+
+/* Processes — disable scroll-reveal (every article must be visible). */
+body.edit-mode .proc-ed__text-col,
+body.edit-mode .proc-ed__img-col,
+body.edit-mode .proc-quality-item,
+body.edit-mode .proc-stat {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Customers — disable the navy fill hover so the cell stays editable
+   (otherwise the overlay covers the editable fields when the cursor
+    sits over the card). */
+body.edit-mode .cust-cell { cursor: default; }
+body.edit-mode .cust-cell::after { display: none !important; }
+body.edit-mode .cust-cell:hover img { opacity: 1; transform: none; }
+body.edit-mode .cust-cell__fill {
+  position: static;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  padding: .4rem 0 0;
+  background: #f7f9fc;
+  border-radius: 4px;
+}
+body.edit-mode .cust-cell__fill-name { display: none; }
+body.edit-mode .cust-cell__fill-tag { color: var(--cu-text, #1a2236); font-size: .78rem; }
+
+/* Machines — keep cards from auto-expanding into the details panel and
+   disable the hover-fill so the editable fields stay readable. */
+body.edit-mode .machine-card::before { display: none !important; }
+body.edit-mode .machine-card:hover .machine-category,
+body.edit-mode .machine-card:hover .machine-info h3,
+body.edit-mode .machine-card:hover .machine-description { color: inherit !important; }
+body.edit-mode .machine-card:hover .machine-image img { transform: none !important; }
+
+/* Inline image slots used INSIDE absolutely-positioned hero/grid cells
+   must remain block-level so the uploader fills the slot correctly. */
+body.edit-mode .block-img-slot { display: block; }
+
+/* Revert button on image slots ----------------------------------- */
+.img-revert {
+  position: absolute; top: 8px; right: 46px; z-index: 3;
+  height: 30px; padding: 0 10px; border-radius: 15px;
+  background: rgba(15,44,77,.92); color: #fff; border: 2px solid #fff;
+  font-size: .78rem; font-weight: 600; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  transition: transform .12s, background .12s;
+}
+.img-revert:hover { background: #1a4a7a; transform: scale(1.05); }
+.img-revert[disabled] {
+  background: rgba(120,128,140,.85); cursor: not-allowed;
+  border-color: rgba(255,255,255,.6);
+}
+body:not(.edit-mode) .img-revert { display: none !important; }
+
+/* Page-level "Save all changes" admin-bar button ----------------- */
+.admin-bar__save-all {
+  border: none; border-radius: 6px; padding: 7px 14px; cursor: pointer;
+  font-family: inherit; font-size: .85rem; font-weight: 600;
+  background: #1a7a4a; color: #fff;
+}
+.admin-bar__save-all:hover { background: #14613b; }
+.admin-bar__save-all[disabled] { opacity: .5; cursor: default; }
 
 /* Toast notifications -------------------------------------------- */
 .admin-toast {

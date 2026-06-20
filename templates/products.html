@@ -1,3 +1,4 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,20 +20,12 @@
     <section class="prod-hero">
         <div class="prod-hero__inner">
             <div class="prod-hero__text">
-                <p class="prod-hero__eyebrow">What We Make</p>
-                <h1 class="prod-hero__title">Our Products</h1>
-                <p class="prod-hero__desc">
-                    From precision-stamped axles to intricate cabin assemblies, KBI delivers
-                    made-to-order sheet metal and tubular components that power the automotive,
-                    agricultural, and construction industries across the globe.
-                </p>
+                {{ e.text('products.hero.eyebrow', 'What We Make', tag='p', cls='prod-hero__eyebrow') }}
+                {{ e.text('products.hero.title', 'Our Products', tag='h1', cls='prod-hero__title') }}
+                {{ e.rich('products.hero.desc', 'From precision-stamped axles to intricate cabin assemblies, KBI delivers made-to-order sheet metal and tubular components that power the automotive, agricultural, and construction industries across the globe.', tag='p', cls='prod-hero__desc') }}
             </div>
             <div class="prod-hero__image-wrap">
-                <img
-                    src="{{ url_for('static', filename='pics/range_of_products.png') }}"
-                    alt="KBI Products"
-                    class="prod-hero__img"
-                >
+                {{ e.image('products.hero.image', url_for('static', filename='pics/range_of_products.png'), alt='KBI Products', cls='prod-hero__img') }}
             </div>
         </div>
     </section>
@@ -67,10 +60,11 @@
             <div class="prod-track" id="productsGrid">
                 {% for p in products %}
                 <div class="prod-card" data-edit-card data-category="{{ p.category }}" data-name="{{ p.id }}" data-id="{{ p.id }}">
-                    <div class="prod-card__img-wrap img-slot" data-image-slot>
+                    <div class="prod-card__img-wrap img-slot" data-image-slot data-original-image="{{ p.image }}">
                         <img src="{{ p.image }}" alt="{{ p.name }}" data-edit-image{% if not p.image %} hidden{% endif %}>
                         {% if is_admin %}
                         <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+                        <button type="button" class="img-revert" data-edit-only hidden title="Revert to last saved image">↶ Revert</button>
                         <button type="button" class="img-uploader"{% if p.image %} hidden{% endif %}>
                           <span class="img-uploader__icon">&#43;</span>
                           <span class="img-uploader__text">Upload image</span>
