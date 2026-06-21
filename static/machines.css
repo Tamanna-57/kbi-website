@@ -118,6 +118,9 @@
   transform: translateX(50px);
   animation: machSlideLeft .85s var(--m-ease) .55s forwards;
 }
+/* The editable.image() macro wraps the hero img in a slot span — make it fill
+   the column so the image still covers it (admin edit mode + public view). */
+.mach-hero__img-wrap .img-slot { display: block; width: 100%; height: 100%; position: relative; }
 .mach-hero__img-wrap img {
   width: 100%;
   height: 100%;

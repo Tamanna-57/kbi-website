@@ -151,7 +151,8 @@
     return (card && card.dataset.collection) || COLLECTION;
   }
 
-  async function saveCard(card) {
+  async function saveCard(card, opts) {
+    const silent = opts && opts.silent;
     const id = card.dataset.id;
     const data = collectCard(card);
     try {
@@ -159,9 +160,11 @@
       card.dataset.name = saved.name || saved.title || '';
       if (saved.category) card.dataset.category = saved.category;
       pruneEmpty(card);
-      toast('Saved “' + (saved.name || saved.title || 'item') + '”', 'success');
+      if (!silent) toast('Saved “' + (saved.name || saved.title || 'item') + '”', 'success');
+      return true;
     } catch (err) {
-      toast('Save failed: ' + err.message, 'error');
+      if (!silent) toast('Save failed: ' + err.message, 'error');
+      return false;
     }
   }
 
@@ -182,6 +185,7 @@
     try {
       await api('POST', `/api/${collection || COLLECTION}`, blank);
       sessionStorage.setItem(STORAGE_KEY, '1');  // stay in edit mode after reload
+      bypassUnloadWarning = true;                // this reload is intentional
       toast('Added — reloading…', 'success');
       setTimeout(() => window.location.reload(), 500);
     } catch (err) {
@@ -198,43 +202,44 @@
   fileInput.style.display = 'none';
   document.body.appendChild(fileInput);
 
-  // Persist an image change immediately. Block-image slots save to /api/block;
-  // card image slots save to the card's collection item.
-  async function persistImage(slot, url) {
-    if (slot.dataset.blockImage) {
-      await api('POST', '/api/block', { key: slot.dataset.blockImage, value: url });
-      return;
-    }
-    const card = slot.closest('[data-id]');
-    if (!card) return;  // brand-new unsaved card: value stays in the DOM only
-    await api('PUT', `/api/${cardCollection(card)}/${card.dataset.id}`, { image: url });
+  // ════════════════════════════════════════════════════════════════
+  //  DEFERRED SAVE MODEL
+  //  Every edit (text, list item, card field, image) is staged in the DOM
+  //  and only written to the server when the admin clicks "Save changes".
+  //  So nothing goes live until an explicit save.
+  // ════════════════════════════════════════════════════════════════
+  const dirtyBlocks = new Map();        // block key -> text element
+  const dirtyBlockImages = new Map();   // block key -> staged image url ('' = removed)
+  let dirty = false;
+  let bypassUnloadWarning = false;
+
+  function markDirty() { dirty = true; updateSaveBtn(); }
+  function clearDirty() { dirty = false; updateSaveBtn(); }
+  function updateSaveBtn() {
+    const btn = document.getElementById('adminSaveAll');
+    if (!btn) return;
+    btn.classList.toggle('has-changes', dirty);
+    btn.textContent = dirty ? '● Save changes' : 'Save changes';
   }
 
-  // ---- free-form text blocks: save on blur if changed ---------------
-  // Plain blocks save textContent; rich blocks save innerHTML (keeps line
-  // breaks / simple formatting). A block is identified by data-block=key.
-  const blockEditStart = new WeakMap();
+  // ---- editable text blocks: staged, saved on demand ----------------
   function blockEl(target) {
     return target.closest && target.closest('[data-block-text], [data-block-rich]');
   }
-  function blockContent(el) {
-    return el.hasAttribute('data-block-rich') ? el.innerHTML : el.textContent;
+  function blockValue(el) {
+    return el.hasAttribute('data-block-rich') ? el.innerHTML : el.textContent.trim();
   }
-  document.addEventListener('focusin', (e) => {
-    const el = blockEl(e.target);
-    if (el) blockEditStart.set(el, blockContent(el));
-  });
-  document.addEventListener('focusout', (e) => {
+  async function saveBlock(el) {
+    await api('POST', '/api/block', { key: el.dataset.block, value: blockValue(el) });
+    dirtyBlocks.delete(el.dataset.block);
+  }
+
+  // Any edit just marks the page dirty (and remembers which block changed).
+  document.addEventListener('input', (e) => {
     if (!document.body.classList.contains('edit-mode')) return;
-    const el = blockEl(e.target);
-    if (!el) return;
-    const before = blockEditStart.get(el);
-    const now = blockContent(el);
-    if (before === undefined || before === now) return;  // unchanged
-    const value = el.hasAttribute('data-block-rich') ? now : now.trim();
-    api('POST', '/api/block', { key: el.dataset.block, value: value })
-      .then(() => toast('Saved', 'success'))
-      .catch(err => toast('Save failed: ' + err.message, 'error'));
+    const bel = blockEl(e.target);
+    if (bel) { dirtyBlocks.set(bel.dataset.block, bel); markDirty(); return; }
+    if (e.target.closest && e.target.closest('[data-edit-card]')) markDirty();
   });
 
   function showUploader(slot, show) {
@@ -246,16 +251,25 @@
     if (del) del.hidden = show;          // no delete button when there's no image
   }
 
-  async function deleteImage(slot) {
+  // Apply an image change to the DOM only — persistence waits for Save.
+  // Card images ride along when the card is saved (collectCard reads the src);
+  // block images (page heroes, etc.) are staged here and saved by saveAll().
+  function applyImage(slot, url) {
     const img = slot.querySelector('[data-edit-image]');
-    if (img) img.removeAttribute('src');
-    showUploader(slot, true);
-    try {
-      await persistImage(slot, '');
-      toast('Image removed — upload a new one', 'success');
-    } catch (err) {
-      toast('Could not remove image: ' + err.message, 'error');
+    if (url) {
+      if (img) img.setAttribute('src', url);
+      showUploader(slot, false);
+    } else {
+      if (img) img.removeAttribute('src');
+      showUploader(slot, true);
     }
+    if (slot.dataset.blockImage) dirtyBlockImages.set(slot.dataset.blockImage, url || '');
+    markDirty();
+  }
+
+  function deleteImage(slot) {
+    applyImage(slot, '');
+    toast('Image removed — click Save to publish', 'success');
   }
 
   async function uploadToSlot(slot, file) {
@@ -268,16 +282,37 @@
       const res = await fetch('/api/upload', { method: 'POST', body: fd });
       if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || res.statusText);
       const { url } = await res.json();
-      const img = slot.querySelector('[data-edit-image]');
-      if (img) img.setAttribute('src', url);
-      showUploader(slot, false);
-      await persistImage(slot, url);
-      toast('Image updated', 'success');
+      applyImage(slot, url);
+      toast('Image staged — click Save to publish', 'success');
     } catch (err) {
       toast('Upload failed: ' + err.message, 'error');
     } finally {
       if (uploader) uploader.classList.remove('busy');
     }
+  }
+
+  // ---- the one page-level Save -------------------------------------
+  async function saveAll() {
+    const btn = document.getElementById('adminSaveAll');
+    const cards = Array.from(document.querySelectorAll('[data-edit-card][data-id]'));
+    const blocks = Array.from(dirtyBlocks.values());
+    const blockImgs = Array.from(dirtyBlockImages.entries());
+    if (!cards.length && !blocks.length && !blockImgs.length) {
+      toast('No changes to save yet', '');
+      return;
+    }
+    if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+    let ok = 0, fail = 0;
+    for (const card of cards) { if (await saveCard(card, { silent: true })) ok++; else fail++; }
+    for (const el of blocks) { try { await saveBlock(el); ok++; } catch (e) { fail++; } }
+    for (const [key, url] of blockImgs) {
+      try { await api('POST', '/api/block', { key, value: url }); dirtyBlockImages.delete(key); ok++; }
+      catch (e) { fail++; }
+    }
+    if (btn) btn.disabled = false;
+    if (!fail) clearDirty(); else updateSaveBtn();
+    toast(`Saved ${ok} change${ok === 1 ? '' : 's'}` + (fail ? ` — ${fail} failed` : ''),
+          fail ? 'error' : 'success');
   }
 
   fileInput.addEventListener('change', () => {
@@ -356,4 +391,16 @@
       setEditMode(true);
     }
   }
+
+  // Page-level Save button + unsaved-changes guard.
+  const saveAllBtn = document.getElementById('adminSaveAll');
+  if (saveAllBtn) { saveAllBtn.addEventListener('click', saveAll); updateSaveBtn(); }
+
+  window.addEventListener('beforeunload', (e) => {
+    if (bypassUnloadWarning) return;
+    if (dirty && document.body.classList.contains('edit-mode')) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
 })();

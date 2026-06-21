@@ -228,5 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
      ============================================================ */
   buildDots();
   updateCarousel();
-  startAuto();
+  // In admin edit mode the carousel is frozen into a static grid (admin.css)
+  // so cards can be added/deleted without the ticker moving — don't autoplay.
+  if (!document.body.classList.contains('edit-mode')) startAuto();
 });

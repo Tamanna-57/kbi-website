@@ -16,6 +16,40 @@
 .admin-bar__logout { margin-left: auto; color: #cfe2f5; text-decoration: none; font-weight: 600; }
 .admin-bar__logout:hover { color: #fff; text-decoration: underline; }
 
+/* Page-level Save button. Turns amber when there are unsaved changes. */
+.admin-bar__save {
+  border: none; border-radius: 6px; padding: 7px 16px; cursor: pointer;
+  font-family: inherit; font-size: .85rem; font-weight: 700;
+  background: #1a7a4a; color: #fff; transition: background .15s, box-shadow .15s;
+}
+.admin-bar__save:hover { background: #14613b; }
+.admin-bar__save:disabled { opacity: .6; cursor: default; }
+.admin-bar__save.has-changes {
+  background: #f7c948; color: #1a1a1a;
+  box-shadow: 0 0 0 3px rgba(247, 201, 72, .35);
+}
+
+/* Products carousel → static grid in edit mode so add/delete are usable
+   (the live ticker moves too violently to click individual cards). */
+body.edit-mode .prod-track-wrap {
+  height: auto !important; perspective: none; overflow: visible; cursor: default;
+}
+body.edit-mode .prod-track {
+  position: static; width: 100%; height: auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.4rem; padding: 1.2rem clamp(1rem, 4vw, 2.5rem);
+}
+body.edit-mode .prod-card {
+  position: relative !important; top: auto !important; left: auto !important;
+  width: 100% !important; height: auto !important; opacity: 1 !important;
+  transform: none !important; transition: none !important; z-index: auto !important;
+}
+body.edit-mode .prod-card__desc-wrap {
+  max-height: none !important; opacity: 1 !important; margin-top: .6rem !important;
+}
+body.edit-mode .prod-arrow,
+body.edit-mode .prod-carousel-dots { display: none !important; }
+
 /* Push page content up so the fixed bar never hides the footer. */
 body.has-admin-bar { padding-bottom: 56px; }
 

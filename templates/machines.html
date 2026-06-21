@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  {% import 'editable.html' as e with context %}
   {% include 'logo.html' %}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,20 +21,20 @@
     <div class="mach-hero__inner">
 
       <div class="mach-hero__text">
-        <p class="mach-hero__eyebrow">Equipment &amp; Machinery</p>
-        <h1 class="mach-hero__title">Our Machines</h1>
-        <p class="mach-hero__sub">High-tonnage presses, CNC systems, welding rigs, and finishing equipment — powering precision at every stage of production.</p>
+        {{ e.text('machines.hero.eyebrow', 'Equipment & Machinery', tag='p', cls='mach-hero__eyebrow') }}
+        {{ e.text('machines.hero.title', 'Our Machines', tag='h1', cls='mach-hero__title') }}
+        {{ e.text('machines.hero.sub', 'High-tonnage presses, CNC systems, welding rigs, and finishing equipment — powering precision at every stage of production.', tag='p', cls='mach-hero__sub') }}
         <ul class="mach-hero__bullets">
-          <li>Over <strong>70+ machines</strong> across 2 manufacturing plants</li>
-          <li>Capacities from <strong>25 tons to 600 tons</strong> pressing force</li>
-          <li>CNC-controlled turning, boring, wirecut &amp; machining centres</li>
-          <li>Dedicated welding bays with MIG, spot &amp; robotic-assist rigs</li>
-          <li>Full finishing line — shot blasting, painting &amp; quality inspection</li>
+          {{ e.rich('machines.hero.bullet1', 'Over <strong>70+ machines</strong> across 2 manufacturing plants', tag='li') }}
+          {{ e.rich('machines.hero.bullet2', 'Capacities from <strong>25 tons to 600 tons</strong> pressing force', tag='li') }}
+          {{ e.rich('machines.hero.bullet3', 'CNC-controlled turning, boring, wirecut &amp; machining centres', tag='li') }}
+          {{ e.rich('machines.hero.bullet4', 'Dedicated welding bays with MIG, spot &amp; robotic-assist rigs', tag='li') }}
+          {{ e.rich('machines.hero.bullet5', 'Full finishing line — shot blasting, painting &amp; quality inspection', tag='li') }}
         </ul>
       </div>
 
       <div class="mach-hero__img-wrap">
-        <img src="{{ url_for('static', filename='pics/process_Pressing.webp') }}" alt="KBI Pressing Machine">
+        {{ e.image('machines.hero.image', url_for('static', filename='pics/process_Pressing.webp'), alt='KBI Pressing Machine') }}
       </div>
 
     </div>
