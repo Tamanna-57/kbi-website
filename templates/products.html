@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% import 'editable.html' as e with context %}
     {% include 'logo.html' %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,11 +29,7 @@
                 </p>
             </div>
             <div class="prod-hero__image-wrap">
-                <img
-                    src="{{ url_for('static', filename='pics/range_of_products.png') }}"
-                    alt="KBI Products"
-                    class="prod-hero__img"
-                >
+                {{ e.image('products.hero.image', url_for('static', filename='pics/range_of_products.png'), alt='KBI Products', cls='prod-hero__img') }}
             </div>
         </div>
     </section>
