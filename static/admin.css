@@ -96,10 +96,21 @@ body.edit-mode .machine-card:hover { transform: none; box-shadow: 0 4px 16px rgb
 .img-uploader:hover, .img-uploader.dragover { background: #e2f1e9; border-color: #14613b; }
 /* The uploader is an edit-time affordance only. */
 body:not(.edit-mode) .img-uploader { display: none !important; }
-/* When a slot already has an image, JS marks the uploader [hidden]; honour
-   that even in edit mode so the existing image stays visible (with its × /
-   delete control) instead of the white upload box covering it. */
-.img-uploader[hidden] { display: none !important; }
+/* When a slot already has an image, JS marks the uploader [hidden]. Rather
+   than a full white box covering the image (or hiding the control entirely),
+   show a compact "change photo" button pinned in the corner — so the existing
+   image stays fully visible AND can still be replaced in one click. */
+body.edit-mode .img-uploader[hidden] {
+  display: inline-flex !important;
+  flex-direction: row; align-items: center; gap: 6px;
+  inset: auto auto 8px 8px;          /* bottom-left corner, sized to content */
+  width: auto; height: auto; min-height: 0;
+  padding: 7px 11px; border-radius: 8px;
+  border: 2px solid #1a7a4a; background: rgba(240, 248, 243, .96);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25); z-index: 4;
+}
+body.edit-mode .img-uploader[hidden] .img-uploader__icon { font-size: 1.1rem; }
+body.edit-mode .img-uploader[hidden] .img-uploader__text { font-size: .8rem; }
 .img-uploader__icon { font-size: 2rem; line-height: 1; }
 .img-uploader__text { font-size: .9rem; }
 .img-uploader.busy { opacity: .6; pointer-events: none; }
