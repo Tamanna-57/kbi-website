@@ -1,238 +1,234 @@
-// Multi-category filter functionality - ADD THIS NEW VARIABLE
-let activeFilters = new Set(['all']); // Track multiple active filters
+/* ============================================================
+   KBI Products — 3D center-focused carousel + filter/search
+   ============================================================ */
 
-// Search functionality - KEEP AS IS (no changes needed)
-function initializeSearch() {
-    const searchInput = document.getElementById('productSearch');
-    const searchBtn = document.querySelector('.search-btn');
-    
-    if (searchInput) {
-        // Search on input
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            filterProducts(searchTerm);
-        });
-        
-        // Search on button click
-        if (searchBtn) {
-            searchBtn.addEventListener('click', function() {
-                const searchTerm = searchInput.value.toLowerCase();
-                filterProducts(searchTerm);
-            });
-        }
-        
-        // Search on Enter key
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const searchTerm = this.value.toLowerCase();
-                filterProducts(searchTerm);
-            }
-        });
+document.addEventListener('DOMContentLoaded', () => {
+
+  const track      = document.getElementById('productsGrid');
+  const trackWrap  = track.closest('.prod-track-wrap');
+  const arrowLeft  = document.getElementById('prodArrowLeft');
+  const arrowRight = document.getElementById('prodArrowRight');
+  const searchInput = document.getElementById('productSearch');
+  const pills       = document.querySelectorAll('.prod-pill');
+  const dotsEl      = document.getElementById('prodDots');
+
+  let activeFilters = new Set(['all']);
+  let activeIndex   = 0;
+  let autoTimer     = null;
+
+  /* ============================================================
+     3D TRANSFORM MAP
+     rel position → visual properties
+     ============================================================ */
+  // 3D cover-flow: center prominent, sides scale + rotate to peek from edges.
+  // |rel| >= 3 = parked off-stage (fully transparent) on its own side.
+  const FAR_TX = 820;
+
+  function getTransform(rel) {
+    switch (rel) {
+      case  0: return { tx:    0, sc: 1.00, ry:   0, op: 1.00, z: 10 };
+      case  1: return { tx:  310, sc: 0.82, ry: -10, op: 0.72, z:  7 };
+      case -1: return { tx: -310, sc: 0.82, ry:  10, op: 0.72, z:  7 };
+      case  2: return { tx:  570, sc: 0.66, ry: -18, op: 0.42, z:  4 };
+      case -2: return { tx: -570, sc: 0.66, ry:  18, op: 0.42, z:  4 };
+      default: return { tx: rel > 0 ? FAR_TX : -FAR_TX, sc: 0.52, ry: rel > 0 ? -24 : 24, op: 0, z: 1 };
     }
-}
+  }
 
-// Filter products based on search term - REPLACE THIS FUNCTION
-function filterProducts(searchTerm) {
-    const productCards = document.querySelectorAll('.product-card');
-    
-    productCards.forEach(card => {
-        const productName = card.dataset.name.toLowerCase();
-        const productCategories = card.dataset.category.toLowerCase().split(',').map(cat => cat.trim());
-        const productDescription = card.querySelector('.product-description').textContent.toLowerCase();
-        
-        const matchesSearch = productName.includes(searchTerm) || 
-                            productCategories.some(cat => cat.includes(searchTerm)) ||
-                            productDescription.includes(searchTerm);
-        
-        const matchesCategory = activeFilters.has('all') || 
-                               productCategories.some(cat => activeFilters.has(cat));
-        
-        if (matchesSearch && matchesCategory) {
-            showProduct(card);
-        } else {
-            hideProduct(card);
-        }
+  function getVisibleCards() {
+    return [...track.querySelectorAll('.prod-card:not(.hidden)')];
+  }
+
+  /* ============================================================
+     FILTER + SEARCH
+     ============================================================ */
+  function applyFilters() {
+    const term  = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    const cards = track.querySelectorAll('.prod-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+      const name = card.dataset.name.toLowerCase();
+      const cats = card.dataset.category.toLowerCase().split(',').map(s => s.trim());
+      const desc = card.querySelector('.prod-card__desc')?.textContent.toLowerCase() || '';
+
+      const matchSearch = !term || name.includes(term) || desc.includes(term)
+        || cats.some(c => c.includes(term));
+      const matchFilter = activeFilters.has('all') || cats.some(c => activeFilters.has(c));
+
+      if (matchSearch && matchFilter) {
+        card.classList.remove('hidden');
+        visible++;
+      } else {
+        card.classList.add('hidden');
+      }
     });
-    
-    // Show no results message if no products match
-    showNoResultsMessage();
-}
 
-// Category filter functionality - REPLACE THIS FUNCTION
-function initializeFilters() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const selectedCategory = this.dataset.category;
-            
-            // Handle "All Products" button
-            if (selectedCategory === 'all') {
-                // Clear all filters and activate "All"
-                activeFilters.clear();
-                activeFilters.add('all');
-                
-                // Update button states
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-            } else {
-                // Remove "All" if it's active
-                if (activeFilters.has('all')) {
-                    activeFilters.delete('all');
-                    document.querySelector('.filter-btn[data-category="all"]').classList.remove('active');
-                }
-                
-                // Toggle the selected category
-                if (activeFilters.has(selectedCategory)) {
-                    activeFilters.delete(selectedCategory);
-                    this.classList.remove('active');
-                } else {
-                    activeFilters.add(selectedCategory);
-                    this.classList.add('active');
-                }
-                
-                // If no categories are selected, activate "All"
-                if (activeFilters.size === 0) {
-                    activeFilters.add('all');
-                    document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
-                }
-            }
-            
-            // Apply filters
-            filterByCategories();
-        });
+    let noRes = track.querySelector('.prod-no-results');
+    if (visible === 0) {
+      if (!noRes) {
+        noRes = document.createElement('p');
+        noRes.className = 'prod-no-results';
+        noRes.textContent = 'No products match your search.';
+        track.appendChild(noRes);
+      }
+    } else {
+      noRes?.remove();
+    }
+
+    const visCards = getVisibleCards();
+    activeIndex = Math.min(activeIndex, Math.max(0, visCards.length - 1));
+    buildDots();
+    updateCarousel();
+  }
+
+  /* Pills — single selection: one category active at a time */
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      activeFilters = new Set([pill.dataset.category]);
+      pills.forEach(p => p.classList.toggle('active', p === pill));
+      activeIndex = 0;
+      applyFilters();
     });
-}
+  });
 
-// Filter products by category - REPLACE THIS FUNCTION
-function filterByCategories() {
-    const productCards = document.querySelectorAll('.product-card');
-    
-    productCards.forEach(card => {
-        const productCategories = card.dataset.category.toLowerCase().split(',').map(cat => cat.trim());
-        
-        // Check if product matches any active filter
-        const matchesCategory = activeFilters.has('all') || 
-                               productCategories.some(cat => activeFilters.has(cat));
-        
-        if (matchesCategory) {
-            showProduct(card);
-        } else {
-            hideProduct(card);
-        }
+  /* Search */
+  if (searchInput) searchInput.addEventListener('input', () => {
+    activeIndex = 0;
+    applyFilters();
+  });
+
+  /* ============================================================
+     DOTS
+     ============================================================ */
+  function buildDots() {
+    if (!dotsEl) return;
+    dotsEl.innerHTML = '';
+    getVisibleCards().forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'prod-carousel-dot';
+      dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      dot.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(dot);
     });
-    
-    // Clear search input when filtering by category
-    const searchInput = document.getElementById('productSearch');
-    if (searchInput) {
-        searchInput.value = '';
-    }
-    
-    // Show no results message if needed
-    showNoResultsMessage();
-}
+  }
 
-// ADD THESE NEW HELPER FUNCTIONS
-// Show product with animation
-function showProduct(card) {
-    card.style.display = 'block';
-    card.classList.remove('hidden');
-    
-    // Add fade-in animation
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    
-    setTimeout(() => {
-        card.style.transition = 'all 0.3s ease';
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-    }, 100);
-}
+  /* ============================================================
+     CAROUSEL LOGIC
+     ============================================================ */
+  function goTo(idx) {
+    const visCards = getVisibleCards();
+    if (!visCards.length) return;
+    activeIndex = ((idx % visCards.length) + visCards.length) % visCards.length;
+    updateCarousel();
+    resetAuto();
+  }
 
-// Hide product
-function hideProduct(card) {
-    card.style.display = 'none';
-    card.classList.add('hidden');
-}
+  function step(dir) { goTo(activeIndex + dir); }
 
-// Show no results message - REPLACE THIS FUNCTION
-function showNoResultsMessage() {
-    const productsGrid = document.getElementById('productsGrid');
-    const visibleProducts = productsGrid.querySelectorAll('.product-card:not(.hidden)');
-    
-    // Remove existing no results message
-    const existingMessage = document.querySelector('.no-results-message');
-    if (existingMessage) {
-        existingMessage.remove();
-    }
-    
-    // Add no results message if no products are visible
-    if (visibleProducts.length === 0) {
-        const noResultsMessage = document.createElement('div');
-        noResultsMessage.className = 'no-results-message';
-        noResultsMessage.style.cssText = `
-            text-align: center;
-            padding: 3rem;
-            color: #666;
-            font-size: 1.2rem;
-            grid-column: 1 / -1;
-        `;
-        noResultsMessage.innerHTML = `
-            <h3>No products found</h3>
-            <p>Try adjusting your search terms or browse all categories.</p>
-            <button class="clear-filters-btn" onclick="clearAllFilters()" style="
-                background-color: #17174f;
-                color: white;
-                padding: 0.5rem 1rem;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                margin-top: 1rem;
-            ">Clear All Filters</button>
-        `;
-        productsGrid.appendChild(noResultsMessage);
-    }
-}
+  function updateCarousel() {
+    const visCards = getVisibleCards();
+    const dots = dotsEl ? dotsEl.querySelectorAll('.prod-carousel-dot') : [];
+    const n = visCards.length;
 
-// ADD THESE NEW FUNCTIONS
-// Clear all filters function
-function clearAllFilters() {
-    activeFilters.clear();
-    activeFilters.add('all');
-    
-    // Reset all filter buttons
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(btn => btn.classList.remove('active'));
-    document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
-    
-    // Clear search input
-    const searchInput = document.getElementById('productSearch');
-    if (searchInput) {
-        searchInput.value = '';
-    }
-    
-    // Show all products
-    filterByCategories();
-}
+    visCards.forEach((card, i) => {
+      // ── Shortest-path rel: each card glides to its new slot the short way ──
+      let rel = i - activeIndex;
+      if (rel >  n / 2) rel -= n;
+      else if (rel < -n / 2) rel += n;
 
-// Get active filters display
-function getActiveFiltersDisplay() {
-    if (activeFilters.has('all')) {
-        return 'All Products';
-    }
-    
-    const filterArray = Array.from(activeFilters);
-    if (filterArray.length === 1) {
-        return filterArray[0].charAt(0).toUpperCase() + filterArray[0].slice(1);
-    }
-    
-    return filterArray.map(filter => 
-        filter.charAt(0).toUpperCase() + filter.slice(1)
-    ).join(', ');
-}
+      const { tx, sc, ry, op, z } = getTransform(rel);
 
-// ADD THIS INITIALIZATION CODE (if you don't already have it)
-document.addEventListener('DOMContentLoaded', function() {
-    initializeSearch();
-    initializeFilters();
+      // Cards deep in the back are invisible and swap sides as the loop wraps;
+      // disabling their transition keeps that swap unseen. Every on-stage card
+      // (|rel| <= 3) animates, so a step is always a single smooth glide — no
+      // teleporting, no forced reflow, no alternating jumps.
+      card.style.transition = Math.abs(rel) > 3 ? 'none' : '';
+      card.style.transform = `translateX(${tx}px) scale(${sc}) rotateY(${ry}deg)`;
+      card.style.opacity   = op;
+      card.style.zIndex    = z;
+      card.classList.toggle('prod-card--active', rel === 0);
+    });
+
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === activeIndex));
+  }
+
+  /* ============================================================
+     NAVIGATION — arrows, keyboard, touch, click-to-focus
+     ============================================================ */
+  arrowLeft.addEventListener('click',  () => step(-1));
+  arrowRight.addEventListener('click', () => step( 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  step(-1);
+    if (e.key === 'ArrowRight') step( 1);
+  });
+
+  /* Touch drag */
+  let touchX = 0;
+  trackWrap.addEventListener('touchstart', e => {
+    touchX = e.touches[0].clientX;
+    clearInterval(autoTimer);
+  }, { passive: true });
+  trackWrap.addEventListener('touchend', e => {
+    const dx = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 40) step(dx > 0 ? 1 : -1);
+    startAuto();
+  });
+
+  /* Mouse drag — allows direction reversal */
+  let dragStartX = null;
+  let wasDragging = false;
+
+  trackWrap.addEventListener('mousedown', e => {
+    dragStartX = e.clientX;
+    wasDragging = false;
+    clearInterval(autoTimer);
+    trackWrap.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (dragStartX === null) return;
+    if (Math.abs(e.clientX - dragStartX) > 8) wasDragging = true;
+  });
+
+  window.addEventListener('mouseup', e => {
+    if (dragStartX !== null) {
+      const dx = dragStartX - e.clientX;
+      if (wasDragging && Math.abs(dx) > 40) step(dx > 0 ? 1 : -1);
+      dragStartX = null;
+      startAuto();
+    }
+    trackWrap.style.cursor = 'grab';
+  });
+
+  trackWrap.addEventListener('click', e => {
+    if (wasDragging) { wasDragging = false; return; }
+    const card = e.target.closest('.prod-card:not(.hidden)');
+    if (!card) return;
+    const idx = getVisibleCards().indexOf(card);
+    if (idx !== -1 && idx !== activeIndex) goTo(idx);
+  });
+
+  /* ============================================================
+     AUTO-PLAY
+     ============================================================ */
+  function startAuto() { autoTimer = setInterval(() => step(1), 2200); }
+  function resetAuto()  { clearInterval(autoTimer); startAuto(); }
+
+  trackWrap.addEventListener('mouseenter', () => clearInterval(autoTimer));
+  trackWrap.addEventListener('mouseleave', () => {
+    dragStartX = null;
+    trackWrap.style.cursor = 'grab';
+    startAuto();
+  });
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  buildDots();
+  updateCarousel();
+  // In admin edit mode the carousel is frozen into a static grid (admin.css)
+  // so cards can be added/deleted without the ticker moving — don't autoplay.
+  if (!document.body.classList.contains('edit-mode')) startAuto();
 });

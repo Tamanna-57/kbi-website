@@ -1,161 +1,145 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     {% include 'logo.html' %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_kbi.css', v=1.1) }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='certifications.css', v=1.1) }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certifications - KBI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='certifications.css') }}">
 </head>
 <body>
-    <header>
-        {% include 'navigation.html' %}
-    </header>
+    <header>{% include 'navigation.html' %}</header>
 
-    <section class="hero" style="background-image: url('static/pics/iso_cert.png'); background-size: cover;">
-        <div class="hero-content">
-            <h1 id="typing-text">Our Certifications & Awards</h1>
-            <p class="fade-in-delay-1">Excellence in Quality, Environment, and Safety Standards</p>
-            <a href="#certifications" class="btn fade-in-delay-2">View Certificates</a>
+    <!-- ═══════════════════════════
+         HERO — navy, no bg image
+    ═══════════════════════════ -->
+    <section class="ch-hero">
+        <div class="ch-hero__inner">
+            {{ e.text('certifications.hero.eyebrow', 'Quality & Compliance', tag='p', cls='ch-hero__eyebrow') }}
+            {{ e.rich('certifications.hero.title', 'Work License &amp;<br>Certificates', tag='h1', cls='ch-hero__title') }}
+            {{ e.text('certifications.hero.sub', "Backed by three internationally recognised ISO standards, KBI's manufacturing processes meet the highest benchmarks for quality, environmental responsibility, and workplace safety.", tag='p', cls='ch-hero__sub') }}
         </div>
     </section>
 
-    <section class="about">
-        <div class="about-content">
-            <h2 class="fade-in-on-scroll">Quality Commitment</h2>
-            <p class="fade-in-on-scroll">At <b>Khandelwal Busar Industries</b>, we are committed to maintaining the highest standards of quality, environmental responsibility, and workplace safety. Our certifications reflect our dedication to continuous improvement and customer satisfaction.</p>
-        </div>
-    </section>
-
-    <section id="certifications" class="section section-light">
-        <div class="container">
-            <h2 class="section-title fade-in-on-scroll">ISO Certifications</h2>
-            
-            <div class="grid grid-3">
-                <div class="cert-card fade-in-on-scroll" data-delay="0">
-                    <div class="cert-icon">
-                        <div class="cert-badge">ISO</div>
-                        <div class="cert-number">9001:2015</div>
-                    </div>
-                    <h3>Quality Management Systems</h3>
-                    <p>International standard for Quality Management Systems (QMS), ensuring we consistently provide products and services that meet customer and regulatory requirements. This certification demonstrates our commitment to continuous improvement and customer satisfaction.</p>
-                    <div class="cert-features">
-                        <span class="feature-tag">Customer Focus</span>
-                        <span class="feature-tag">Process Improvement</span>
-                        <span class="feature-tag">Quality Assurance</span>
-                    </div>
-                </div>
-
-                <div class="cert-card fade-in-on-scroll" data-delay="200">
-                    <div class="cert-icon">
-                        <div class="cert-badge">ISO</div>
-                        <div class="cert-number">14001:2015</div>
-                    </div>
-                    <h3>Environmental Management Systems</h3>
-                    <p>International standard for Environmental Management Systems (EMS), providing a framework to manage our environmental responsibilities systematically and sustainably. We are committed to reducing our environmental impact.</p>
-                    <div class="cert-features">
-                        <span class="feature-tag">Sustainability</span>
-                        <span class="feature-tag">Waste Reduction</span>
-                        <span class="feature-tag">Green Manufacturing</span>
-                    </div>
-                </div>
-
-                <div class="cert-card fade-in-on-scroll" data-delay="400">
-                    <div class="cert-icon">
-                        <div class="cert-badge">ISO</div>
-                        <div class="cert-number">45001:2018</div>
-                    </div>
-                    <h3>Occupational Health & Safety</h3>
-                    <p>International standard for Occupational Health and Safety Management Systems (OHSMS), helping us provide a safe and healthy workplace by preventing work-related injuries and illnesses while improving OH&S performance.</p>
-                    <div class="cert-features">
-                        <span class="feature-tag">Workplace Safety</span>
-                        <span class="feature-tag">Risk Management</span>
-                        <span class="feature-tag">Employee Wellbeing</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="certificate-gallery" class="section section-light">
-        <div class="container">
-            <h2 class="section-title fade-in-on-scroll">Certificate Gallery</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item fade-in-on-scroll" data-delay="0">
-                    <img src="{{ url_for('static', filename='pics/iso_9001.jpg') }}" alt="ISO 9001:2015 Certificate" class="gallery-image">
-                    <div class="gallery-overlay">ISO 9001:2015</div>
-                </div>
-                <div class="gallery-item fade-in-on-scroll" data-delay="200">
-                    <img src="{{ url_for('static', filename='pics/iso_14001.jpg') }}" alt="ISO 14001:2015 Certificate" class="gallery-image">
-                    <div class="gallery-overlay">ISO 14001:2015</div>
-                </div>
-                <div class="gallery-item fade-in-on-scroll" data-delay="400">
-                    <img src="{{ url_for('static', filename='pics/iso_45001.jpg') }}" alt="ISO 45001:2018 Certificate" class="gallery-image">
-                    <div class="gallery-overlay">ISO 45001:2018</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Lightbox Modal -->
-    <div id="lightbox-modal" class="lightbox">
-        <span class="lightbox-close">&times;</span>
-        <img class="lightbox-content" id="lightbox-img">
-        <div id="lightbox-caption"></div>
+    <!-- ═══════════════════════════
+         ISO CERTS — editable collection, alternating image / text
+    ═══════════════════════════ -->
+    {% if is_admin %}
+    <div class="admin-grid-actions" data-edit-only hidden style="max-width:1200px;margin:0 auto;padding:20px 5vw 0;">
+        <button type="button" class="admin-btn admin-btn--add" data-add-item data-collection="certifications"
+          data-new-item='{"badge":"ISO 0000 : 2025","heading":"New Certification","body":"Description goes here.","image":"/static/pics/iso_9001.jpg","tags":[]}'>+ Add certificate</button>
     </div>
+    {% endif %}
 
-    <section class="section section-dark">
-        <div class="container">
-            <h2 class="section-title fade-in-on-scroll">Awards & Recognition</h2>
-            
-            <div class="awards-timeline">
-                <div class="timeline-item fade-in-on-scroll" data-delay="0">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="award-year">2022</div>
-                        <h3>Quality Kaizen Presentation Award</h3>
-                        <p class="award-giver">Escorts Kubota Limited</p>
-                        <p>Certificate of Participation</p>
-                    </div>
+    {% for c in certifications %}
+    {% set flip = (loop.index % 2 == 0) %}
+    <article class="ch-cert {% if flip %}ch-cert--cream ch-cert--flip{% else %}ch-cert--light{% endif %}"
+             data-edit-card data-collection="certifications" data-id="{{ c.id }}" data-name="{{ c.badge }}">
+        <div class="ch-cert__inner">
+            {% if flip %}
+            <div class="ch-cert__text-col">
+                <span class="ch-cert__badge" data-edit-field="badge">{{ c.badge }}</span>
+                <h2 class="ch-cert__heading" data-edit-field="heading">{{ c.heading }}</h2>
+                <div class="ch-cert__rule"></div>
+                <p class="ch-cert__body" data-edit-field="body">{{ c.body }}</p>
+                <ul class="ch-cert__tags" data-edit-list="tags" data-edit-item="li" data-add-label="tag">
+                    {% for t in c.tags %}<li>{{ t }}</li>{% endfor %}
+                </ul>
+                {% if is_admin %}
+                <div class="card-edit-toolbar" data-edit-only hidden>
+                    <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+                    <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
                 </div>
-
-                <div class="timeline-item fade-in-on-scroll" data-delay="200">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="award-year">2025</div>
-                        <h3>30 years of partnership</h3>
-                        <p class="award-giver">Escorts Kubota Limited</p>
-                        <p>Awarded for being a trusted partner and consistently meeting stringent quality standards</p>
-                    </div>
+                {% endif %}
+            </div>
+            <div class="ch-cert__img-col">
+                <div class="ch-cert__img-frame img-slot" data-image-slot>
+                    <img src="{{ c.image }}" alt="{{ c.badge }} Certificate" data-edit-image{% if not c.image %} hidden{% endif %}>
+                    {% if is_admin %}
+                    <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+                    <button type="button" class="img-uploader"{% if c.image %} hidden{% endif %}><span class="img-uploader__icon">&#43;</span><span class="img-uploader__text">Upload image</span></button>
+                    {% endif %}
                 </div>
+            </div>
+            {% else %}
+            <div class="ch-cert__img-col">
+                <div class="ch-cert__img-frame img-slot" data-image-slot>
+                    <img src="{{ c.image }}" alt="{{ c.badge }} Certificate" data-edit-image{% if not c.image %} hidden{% endif %}>
+                    {% if is_admin %}
+                    <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+                    <button type="button" class="img-uploader"{% if c.image %} hidden{% endif %}><span class="img-uploader__icon">&#43;</span><span class="img-uploader__text">Upload image</span></button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="ch-cert__text-col">
+                <span class="ch-cert__badge" data-edit-field="badge">{{ c.badge }}</span>
+                <h2 class="ch-cert__heading" data-edit-field="heading">{{ c.heading }}</h2>
+                <div class="ch-cert__rule"></div>
+                <p class="ch-cert__body" data-edit-field="body">{{ c.body }}</p>
+                <ul class="ch-cert__tags" data-edit-list="tags" data-edit-item="li" data-add-label="tag">
+                    {% for t in c.tags %}<li>{{ t }}</li>{% endfor %}
+                </ul>
+                {% if is_admin %}
+                <div class="card-edit-toolbar" data-edit-only hidden>
+                    <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+                    <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </article>
+    {% endfor %}
 
-                <!-- <div class="timeline-item fade-in-on-scroll" data-delay="400">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="award-year">2022</div>
-                        <h3>Quality Kaizen Presentation</h3>
-                        <p class="award-giver">Mahindra & Mahindra</p>
-                        <p>Achieved preferred vendor status for exceptional performance in manufacturing precision components and maintaining supply chain excellence.</p>
-                    </div>
-                </div> -->
+    <!-- ═══════════════════════════
+         AWARDS & RECOGNITION — editable collection
+    ═══════════════════════════ -->
+    <section class="ch-awards">
+        <div class="ch-awards__inner">
+            <div class="ch-awards__header">
+                {{ e.text('certifications.awards.eyebrow', 'Recognition', tag='p', cls='ch-awards__eyebrow') }}
+                {{ e.text('certifications.awards.title', 'Awards We Are Proud Of', tag='h2', cls='ch-awards__title') }}
+                {{ e.text('certifications.awards.sub', 'Acknowledged by our long-standing partners for consistent quality and trust.', tag='p', cls='ch-awards__sub') }}
+            </div>
 
-                <!-- <div class="timeline-item fade-in-on-scroll" data-delay="600">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="award-year">2020</div>
-                        <h3>Safety Excellence Award</h3>
-                        <p class="award-giver">Hero MotoCorp</p>
-                        <p>Recognized for implementing comprehensive safety measures and achieving zero workplace accidents for consecutive 1000+ days.</p>
+            {% if is_admin %}
+            <div class="admin-grid-actions" data-edit-only hidden style="margin-bottom:20px;">
+                <button type="button" class="admin-btn admin-btn--add" data-add-item data-collection="awards"
+                  data-new-item='{"year":"2025","title":"New Award","org":"Organisation","description":"Description goes here."}'>+ Add award</button>
+            </div>
+            {% endif %}
+
+            <div class="ch-awards__grid">
+                {% for a in awards %}
+                <div class="ch-award-card" data-edit-card data-collection="awards" data-id="{{ a.id }}" data-name="{{ a.title }}">
+                    <div class="ch-award-card__top">
+                        <span class="ch-award-card__year" data-edit-field="year">{{ a.year }}</span>
+                        <div class="ch-award-card__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 010-5H6"/><path d="M18 9h1.5a2.5 2.5 0 000-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0012 0V2z"/></svg>
+                        </div>
                     </div>
-                </div> -->
+                    <h3 class="ch-award-card__title" data-edit-field="title">{{ a.title }}</h3>
+                    <p class="ch-award-card__org" data-edit-field="org">{{ a.org }}</p>
+                    <p class="ch-award-card__desc" data-edit-field="description">{{ a.description }}</p>
+                    {% if is_admin %}
+                    <div class="card-edit-toolbar" data-edit-only hidden>
+                        <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+                        <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
             </div>
         </div>
     </section>
-
 
     {% include 'footer.html' %}
-    <script src="{{ url_for('static', filename='scripts.js', v=1.1) }}"></script>
-    <script src="{{ url_for('static', filename='certifications.js', v=1.1) }}"></script>
+    {% set admin_collection = 'certifications' %}
+    {% include 'admin_bar.html' %}
+    <script src="{{ url_for('static', filename='certifications.js') }}"></script>
 </body>
 </html>

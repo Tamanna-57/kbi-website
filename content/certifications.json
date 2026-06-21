@@ -1,0 +1,38 @@
+[
+  {
+    "id": "iso-9001",
+    "badge": "ISO 9001 : 2015",
+    "heading": "Quality Management Systems",
+    "body": "International standard for Quality Management Systems (QMS), ensuring we consistently provide products that meet customer and regulatory requirements. This certification demonstrates our commitment to continuous improvement and customer satisfaction.",
+    "image": "/static/pics/iso_9001.jpg",
+    "tags": [
+      "Customer Focus",
+      "Process Improvement",
+      "Quality Assurance"
+    ]
+  },
+  {
+    "id": "iso-14001",
+    "badge": "ISO 14001 : 2015",
+    "heading": "Environmental Management Systems",
+    "body": "International standard for Environmental Management Systems (EMS), providing a framework to manage our environmental responsibilities systematically and sustainably. We are committed to reducing our environmental footprint across both plants.",
+    "image": "/static/pics/iso_14001.jpg",
+    "tags": [
+      "Sustainability",
+      "Waste Reduction",
+      "Green Manufacturing"
+    ]
+  },
+  {
+    "id": "iso-45001",
+    "badge": "ISO 45001 : 2018",
+    "heading": "Occupational Health & Safety",
+    "body": "International standard for Occupational Health and Safety Management Systems (OHSMS), helping KBI provide a safe and healthy workplace by preventing work-related injuries and illnesses while continuously improving our OH&S performance.",
+    "image": "/static/pics/iso_45001.jpg",
+    "tags": [
+      "Workplace Safety",
+      "Risk Management",
+      "Employee Wellbeing"
+    ]
+  }
+]

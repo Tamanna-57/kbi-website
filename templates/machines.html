@@ -1,403 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% include 'logo.html' %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Machines - KBI</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='machines.css') }}">
+  {% import 'editable.html' as e with context %}
+  {% include 'logo.html' %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Machines - KBI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='machines.css') }}">
 </head>
 <body>
-    <header>
-        {% include 'navigation.html' %}
-    </header>
+  <header>{% include 'navigation.html' %}</header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="slider">
-            <div class="slide">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/packaging.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/packaging.png') }}" alt="Image 1">
-                </picture>
-            </div>
-            <div class="slide">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/shopfloor2.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/shopfloor2.png') }}" alt="Image 2">
-                </picture>
-            </div>
-            <div class="slide">
-                <picture>
-                    <source srcset="{{ url_for('static', filename='pics/tools.webp') }}" type="image/webp">
-                    <img src="{{ url_for('static', filename='pics/tools.png') }}" alt="Image 3">
-                </picture>
-            </div>
+  <!-- ═══════════════════════════════════════
+       HERO — split: text left, image right
+  ═══════════════════════════════════════ -->
+  <section class="mach-hero">
+    <div class="mach-hero__inner">
+
+      <div class="mach-hero__text">
+        {{ e.text('machines.hero.eyebrow', 'Equipment & Machinery', tag='p', cls='mach-hero__eyebrow') }}
+        {{ e.text('machines.hero.title', 'Our Machines', tag='h1', cls='mach-hero__title') }}
+        {{ e.text('machines.hero.sub', 'High-tonnage presses, CNC systems, welding rigs, and finishing equipment — powering precision at every stage of production.', tag='p', cls='mach-hero__sub') }}
+        <ul class="mach-hero__bullets">
+          {{ e.rich('machines.hero.bullet1', 'Over <strong>70+ machines</strong> across 2 manufacturing plants', tag='li') }}
+          {{ e.rich('machines.hero.bullet2', 'Capacities from <strong>25 tons to 600 tons</strong> pressing force', tag='li') }}
+          {{ e.rich('machines.hero.bullet3', 'CNC-controlled turning, boring, wirecut &amp; machining centres', tag='li') }}
+          {{ e.rich('machines.hero.bullet4', 'Dedicated welding bays with MIG, spot &amp; robotic-assist rigs', tag='li') }}
+          {{ e.rich('machines.hero.bullet5', 'Full finishing line — shot blasting, painting &amp; quality inspection', tag='li') }}
+        </ul>
+      </div>
+
+      <div class="mach-hero__img-wrap">
+        {{ e.image('machines.hero.image', url_for('static', filename='pics/process_Pressing.webp'), alt='KBI Pressing Machine') }}
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FILTER + SEARCH
+  ═══════════════════════════════════════ -->
+  <section class="mach-filter">
+    <div class="container">
+      <div class="mach-filter__row">
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-category="all">All</button>
+          <button class="filter-btn" data-category="presses">Presses</button>
+          <button class="filter-btn" data-category="welding">Welding</button>
+          <button class="filter-btn" data-category="cutting">Cutting</button>
+          <button class="filter-btn" data-category="machining">Machining</button>
+          <button class="filter-btn" data-category="drilling">Drilling</button>
+          <button class="filter-btn" data-category="Finishing">Finishing</button>
         </div>
-        <div class="hero-content">
-            <h1 class="typing-element-global">Our Machines</h1>
-            <p class="typing-element-global">Industrial equipment and machinery for precision manufacturing</p>
-            <div class="search-container">
-                <input type="text" id="machineSearch" placeholder="Search machines..." class="search-input">
-                <button class="search-btn">🔍</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       MACHINES GRID
+  ═══════════════════════════════════════ -->
+  <section class="machines-section">
+    <div class="container">
+      {% if is_admin %}
+      <div class="admin-grid-actions" data-edit-only hidden>
+        <button type="button" class="admin-btn admin-btn--add" data-add-item
+          data-new-item='{"category":"presses","category_label":"Presses","name":"New machine","description":"Description goes here.","quantity":1,"image":"/static/pics/process_Pressing.webp","features":[],"details":[]}'>+ Add machine</button>
+      </div>
+      {% endif %}
+      <div class="machines-grid" id="machinesGrid">
+        {% for m in machines %}
+        <div class="machine-card" data-edit-card data-category="{{ m.category }}" data-name="{{ m.name }}" data-id="{{ m.id }}">
+          <div class="machine-image img-slot" data-image-slot>
+            <img src="{{ m.image }}" alt="{{ m.name }}" data-edit-image{% if not m.image %} hidden{% endif %}>
+            {% if is_admin %}
+            <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+            <button type="button" class="img-uploader"{% if m.image %} hidden{% endif %}>
+              <span class="img-uploader__icon">&#43;</span>
+              <span class="img-uploader__text">Upload image</span>
+            </button>
+            {% endif %}
+          </div>
+          <div class="machine-info">
+            <p class="machine-category" data-edit-field="category_label">{{ m.category_label }}</p>
+            <h3 data-edit-field="name">{{ m.name }}</h3>
+            <p class="machine-description" data-edit-field="description">{{ m.description }}</p>
+            <div class="machine-features" data-edit-list="features" data-edit-item=".feature-tag" data-add-label="tag">
+              {% for f in m.features %}
+              <span class="feature-tag">{{ f }}</span>
+              {% endfor %}
             </div>
-        </div>
-    </section>
-
-    <!-- Filter Section -->
-    <section class="filter-section">
-        <div class="container">
-            <h2 class="typing-element-global">Browse by Category</h2>
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-category="all">All Machines</button>
-                <button class="filter-btn" data-category="presses">Presses</button>
-                <button class="filter-btn" data-category="welding">Welding</button>
-                <button class="filter-btn" data-category="cutting">Cutting</button>
-                <button class="filter-btn" data-category="machining">Machining</button>
-                <button class="filter-btn" data-category="drilling">Drilling</button>
+            <div class="machine-quantity">
+              <span class="quantity-label">Available Units</span>
+              <span class="quantity-number" data-edit-field="quantity" data-edit-type="number">{{ m.quantity }}</span>
             </div>
+          </div>
+          <div class="machine-details">
+            <ul data-edit-list="details" data-edit-item="li" data-add-label="detail">
+              {% for d in m.details %}
+              <li>{{ d }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% if is_admin %}
+          <div class="machine-edit-toolbar" data-edit-only hidden>
+            <select class="machine-cat-select" data-edit-category>
+              <option value="presses">Presses</option>
+              <option value="welding">Welding</option>
+              <option value="cutting">Cutting</option>
+              <option value="machining">Machining</option>
+              <option value="drilling">Drilling</option>
+              <option value="Finishing">Finishing</option>
+            </select>
+            <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+            <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
+          </div>
+          {% endif %}
         </div>
-    </section>
+        {% endfor %}
+      </div><!-- /machines-grid -->
+    </div><!-- /container -->
+  </section>
 
-    <!-- Machines Section -->
-    <section class="machines-section">
-        <div class="container">
-            <div class="machines-grid" id="machinesGrid">
-                <!-- Machine 1 -->
-                <div class="machine-card" data-category="presses" data-name="HPS Line Press">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/process_Pressing.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/process_Pressing.png') }}" alt="HPS Line Press">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>HPS Line Press</h3>
-                        <p class="machine-category">Presses</p>
-                        <p class="machine-description">Suitable for high-tonnage sheet metal forming, deep drawing, and structural part stamping</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">600 Ton Capacity</span>
-                            <span class="feature-tag">Precision Control</span>
-                            <span class="feature-tag">Auto-Cycle</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">4</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Maximum force: 600 tons</li>
-                            <li class="typing-element">Bed size: 3000 mm × 1600 mm</li>
-                            <li class="typing-element">Shut Height: 900mm</li>
-                            <li class="typing-element">Power: 45kW</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Machine 2 -->
-                <div class="machine-card" data-category="presses" data-name="Hydraulic Press">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/hydraulic_press.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/hydraulic_press.png') }}" alt="Hydraulic Press HP-500">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>Hydraulic Press</h3>
-                        <p class="machine-category">Presses</p>
-                        <p class="machine-description">Ideal for deep drawing, die forming, punching, and precision metal forming processes</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">600 Ton Capacity</span>
-                            <span class="feature-tag">Precision Control</span>
-                            <span class="feature-tag">Auto-Cycle</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">3</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Maximum force: 600 tons</li>
-                            <li class="typing-element">Bed size: 2000 mm × 1000 mm</li>
-                            <li class="typing-element">Shut Height: 800mm</li>
-                            <li class="typing-element">Power: 20kW</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Machine 3 -->
-                <div class="machine-card" data-category="presses" data-name="LPS Line Press">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/lps.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/lps.png') }}" alt="LPS Line Press">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>LPS Line Press</h3>
-                        <p class="machine-category">Presses</p>
-                        <p class="machine-description">Suitable for medium-capacity sheet metal stamping, blanking, and bending operations</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">250 Ton Capacity</span>
-                            <span class="feature-tag">Precision Control</span>
-                            <span class="feature-tag">Auto-Cycle</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">20</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Maximum force: 250 tons</li>
-                            <li class="typing-element">Bed size: 1500 mm × 1000 mm</li>
-                            <li class="typing-element">Shut Height: 400mm</li>
-                            <li class="typing-element">Power: 20kW</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Machine 4 -->
-                <div class="machine-card" data-category="welding" data-name="MIG Welder">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/process_Welding.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/process_Welding.png') }}" alt="MIG Welder">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>MIG Welder</h3>
-                        <p class="machine-category">Welding</p>
-                        <p class="machine-description">Professional MIG welding machine for high-quality metal joining applications.</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">50-400A Output</span>
-                            <span class="feature-tag">CO2 and Argon</span>
-                            <span class="feature-tag">Auto-Feed</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">40</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Output current: 50-400A</li>
-                            <li class="typing-element">Duty cycle: 60% at 250A</li>
-                            <li class="typing-element">Wire diameter: 0.8-1.2mm</li>
-                            <li class="typing-element">Input voltage: 380V</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Machine 5 -->
-                <div class="machine-card" data-category="cutting" data-name="CNC Wirecut Electronica Ultra‑Cut F2">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/wirecut.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/wirecut.png') }}" alt="CNC Wirecut Electronica Ultra‑Cut F2">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>CNC Wirecut Electronica Ultra‑Cut F2</h3>
-                        <p class="machine-category">Cutting</p>
-                        <p class="machine-description">used for precisely cutting conductive materials with a thin wire, often for intricate shapes and high accuracy</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">CNC Control</span>
-                            <span class="feature-tag">Auto-Focus</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">1</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Laser power: 2000W</li>
-                            <li class="typing-element">X‑axis travel: 600mm</li>
-                            <li class="typing-element">Y‑axis travel: 400mm</li>
-                            <li class="typing-element">Z‑axis travel: 300mm</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Machine 6 -->
-                <div class="machine-card" data-category="machining" data-name="CNC Turning Machine">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/turning.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/turning.png') }}" alt="CNC Turning Machine">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>CNC Turning Machine</h3>
-                        <p class="machine-category">Machining</p>
-                        <p class="machine-description">CNC turning is a typical subtractive manufacturing process that uses a cutting tool to remove portions of a material from its exterior</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">4000 RPM spindle speed</span>
-                            <span class="feature-tag">Programmable Tailstock</span>
-                            <span class="feature-tag">8 station tool turret</span>
-                            <span class="feature-tag">Delta Control System</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">1</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Max Turning Diameter: 200mm</li>
-                            <li class="typing-element">Max Turning Length: 300mm</li>
-                            <li class="typing-element">Arm length: 1600mm</li>
-                            <li class="typing-element">Motor power: 4kW</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Machine 7 -->
-                <div class="machine-card" data-category="drilling" data-name="Horizontal Multi Spindle Drilling Machine">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/horizontal_multispindle_drilling.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/horizontalMultisplidnleDrilling.png') }}" alt="Horizontal Multi Spindle Drilling Machine">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>Horizontal Multi Spindle Drilling Machine</h3>
-                        <p class="machine-category">Drilling</p>
-                        <p class="machine-description">a specialized machine tool that utilizes multiple spindles, typically arranged horizontally, to drill multiple holes simultaneously in a workpiece</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">5+5 Spindles (customizable)</span>
-                            <span class="feature-tag">Hydraulic Power Feed</span>
-                            <span class="feature-tag">Variable spindle speed</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">4</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Spindle Taper: ER Collet</li>
-                            <li class="typing-element">Motor Power	5+5 HP</li>
-                            <li class="typing-element">Spindle Center Distance:40 - 250 mm</li>
-                            <li class="typing-element">Spindle Travel:	75 mm to 150 mm</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Machine 8 -->
-                <div class="machine-card" data-category="machining" data-name="Horizontal Boring Machine">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/boringmachine.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/boringmachine.png') }}" alt="Horizontal Boring Machine">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>Horizontal Boring Machine</h3>
-                        <p class="machine-category">Machining</p>
-                        <p class="machine-description">A specialized machine tool used to enlarge and precisely shape existing holes in various materials</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">200A AC/DC</span>
-                            <span class="feature-tag">Pulse Mode</span>
-                            <span class="feature-tag">Remote Control</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">3</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Spindle Diameter: 30 mm to 100 mm</li>
-                            <li class="typing-element">Spindle Speed Range: 20 – 1500 RPM</li>
-                            <li class="typing-element">Table Size: 400 × 1500 mm</li> 
-                            <li class="typing-element">Table Travel: 300 mm max</li>
-                            <li class="typing-element">Vertical Head Travel: 800 mm to 2000 mm</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Machine 9 -->
-                <div class="machine-card" data-category="cutting" data-name="Band Saw Machines">
-                    <div class="machine-image">
-                        <picture>
-                            <source srcset="{{ url_for('static', filename='pics/Handsaw.webp') }}" type="image/webp">
-                            <img src="{{ url_for('static', filename='pics/Handsaw.png') }}" alt="Band Saw Machine">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>Band Saw Machines</h3>
-                        <p class="machine-category">Cutting</p>
-                        <p class="machine-description">a power tool that utilizes a continuous band of toothed metal, stretched between two or more wheels, to cut a metal</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">Hydraulic Clamping</span>
-                            <span class="feature-tag">Built in Coolant system</span>
-                            <span class="feature-tag">Miter Cutting	0° to 45°</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">3</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4 class="typing-element">Specifications:</h4>
-                        <ul>
-                            <li class="typing-element">Cutting Capacity: 20 mm to 100 mm</li>
-                            <li class="typing-element">Blade Size	3500 × 27 × 0.9 mm</li> 
-                            <li class="typing-element">Blade Speed	20 – 80 m/min</li> 
-                            <li class="typing-element">Motor Power	 5 HP</li> 
-                        </ul>
-                    </div>
-                </div>
-                <!-- Machine 10 -->
-                <div class="machine-card" data-category="Finishing" data-name="Shot Blasting">
-                    <div class="machine-image">
-                        <picture>
-                            <img src="{{ url_for('static', filename='pics/shotblasting.png') }}" alt="Shot Blasting Machine">
-                        </picture>
-                    </div>
-                    <div class="machine-info">
-                        <h3>Shot Blasting Machine</h3>
-                        <p class="machine-category">Finishing</p>
-                        <p class="machine-description">a machine used to clean, strengthen, or polish metal and other materials by propelling abrasive media</p>
-                        <div class="machine-features">
-                            <span class="feature-tag">2 blast wheels</span>
-                            <span class="feature-tag">PLC</span>
-                            <span class="feature-tag">Timer based Interlocks</span>
-                        </div>
-                        <div class="machine-quantity">
-                            <span class="quantity-label">Available Units:</span>
-                            <span class="quantity-number">1</span>
-                        </div>
-                    </div>
-                    <div class="machine-details">
-                        <h4>Specifications:</h4>
-                        <ul>
-                            <li>Wheel Power:10 HP</li>
-                            <li>Cleaning Cycle Time: 2-10 mins</li>
-                            <li>Workpiece capacity: 100kg/hanger</li>
-                            <li>Blast Media	Steel Shot 2.50 mm</li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div> <!-- /machines-grid -->
-        </div> <!-- /container -->
-    </section>
-
-    {% include 'footer.html' %}
-
-    <script src="{{ url_for('static', filename='machines.js') }}"></script>
+  {% include 'footer.html' %}
+  {% set admin_collection = 'machines' %}
+  {% include 'admin_bar.html' %}
+  <script src="{{ url_for('static', filename='machines.js') }}"></script>
 </body>
 </html>

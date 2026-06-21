@@ -1,3 +1,4 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,202 +6,157 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - KBI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_kbi.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='contact_us.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     {% include 'navigation.html' %}
-    <!-- Hero Section -->
-    <section class="hero" style="background-image: url('static/pics/contact_us_hero.png'); background-size: cover;">
-        <div class="hero-content">
-            <h1>Contact Us</h1>
-            <p>We'd love to hear from you. Get in touch and let's discuss how we can help.</p>
-            <a href="#contact-form" class="btn">Get In Touch</a>
+
+    <!-- ── HERO ─────────────────────────────────────────── -->
+    <section class="cu-hero">
+        <!-- Left decorative chevrons -->
+        <div class="cu-hero__arrows cu-hero__arrows--left" aria-hidden="true">
+            <svg width="72" height="96" viewBox="0 0 72 96" fill="none">
+                <polyline points="48,8 16,48 48,88"  stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+                <polyline points="64,8 32,48 64,88"  stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.28"/>
+                <polyline points="80,8 48,48 80,88"  stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.12"/>
+            </svg>
+        </div>
+
+        <div class="cu-hero__content">
+            {{ e.text('contact.hero.title', 'Contact Us', tag='h1', cls='cu-hero__title') }}
+            <div class="cu-hero__wave" aria-hidden="true">
+                <svg viewBox="0 0 140 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 9 C20 2, 36 16, 52 9 S84 2, 100 9 S132 16, 136 9" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round" fill="none"/>
+                </svg>
+            </div>
+            {{ e.text('contact.hero.sub', "We'd love to hear from you. Get in touch and let's discuss how we can help your business grow.", tag='p', cls='cu-hero__sub') }}
+        </div>
+
+        <!-- Right decorative chevrons -->
+        <div class="cu-hero__arrows cu-hero__arrows--right" aria-hidden="true">
+            <svg width="72" height="96" viewBox="0 0 72 96" fill="none">
+                <polyline points="24,8 56,48 24,88"  stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.55"/>
+                <polyline points="8,8  40,48  8,88"  stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.28"/>
+                <polyline points="-8,8 24,48 -8,88"  stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.12"/>
+            </svg>
         </div>
     </section>
 
-    <!-- Contact Information Section -->
-    <section class="contact-info-section">
-        <div class="container">
-            <h2>Get In Touch</h2>
-            <div class="contact-info-grid">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <h3>Visit Our Office</h3>
-                    <p>Plot no. 112, Sec-59<br>
-                        HSIIDC Faridabad – 121004<br>
-                        Haryana (India)
-                    <br>
-                    <br>
-                Plot A22, MIA<br>
-                Alwar 301001<br>
-            Rajasthan (India)</p>
+    <!-- ── LOGO STRIP ─────────────────────────────────── -->
+    <div class="cu-logos">
+        <div class="cu-logos__inner">
+            <img src="/static/pics/maruti_suzuki_img.png"   alt="Maruti Suzuki">
+            <img src="/static/pics/eicher_img.png"          alt="Eicher">
+            <img src="/static/pics/havells_img.png"         alt="Havells">
+            <img src="/static/pics/caparo_img.png"          alt="Caparo">
+            <img src="/static/pics/New_Holland_img.png"     alt="New Holland">
+        </div>
+    </div>
+
+    <!-- ── FORM + NEWSLETTER ──────────────────────────── -->
+    <section class="cu-main">
+        <div class="cu-container">
+            <div class="cu-main__grid">
+
+                <!-- Contact Form -->
+                <div class="cu-form-wrap">
+                    <form class="cu-form" id="cu-contact-form">
+                        <div class="cu-form__row">
+                            <input type="email" name="email"   id="cu-email" placeholder="Email" required>
+                            <input type="tel"   name="phone"   id="cu-phone" placeholder="Phone">
+                        </div>
+                        <input type="text" name="name" id="cu-name" placeholder="Name" required>
+                        <textarea name="message" id="cu-message" placeholder="Message" rows="6" required></textarea>
+                        <button type="submit" class="cu-btn cu-btn--form">Send Message</button>
+                    </form>
                 </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-phone"></i>
+
+                <!-- Newsletter Card -->
+                <aside class="cu-newsletter">
+                    {{ e.text('contact.newsletter.title', 'Our Newsletters', tag='h3', cls='cu-newsletter__title') }}
+                    {{ e.text('contact.newsletter.body', "Stay updated with KBI's latest products, certifications, and manufacturing insights delivered straight to your inbox.", tag='p', cls='cu-newsletter__body') }}
+                    <input type="email" class="cu-newsletter__input" placeholder="Email" aria-label="Newsletter email">
+                    <button class="cu-newsletter__btn">Subscribe</button>
+                </aside>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── INFO CARDS ─────────────────────────────────── -->
+    <section class="cu-info">
+        <div class="cu-container">
+            <div class="cu-info__grid">
+
+                <!-- Phone -->
+                <div class="cu-info-card">
+                    <div class="cu-info-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6 6l.86-.86a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/>
+                        </svg>
                     </div>
-                    <h3>Call Us</h3>
-                    <p>Phone: +91 9811181125<br>
-                       HR: +91 8587000740<br>
-                    </p>
+                    {{ e.text('contact.phone.head', '(+91) 981 118 1125', tag='h4', cls='cu-info-card__head') }}
+                    {{ e.rich('contact.phone.body', 'Main: +91 9811181125<br>\n                        HR Dept: +91 8587000740', tag='p', cls='cu-info-card__body') }}
                 </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
+
+                <!-- Email -->
+                <div class="cu-info-card">
+                    <div class="cu-info-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"/>
+                            <polyline points="2,4 12,13 22,4"/>
+                        </svg>
                     </div>
-                    <h3>Email Us</h3>
-                    <p>General: info@khandelwalbusar.com<br>
-                       GST and GWS: alwar@khandelwalbusar.com<br>
-                       Autocomponents: business@khandelwalbusar.com</p>
+                    {{ e.text('contact.email.head', 'info@khandelwalbusar.com', tag='h4', cls='cu-info-card__head') }}
+                    {{ e.rich('contact.email.body', 'General: info@khandelwalbusar.com<br>\n                        Autocomp: business@khandelwalbusar.com<br>\n                        GST/GWS: alwar@khandelwalbusar.com', tag='p', cls='cu-info-card__body') }}
                 </div>
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-clock"></i>
+
+                <!-- Address -->
+                <div class="cu-info-card">
+                    <div class="cu-info-card__icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
                     </div>
-                    <h3>Business Hours</h3>
-                    <p>Monday - Friday: 9:00 AM - 6:00 PM<br>
-                       Saturday: 10:00 AM - 4:00 PM<br>
-                       Sunday: Closed</p>
+                    {{ e.text('contact.address.head', 'Faridabad & Alwar', tag='h4', cls='cu-info-card__head') }}
+                    {{ e.rich('contact.address.body', 'Plot 112, Sec-59, HSIIDC<br>\n                        Faridabad – 121004, Haryana<br><br>\n                        Plot A22, MIA<br>\n                        Alwar – 301001, Rajasthan', tag='p', cls='cu-info-card__body') }}
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ── MAPS ───────────────────────────────────────── -->
+    <section class="cu-maps">
+        <div class="cu-container">
+            <div class="cu-maps__grid">
+                <div class="cu-map-item">
+                    {{ e.text('contact.map.faridabad', 'Faridabad Unit', tag='p', cls='cu-map-item__label') }}
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3512.6087452930224!2d77.30365768120048!3d28.310173913553385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdb05a9c6f243%3A0x5c92c46ec3ec3dd3!2sKhandelwal%20Busar%20Industries%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1752573598148!5m2!1sen!2sin"
+                        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Faridabad Unit Map">
+                    </iframe>
+                </div>
+                <div class="cu-map-item">
+                    {{ e.text('contact.map.alwar', 'Alwar Unit', tag='p', cls='cu-map-item__label') }}
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m25!1m12!1m3!1d21343.24931775208!2d76.6198681627595!3d27.55765908500915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m10!3e6!4m4!1s0x39729a0232bd9ed5%3A0x4908eef38d108033!3m2!1d27.5528901!2d76.63467729999999!4m3!3m2!1d27.5529907!2d76.6345735!5e0!3m2!1sen!2sin!4v1753381110940!5m2!1sen!2sin"
+                        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Alwar Unit Map">
+                    </iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Form Section -->
-    <section class="contact-form-section" id="contact-form">
-        <div class="container">
-            <h2>Send Us a Message</h2>
-            <div class="form-content">
-                <div class="form-text">
-                    <h3>Let's Start a Conversation</h3>
-                    <p>Have a question, need support, or want to discuss a project? We're here to help. Fill out the form and we'll get back to you as soon as possible.</p>
-                    <div class="form-features">
-                        <div class="feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Quick Response Time</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Secure & Confidential</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-user-tie"></i>
-                            <span>Professional Support</span>
-                        </div>
-                    </div>
-                </div>
-                <form class="contact-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstName">First Name *</label>
-                            <input type="text" id="firstName" name="firstName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="lastName">Last Name *</label>
-                            <input type="text" id="lastName" name="lastName" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="company">Company</label>
-                        <input type="text" id="company" name="company">
-                    </div>
-                    <div class="form-group">
-                        <label for="subject">Subject *</label>
-                        <select id="subject" name="subject" required>
-                            <option value="">Select a subject...</option>
-                            <option value="general">General Inquiry</option>
-                            <option value="support">Product Support</option>
-                            <option value="sales">Business Inquiry</option>
-                            <option value="partnership">Partnership</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message *</label>
-                        <textarea id="message" name="message" rows="5" required placeholder="Tell us how we can help you..."></textarea>
-                    </div>
-                    <button type="submit" class="btn submit-btn">Send Message</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="faq-section">
-        <div class="container">
-            <h2>Frequently Asked Questions</h2>
-            <div class="faq-grid">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>How quickly do you respond to inquiries?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call us directly.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>What information should I include in my message?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Please provide as much detail as possible about your inquiry, including your specific needs, timeline, and any relevant background information.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Do you offer phone consultations?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Yes, we offer phone consultations for qualified prospects. Please submit a form or call us to schedule a consultation.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Can I visit your office?</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="faq-answer">
-                        <p>We welcome office visits by appointment. Please contact us in advance to schedule a meeting at our location.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Map Section -->
-    <section class="map-section">
-        <div class="container">
-            <h2>Find Us</h2>
-            <div class="map-wrapper">
-                <div class="map-item">
-                    <h3>Faridabad Unit</h3>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3512.6087452930224!2d77.30365768120048!3d28.310173913553385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cdb05a9c6f243%3A0x5c92c46ec3ec3dd3!2sKhandelwal%20Busar%20Industries%20Pvt%20Ltd!5e0!3m2!1sen!2sin!4v1752573598148!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-                <div class="map-item">
-                    <h3>Alwar Unit</h3>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m25!1m12!1m3!1d21343.24931775208!2d76.6198681627595!3d27.55765908500915!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m10!3e6!4m4!1s0x39729a0232bd9ed5%3A0x4908eef38d108033!3m2!1d27.5528901!2d76.63467729999999!4m3!3m2!1d27.5529907!2d76.6345735!5e0!3m2!1sen!2sin!4v1753381110940!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-            </div>
-        </div>
-    </section>
     {% include 'footer.html' %}
+    {% include 'admin_bar.html' %}
     <script src="{{ url_for('static', filename='contact_us.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,203 @@
+/* ════════════════════════════════════════════════════════════════
+   KBI Admin — edit-mode UI (only loaded for logged-in admins)
+   ════════════════════════════════════════════════════════════════ */
+
+.admin-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+  display: flex; align-items: center; gap: 18px;
+  padding: 10px 20px; background: #0f2c4d; color: #fff;
+  font-family: 'Inter', system-ui, sans-serif; font-size: .9rem;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.25);
+}
+.admin-bar__brand { font-weight: 700; letter-spacing: .02em; }
+.admin-bar__toggle { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+.admin-bar__toggle input { width: 16px; height: 16px; cursor: pointer; }
+.admin-bar__status { color: #9fc4e8; font-size: .82rem; }
+.admin-bar__logout { margin-left: auto; color: #cfe2f5; text-decoration: none; font-weight: 600; }
+.admin-bar__logout:hover { color: #fff; text-decoration: underline; }
+
+/* Page-level Save button. Turns amber when there are unsaved changes. */
+.admin-bar__save {
+  border: none; border-radius: 6px; padding: 7px 16px; cursor: pointer;
+  font-family: inherit; font-size: .85rem; font-weight: 700;
+  background: #1a7a4a; color: #fff; transition: background .15s, box-shadow .15s;
+}
+.admin-bar__save:hover { background: #14613b; }
+.admin-bar__save:disabled { opacity: .6; cursor: default; }
+.admin-bar__save.has-changes {
+  background: #f7c948; color: #1a1a1a;
+  box-shadow: 0 0 0 3px rgba(247, 201, 72, .35);
+}
+
+/* Products carousel → static grid in edit mode so add/delete are usable
+   (the live ticker moves too violently to click individual cards). */
+body.edit-mode .prod-track-wrap {
+  height: auto !important; perspective: none; overflow: visible; cursor: default;
+}
+body.edit-mode .prod-track {
+  position: static; width: 100%; height: auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.4rem; padding: 1.2rem clamp(1rem, 4vw, 2.5rem);
+}
+body.edit-mode .prod-card {
+  position: relative !important; top: auto !important; left: auto !important;
+  width: 100% !important; height: auto !important; opacity: 1 !important;
+  transform: none !important; transition: none !important; z-index: auto !important;
+}
+body.edit-mode .prod-card__desc-wrap {
+  max-height: none !important; opacity: 1 !important; margin-top: .6rem !important;
+}
+body.edit-mode .prod-arrow,
+body.edit-mode .prod-carousel-dots { display: none !important; }
+
+/* Push page content up so the fixed bar never hides the footer. */
+body.has-admin-bar { padding-bottom: 56px; }
+
+/* Buttons --------------------------------------------------------- */
+.admin-btn {
+  border: none; border-radius: 6px; padding: 7px 14px; cursor: pointer;
+  font-family: inherit; font-size: .85rem; font-weight: 600; transition: background .15s, opacity .15s;
+}
+.admin-btn--add  { background: #1a7a4a; color: #fff; }
+.admin-btn--add:hover { background: #14613b; }
+.admin-btn--save { background: #1a4a7a; color: #fff; }
+.admin-btn--save:hover { background: #0f2c4d; }
+.admin-btn--del  { background: #fff; color: #9b1c1c; border: 1px solid #e3b7b7; }
+.admin-btn--del:hover { background: #fde8e8; }
+.admin-btn:disabled { opacity: .5; cursor: default; }
+
+.admin-grid-actions { margin-bottom: 20px; }
+
+/* Edit-mode field affordances ------------------------------------ */
+body.edit-mode [data-edit-field],
+body.edit-mode [data-block-text],
+body.edit-mode [data-block-rich],
+body.edit-mode [data-edit-list] .feature-tag,
+body.edit-mode [data-edit-list] li {
+  outline: 1px dashed #f7c948; outline-offset: 3px; border-radius: 4px;
+  cursor: text; transition: outline-color .15s, box-shadow .15s;
+}
+/* On focus: keep the field's own background/text intact (so light text on a
+   dark section stays readable) — just brighten the outline and add a halo.
+   The previous light-green fill made white text invisible on dark panels. */
+body.edit-mode [data-edit-field]:focus,
+body.edit-mode [data-block-text]:focus,
+body.edit-mode [data-block-rich]:focus,
+body.edit-mode [data-edit-list] .feature-tag:focus,
+body.edit-mode [data-edit-list] li:focus {
+  outline: 2px solid #f7c948;
+  box-shadow: 0 0 0 4px rgba(247, 201, 72, .18);
+  background: transparent;
+}
+/* High-contrast text selection so highlighted text never disappears. */
+body.edit-mode [data-edit-field]::selection,
+body.edit-mode [data-block-text]::selection,
+body.edit-mode [data-block-rich]::selection,
+body.edit-mode [data-edit-list] *::selection {
+  background: #f7c948; color: #1a1a1a;
+}
+/* Inline image slot used by the editable.image() macro. */
+.block-img-slot { display: inline-block; }
+
+/* In edit mode the details panel must be visible to edit it. */
+body.edit-mode .machine-card .machine-details {
+  max-height: none !important; opacity: 1 !important; padding: 20px !important; overflow: visible !important;
+}
+body.edit-mode .machine-card { cursor: default; }
+body.edit-mode .machine-card:hover { transform: none; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+/* Disable the navy hover-fill overlay in edit mode — it was covering the card
+   (and its Delete button), making cards impossible to delete. */
+body.edit-mode .machine-card::before { display: none !important; }
+body.edit-mode .machine-card:hover .machine-category,
+body.edit-mode .machine-card:hover .machine-info h3,
+body.edit-mode .machine-card:hover .machine-description { color: inherit !important; }
+body.edit-mode .machine-card:hover .machine-image img { transform: none !important; }
+/* Keep the edit toolbar above everything so Save/Delete are always clickable. */
+body.edit-mode .machine-edit-toolbar { position: relative; z-index: 3; }
+
+/* Editable image slot — delete (×) overlay + in-place uploader ------ */
+.img-slot { position: relative; }
+
+/* Small circular delete button, top-right of the image, edit mode only */
+.img-del {
+  position: absolute; top: 8px; right: 8px; z-index: 3;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(155,28,28,.92); color: #fff; border: 2px solid #fff;
+  font-size: 1.1rem; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3); transition: transform .12s, background .12s;
+}
+.img-del:hover { background: #7a1414; transform: scale(1.1); }
+
+/* Upload drop-zone that appears where the image was */
+.img-uploader {
+  position: absolute; inset: 0; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  width: 100%; border: 2px dashed #1a7a4a; background: #f0f8f3; color: #1a7a4a;
+  font-family: inherit; font-weight: 600; cursor: pointer; transition: background .15s, border-color .15s;
+}
+.img-uploader:hover, .img-uploader.dragover { background: #e2f1e9; border-color: #14613b; }
+/* The uploader is an edit-time affordance only. */
+body:not(.edit-mode) .img-uploader { display: none !important; }
+/* When a slot already has an image, JS marks the uploader [hidden]. Rather
+   than a full white box covering the image (or hiding the control entirely),
+   show a compact "change photo" button pinned in the corner — so the existing
+   image stays fully visible AND can still be replaced in one click. */
+body.edit-mode .img-uploader[hidden] {
+  display: inline-flex !important;
+  flex-direction: row; align-items: center; gap: 6px;
+  inset: auto auto 8px 8px;          /* bottom-left corner, sized to content */
+  width: auto; height: auto; min-height: 0;
+  padding: 7px 11px; border-radius: 8px;
+  border: 2px solid #1a7a4a; background: rgba(240, 248, 243, .96);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .25); z-index: 4;
+}
+body.edit-mode .img-uploader[hidden] .img-uploader__icon { font-size: 1.1rem; }
+body.edit-mode .img-uploader[hidden] .img-uploader__text { font-size: .8rem; }
+.img-uploader__icon { font-size: 2rem; line-height: 1; }
+.img-uploader__text { font-size: .9rem; }
+.img-uploader.busy { opacity: .6; pointer-events: none; }
+/* When an uploader sits over an empty slot, give it a minimum height. */
+.img-slot > img[hidden] + .img-del + .img-uploader { position: relative; min-height: 200px; }
+
+/* Per-card edit toolbar */
+.machine-edit-toolbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 12px 16px; border-top: 1px solid #e5e9f0; background: #f7f9fc;
+}
+.machine-cat-select { padding: 6px 8px; border: 1px solid #ccd; border-radius: 6px; font-family: inherit; font-size: .85rem; }
+
+/* Generic per-card edit toolbar (products / processes) */
+.card-edit-toolbar {
+  display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 12px; border-top: 1px dashed #d5dbe6;
+}
+.card-edit-toolbar__btns { display: flex; gap: 8px; }
+.edit-cat-field {
+  display: flex; flex-direction: column; gap: 4px;
+  font-size: .72rem; font-weight: 600; color: #556; text-transform: uppercase; letter-spacing: .03em;
+}
+.edit-cat-field input {
+  padding: 6px 8px; border: 1px solid #ccd; border-radius: 6px;
+  font-family: inherit; font-size: .85rem; font-weight: 400; text-transform: none; letter-spacing: 0; min-width: 180px;
+}
+
+/* "+ add" chips for editable lists */
+.edit-add-chip {
+  border: 1px dashed #1a7a4a; background: #f0f8f3; color: #1a7a4a;
+  border-radius: 6px; padding: 4px 10px; font-size: .8rem; font-weight: 600; cursor: pointer;
+  margin-left: 6px;
+}
+.machine-details .edit-add-chip { margin: 8px 0 0; display: inline-block; }
+
+/* Toast notifications -------------------------------------------- */
+.admin-toast {
+  position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: #1a1a1a; color: #fff; padding: 12px 22px; border-radius: 8px;
+  font-family: 'Inter', system-ui, sans-serif; font-size: .9rem; z-index: 10000;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  box-shadow: 0 8px 30px rgba(0,0,0,.3); max-width: 80vw;
+}
+.admin-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.admin-toast.error { background: #9b1c1c; }
+.admin-toast.success { background: #1a7a4a; }

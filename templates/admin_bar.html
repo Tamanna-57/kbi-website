@@ -1,0 +1,17 @@
+{# Floating admin controls — rendered only for a logged-in admin. #}
+{% if is_admin %}
+<div id="adminBar" class="admin-bar" data-collection="{{ admin_collection|default('') }}">
+  <span class="admin-bar__brand">KBI Admin</span>
+  <label class="admin-bar__toggle">
+    <input type="checkbox" id="editModeToggle">
+    <span>Edit mode</span>
+  </label>
+  <button type="button" id="adminSaveAll" class="admin-bar__save" data-edit-only hidden
+          title="Publish all changes on this page">Save changes</button>
+  <span id="adminStatus" class="admin-bar__status"></span>
+  <a class="admin-bar__logout" href="{{ url_for('admin_logout') }}">Sign out</a>
+</div>
+<div id="adminToast" class="admin-toast" role="status" aria-live="polite"></div>
+<link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+<script src="{{ url_for('static', filename='admin.js') }}" defer></script>
+{% endif %}

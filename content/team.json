@@ -1,0 +1,23 @@
+[
+  {
+    "id": "amit-kapoor",
+    "name": "Amit Kapoor",
+    "role": "Chief Executive Officer — Autocomponents",
+    "bio": "26+ years in Business Development, Green Field Projects, and Plant Operations. Previously with Action Construction Equipment, FLSmidth, and Kirby Building Systems.",
+    "image": "/static/pics/Amit.jpg"
+  },
+  {
+    "id": "vipin-dixit",
+    "name": "Vipin Dixit",
+    "role": "Business Manager — Autocomponents",
+    "bio": "15 years heading Quality across sheet metal and fabrication. Awarded Best Kaizen Improvement by Escorts Kubota in 2022.",
+    "image": "/static/pics/Vipin.jpg"
+  },
+  {
+    "id": "narender-garg",
+    "name": "Narender Garg",
+    "role": "Business Manager — GST & GWS",
+    "bio": "23+ years with KBI, leading Galvanised Steel Tape, Wire & Strip marketing for power and telecom cable applications.",
+    "image": "/static/pics/Narender.jpeg"
+  }
+]

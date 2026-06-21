@@ -1,275 +1,260 @@
-// Image slider functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const slides = document.querySelectorAll('.slide');
-    const slider = document.querySelector('.slider');
-    let currentSlide = 0;
-    let slideInterval;
-    
-    // Create slider controls if they don't exist
-    if (!document.querySelector('.slider-controls')) {
-        const controls = document.createElement('div');
-        controls.className = 'slider-controls';
-        
-        slides.forEach((_, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'slider-dot';
-            if (index === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(index));
-            controls.appendChild(dot);
-        });
-        
-        slider.appendChild(controls);
+/* ══════════════════════════════════════════════════════
+   KBI — Main Scripts  v3
+══════════════════════════════════════════════════════ */
+
+/* Always start at top on load/refresh — prevents browser restoring
+   mid-page scroll position (which breaks GSAP pinned sections)      */
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+window.scrollTo(0, 0);
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ── 1. HERO CROSSFADE SLIDER ───────────────────────── */
+  (function () {
+    const slides = Array.from(document.querySelectorAll(".hero-slide"));
+    const dots   = Array.from(document.querySelectorAll(".slide-dot"));
+    if (!slides.length) return;
+
+    let cur = 0, timer;
+    const INTERVAL = 7000;
+
+    function go(i) {
+      const n = ((i % slides.length) + slides.length) % slides.length;
+      slides.forEach((s, j) => s.classList.toggle("active", j === n));
+      dots.forEach((d, j) => {
+        d.classList.toggle("active", j === n);
+        d.setAttribute("aria-selected", j === n);
+      });
+      cur = n;
     }
-    
-    const dots = document.querySelectorAll('.slider-dot');
-    
-    // Initialize first slide
-    if (slides.length > 0) {
-        slides[0].classList.add('active');
+
+    function reset() { clearInterval(timer); timer = setInterval(() => go(cur + 1), INTERVAL); }
+
+    dots.forEach((d, i) => d.addEventListener("click", () => { go(i); reset(); }));
+
+    // Swipe
+    let tx = 0;
+    const wrap = document.querySelector(".hero-slides");
+    if (wrap) {
+      wrap.addEventListener("touchstart", e => { tx = e.changedTouches[0].screenX; }, { passive: true });
+      wrap.addEventListener("touchend",   e => {
+        const d = tx - e.changedTouches[0].screenX;
+        if (Math.abs(d) > 50) { go(cur + (d > 0 ? 1 : -1)); reset(); }
+      }, { passive: true });
     }
-    
-    function showSlide(index) {
-        // Remove active class from all slides and dots
-        slides.forEach(slide => slide.classList.remove('active'));
-        dots.forEach(dot => dot.classList.remove('active'));
-        
-        // Add active class to current slide and dot
-        if (slides[index]) {
-            slides[index].classList.add('active');
-        }
-        if (dots[index]) {
-            dots[index].classList.add('active');
-        }
+
+    go(0); reset();
+  })();
+
+  /* ── 2. OUR TECHNOLOGIES — hover-driven section ─────── */
+  (function () {
+    const bgSlides  = Array.from(document.querySelectorAll(".tech-bg-slide"));
+    const navItems  = Array.from(document.querySelectorAll(".tech-nav-item"));
+    const titleEl   = document.getElementById("techTitle");
+    const descEl    = document.getElementById("techDesc");
+    const linkEl    = document.getElementById("techLink");
+    const panel     = document.getElementById("techContentPanel");
+    if (!bgSlides.length || !navItems.length) return;
+
+    const techs = [
+      {
+        title: "Tooling",
+        desc:  "Our tooling department creates precision dies, jigs, and fixtures using advanced CNC machines and skilled craftsmen. We manufacture custom tooling solutions for in-house component manufacturing across automotive and industrial sectors.",
+        href:  "/processes"
+      },
+      {
+        title: "Machining",
+        desc:  "Our machining division specialises in precision turning, milling, and drilling operations. We produce high-quality components for automotive, agricultural, and industrial machinery with tight dimensional tolerances.",
+        href:  "/processes"
+      },
+      {
+        title: "Press Operations",
+        desc:  "Our press shop is equipped with presses from 20T to 600T for stamping, forming, and deep drawing operations. We handle both high-volume production runs and prototype development with equal precision.",
+        href:  "/processes"
+      },
+      {
+        title: "Welding",
+        desc:  "State-of-the-art MIG, TIG, and spot welding capabilities backed by skilled welders and weld fixture tooling. Every joint is visually and dimensionally verified before dispatch.",
+        href:  "/processes"
+      },
+      {
+        title: "Cutting",
+        desc:  "Precision shearing, blanking, and flame-cutting operations delivering accurate profiles and blanks. Tight tolerances are maintained across high-volume production runs for automotive and infrastructure sectors.",
+        href:  "/processes"
+      },
+      {
+        title: "Fabrication & Assembly",
+        desc:  "Complete fabrication and sub-assembly capabilities including galvanizing, surface treatment, and packaging — delivering ready-to-fit components directly to OEM assembly lines.",
+        href:  "/processes"
+      }
+    ];
+
+    let activeTech = 0;
+    let transitioning = false;
+
+    function activate(i) {
+      if (i === activeTech || transitioning) return;
+      transitioning = true;
+
+      // Crossfade background
+      bgSlides[activeTech].classList.remove("active");
+      bgSlides[i]?.classList.add("active");
+
+      // Highlight nav
+      navItems.forEach((el, j) => el.classList.toggle("active", j === i));
+
+      // Fade content out
+      if (panel) panel.classList.remove("content-ready");
+
+      setTimeout(() => {
+        if (titleEl) titleEl.textContent = techs[i].title;
+        if (descEl)  descEl.textContent  = techs[i].desc;
+        if (linkEl)  linkEl.href         = techs[i].href;
+        activeTech = i;
+        // Fade content in
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (panel) panel.classList.add("content-ready");
+          transitioning = false;
+        }));
+      }, 240);
     }
-    
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
-    
-    function goToSlide(index) {
-        currentSlide = index;
-        showSlide(currentSlide);
-        resetAutoSlide();
-    }
-    
-    function startAutoSlide() {
-        slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
-    }
-    
-    function resetAutoSlide() {
-        clearInterval(slideInterval);
-        startAutoSlide();
-    }
-    
-    // Start auto-sliding
-    if (slides.length > 1) {
-        startAutoSlide();
-    }
-    
-    // Pause auto-slide on hover
-    slider.addEventListener('mouseenter', () => {
-        clearInterval(slideInterval);
+
+    navItems.forEach((item, i) => {
+      item.addEventListener("mouseenter", () => activate(i));
+      item.addEventListener("click",      () => activate(i));
+      item.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(i); }
+      });
     });
-    
-    slider.addEventListener('mouseleave', () => {
-        if (slides.length > 1) {
-            startAutoSlide();
+
+    // Init first item
+    navItems[0]?.classList.add("active");
+    bgSlides[0]?.classList.add("active");
+    if (panel) panel.classList.add("content-ready");
+  })();
+
+  /* ── 3. KBI ABOUT CAROUSEL ──────────────────────────── */
+  (function () {
+    const slides = Array.from(document.querySelectorAll(".kbi-carousel-slide"));
+    if (!slides.length) return;
+    let cur = 0;
+    setInterval(() => {
+      slides[cur].classList.remove("active");
+      cur = (cur + 1) % slides.length;
+      slides[cur].classList.add("active");
+    }, 4500);
+  })();
+
+  /* ── 4. SCROLL-REVEAL ───────────────────────────────── */
+  (function () {
+    // Generic reveals (small elements — low threshold is fine)
+    const ioGeneric = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const t = e.target;
+        if (t.classList.contains("reveal-section"))  t.classList.add("is-visible");
+        if (t.classList.contains("kbi-intro-card"))  t.classList.add("in-view");
+        if (t.classList.contains("info-section") || t.classList.contains("cta-section")) {
+          t.style.opacity = "1";
+          t.style.transform = "translateY(0)";
         }
+        ioGeneric.unobserve(t);
+      });
+    }, { threshold: 0.12 });
+
+    // Tech section gets its own observer with a higher threshold so the
+    // left/right slide animation fires when the section is well into view
+    // (≈ 32 % of 90 vh = ~29 vh visible), not at the very first pixel.
+    const ioTech = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("in-view");
+        ioTech.unobserve(e.target);
+      });
+    }, { threshold: 0.32 });
+
+    const techSection = document.querySelector(".tech-section");
+    if (techSection) ioTech.observe(techSection);
+
+    [
+      ...document.querySelectorAll(".reveal-section"),
+      document.querySelector(".kbi-intro-card"),
+      document.querySelector(".info-section"),
+      document.querySelector(".cta-section"),
+    ].forEach(el => el && ioGeneric.observe(el));
+
+    // info + cta: set initial hidden state
+    [document.querySelector(".info-section"), document.querySelector(".cta-section")].forEach(el => {
+      if (el) {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
+        el.style.transition = "opacity .7s ease, transform .7s ease";
+      }
     });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft') {
-            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-            showSlide(currentSlide);
-            resetAutoSlide();
-        } else if (e.key === 'ArrowRight') {
-            nextSlide();
-            resetAutoSlide();
-        }
+  })();
+
+  /* ── 5. NUMBER COUNTERS ─────────────────────────────── */
+  (function () {
+    const els = document.querySelectorAll(".stat-num[data-count]");
+    if (!els.length) return;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target, target = +el.dataset.count, dur = 1500, t0 = performance.now();
+        (function tick(now) {
+          const p = Math.min((now - t0) / dur, 1);
+          el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target).toLocaleString();
+          if (p < 1) requestAnimationFrame(tick);
+        })(t0);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    els.forEach(el => io.observe(el));
+  })();
+
+  /* ── 6. PRODUCTS CARDS — one-time entrance via IntersectionObserver ─ */
+  (function () {
+    const trackWrap = document.getElementById("productsTrackWrap");
+    if (!trackWrap) return;
+    /* Cards slide in from the right, staggered, exactly once.
+       No scroll pinning — page scrolls freely past this section. */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        trackWrap.classList.add("cards-in-view");
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.15 });
+    io.observe(trackWrap);
+  })();
+
+  /* ── 8. BUTTON RIPPLE ───────────────────────────────── */
+  document.addEventListener("click", e => {
+    const btn = e.target.closest(".cta-btn, .hero-btn, .kbi-intro-link, .tech-read-more");
+    if (!btn) return;
+    const r = document.createElement("span");
+    const rect = btn.getBoundingClientRect();
+    const sz = Math.max(rect.width, rect.height);
+    Object.assign(r.style, {
+      position: "absolute", borderRadius: "50%", pointerEvents: "none",
+      background: "rgba(255,255,255,.22)",
+      width: sz + "px", height: sz + "px",
+      left: (e.clientX - rect.left - sz / 2) + "px",
+      top:  (e.clientY - rect.top  - sz / 2) + "px",
+      transform: "scale(0)", animation: "_ripple .6s linear"
     });
-    
-    // Touch/swipe support for mobile
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    slider.addEventListener('touchstart', function(e) {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-    
-    slider.addEventListener('touchend', function(e) {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    });
-    
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
-        
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
-                // Swipe left - next slide
-                nextSlide();
-            } else {
-                // Swipe right - previous slide
-                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-                showSlide(currentSlide);
-            }
-            resetAutoSlide();
-        }
-    }
+    btn.style.overflow = "hidden";
+    btn.style.position = btn.style.position || "relative";
+    btn.appendChild(r);
+    setTimeout(() => r.remove(), 700);
+  });
+
 });
 
-// Smooth scrolling for anchor links
-document.addEventListener('DOMContentLoaded', function() {
-    const links = document.querySelectorAll('a[href^="#"]');
-    
-    links.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            if (href !== '#') {
-                e.preventDefault();
-                const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            }
-        });
-    });
-});
-
-// Fade in animation on scroll
-document.addEventListener('DOMContentLoaded', function() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
-            }
-        });
-    }, observerOptions);
-    
-    // Observe cards and sections
-    const elementsToObserve = document.querySelectorAll('.card, .about-content, .section');
-    elementsToObserve.forEach(el => {
-        observer.observe(el);
-    });
-});
-
-// Enhanced button interactions
-document.addEventListener('DOMContentLoaded', function() {
-    const buttons = document.querySelectorAll('.btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            // Add ripple effect
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
-    });
-});
-
-// CSS for ripple effect (will be added dynamically)
-if (!document.querySelector('#ripple-styles')) {
-    const style = document.createElement('style');
-    style.id = 'ripple-styles';
-    style.textContent = `
-        .btn {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.3);
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-            pointer-events: none;
-        }
-        
-        @keyframes ripple-animation {
-            to {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
+/* Ripple keyframe */
+if (!document.getElementById("_ks")) {
+  const s = document.createElement("style");
+  s.id = "_ks";
+  s.textContent = "@keyframes _ripple{to{transform:scale(3);opacity:0}}";
+  document.head.appendChild(s);
 }
-
-// Performance optimization: Preload next slide image
-document.addEventListener('DOMContentLoaded', function() {
-    const slides = document.querySelectorAll('.slide img');
-    
-    // Preload the next image
-    function preloadNextImage(currentIndex) {
-        const nextIndex = (currentIndex + 1) % slides.length;
-        if (slides[nextIndex] && !slides[nextIndex].complete) {
-            const img = new Image();
-            img.src = slides[nextIndex].src;
-        }
-    }
-    
-    // Preload first few images
-    slides.forEach((slide, index) => {
-        if (index < 3) {
-            const img = new Image();
-            img.src = slide.src;
-        }
-    });
-});
-
-// Accessibility improvements
-document.addEventListener('DOMContentLoaded', function() {
-    const slider = document.querySelector('.slider');
-    const slides = document.querySelectorAll('.slide');
-    
-    // Add ARIA labels
-    if (slider) {
-        slider.setAttribute('role', 'region');
-        slider.setAttribute('aria-label', 'Image carousel');
-    }
-    
-    slides.forEach((slide, index) => {
-        slide.setAttribute('role', 'img');
-        slide.setAttribute('aria-label', `Slide ${index + 1} of ${slides.length}`);
-    });
-    
-    // Add keyboard focus management
-    const dots = document.querySelectorAll('.slider-dot');
-    dots.forEach((dot, index) => {
-        dot.setAttribute('role', 'button');
-        dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
-        dot.setAttribute('tabindex', '0');
-        
-        dot.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                dot.click();
-            }
-        });
-    });
-});

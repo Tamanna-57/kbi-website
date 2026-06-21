@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Sign In — KBI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0f2c4d 0%, #1a4a7a 100%); color: #1a1a1a;
+    }
+    .login-card {
+      background: #fff; width: 100%; max-width: 380px; border-radius: 14px;
+      padding: 40px 34px; box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+    .login-card h1 { margin: 0 0 4px; font-size: 1.4rem; color: #0f2c4d; }
+    .login-card p.sub { margin: 0 0 24px; color: #667; font-size: .9rem; }
+    label { display: block; font-size: .82rem; font-weight: 600; margin-bottom: 6px; color: #334; }
+    input[type=password] {
+      width: 100%; padding: 12px 14px; border: 1px solid #ccd; border-radius: 8px;
+      font-size: 1rem; margin-bottom: 18px; transition: border-color .15s;
+    }
+    input[type=password]:focus { outline: none; border-color: #1a4a7a; }
+    button {
+      width: 100%; padding: 12px; border: none; border-radius: 8px; cursor: pointer;
+      background: #1a4a7a; color: #fff; font-size: 1rem; font-weight: 600; transition: background .15s;
+    }
+    button:hover { background: #0f2c4d; }
+    .error { background: #fde8e8; color: #9b1c1c; padding: 10px 14px; border-radius: 8px;
+             font-size: .85rem; margin-bottom: 18px; }
+    .back { display: block; text-align: center; margin-top: 20px; color: #889; font-size: .82rem; text-decoration: none; }
+    .back:hover { color: #1a4a7a; }
+  </style>
+</head>
+<body>
+  <form class="login-card" method="POST" action="{{ url_for('admin_login') }}">
+    <h1>KBI Admin</h1>
+    <p class="sub">Sign in to manage site content.</p>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <input type="hidden" name="next" value="{{ next_url }}">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" autofocus required>
+    <button type="submit">Sign In</button>
+    <a class="back" href="{{ url_for('index') }}">← Back to website</a>
+  </form>
+</body>
+</html>

@@ -1,119 +1,87 @@
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Form Submission
-document.querySelector('.contact-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    console.log('Form submission initiated.');
-    const form = e.target;
-    const submitBtn = form.querySelector('.submit-btn');
-    const originalBtnText = submitBtn.textContent;
-    
-    // Disable submit button and show loading state
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending...';
-    
-    // Collect form data
-    const formData = {
-        firstName: form.firstName.value,
-        lastName: form.lastName.value,
-        email: form.email.value,
-        phone: form.phone.value,
-        company: form.company.value,
-        subject: form.subject.value,
-        message: form.message.value
-    };
-    
-    try {
-        // Send data to Flask backend
-        console.log('Form data:', formData);
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ── Contact Form Submission ───────────────────── */
+  const form = document.getElementById('cu-contact-form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('.cu-btn--form');
+      const original = btn.textContent;
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      const formData = {
+        name:    form.elements['name'].value,
+        email:   form.elements['email'].value,
+        phone:   form.elements['phone'].value,
+        message: form.elements['message'].value,
+      };
+
+      try {
         const response = await fetch('/submit-contact', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
         });
-        
         const result = await response.json();
-        
+
         if (result.success) {
-            // Success - show success message and reset form
-            alert(result.message);
-            form.reset();
+          alert(result.message || 'Message sent! We\'ll get back to you soon.');
+          form.reset();
         } else {
-            // Error from server
-            alert(result.message || 'There was an error sending your message. Please try again.');
+          alert(result.message || 'Something went wrong. Please try again.');
         }
-        
-    } catch (error) {
-        console.error('Error:', error);
-        alert('There was an error sending your message. Please check your connection and try again.');
-    } finally {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-    }
-});
+      } catch {
+        alert('Connection error. Please check your internet and try again.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
 
-// Optional: Add real-time form validation
-document.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
-    field.addEventListener('blur', function() {
-        if (!this.value.trim()) {
-            this.style.borderColor = '#e74c3c';
-        } else {
-            this.style.borderColor = '#ddd';
+    /* Real-time validation highlight */
+    form.querySelectorAll('input[required], textarea[required]').forEach(field => {
+      field.addEventListener('blur', function () {
+        this.style.borderColor = this.value.trim() ? '' : '#e74c3c';
+      });
+      field.addEventListener('input', function () {
+        if (this.value.trim()) this.style.borderColor = '';
+      });
+    });
+  }
+
+  /* ── Newsletter Subscribe (stub) ──────────────── */
+  const nlBtn = document.querySelector('.cu-newsletter__btn');
+  if (nlBtn) {
+    nlBtn.addEventListener('click', () => {
+      const input = document.querySelector('.cu-newsletter__input');
+      if (!input || !input.value.trim()) return;
+      // Stub — wire up to backend when ready
+      alert('Thank you for subscribing! We\'ll keep you updated.');
+      input.value = '';
+    });
+  }
+
+  /* ── Scroll-reveal ────────────────────────────── */
+  const revealEls = document.querySelectorAll('.cu-info-card, .cu-map-item, .cu-newsletter, .cu-form-wrap');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'none';
+          io.unobserve(entry.target);
         }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(18px)';
+      el.style.transition = 'opacity .55s ease, transform .55s ease';
+      io.observe(el);
     });
-});
+  }
 
-// Email validation
-document.getElementById('email').addEventListener('blur', function() {
-    const email = this.value;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    if (email && !emailRegex.test(email)) {
-        this.style.borderColor = '#e74c3c';
-        // You could show an error message here
-    } else if (email) {
-        this.style.borderColor = '#27ae60';
-    }
-});
-
-    // Existing Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // FAQ Toggle Functionality
-    document.querySelectorAll('.faq-question').forEach(question => {
-        question.addEventListener('click', () => {
-            const faqItem = question.parentElement;
-            const answer = faqItem.querySelector('.faq-answer');
-            const icon = question.querySelector('i');
-            
-            // Close other active items
-            document.querySelectorAll('.faq-item.active').forEach(item => {
-                if (item !== faqItem) {
-                    item.classList.remove('active');
-                    item.querySelector('.faq-answer').style.maxHeight = '0';
-                    item.querySelector('i').style.transform = 'rotate(0deg)';
-                }
-            });
-
-            faqItem.classList.toggle('active');
-            
-            if (faqItem.classList.contains('active')) {
-                answer.style.maxHeight = answer.scrollHeight + 'px';
-                icon.style.transform = 'rotate(180deg)';
-            } else {
-                answer.style.maxHeight = '0';
-                icon.style.transform = 'rotate(0deg)';
-            }
-        });
-    });
 });

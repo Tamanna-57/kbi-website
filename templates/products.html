@@ -1,214 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% import 'editable.html' as e with context %}
     {% include 'logo.html' %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products - KBI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='products.css') }}">
 </head>
 <body>
     <header>
         {% include 'navigation.html' %}
     </header>
-    
-        
 
-   <!-- Hero Section with Video Background -->
-    <section class="hero" style="background-image: url('{{ url_for('static', filename='pics/range_of_products.png') }}');">
-        <div class="hero-content">
-            <h1>Our Products</h1>
-            <p>Discover our made to order solutions</p>
-            <div class="search-container">
-                <input type="text" id="productSearch" placeholder="Search products..." class="search-input">
-                <button class="search-btn">🔍</button>
+    <!-- Hero Section — split layout, no full-bleed image -->
+    <section class="prod-hero">
+        <div class="prod-hero__inner">
+            <div class="prod-hero__text">
+                {{ e.text('products.hero.eyebrow', 'What We Make', tag='p', cls='prod-hero__eyebrow') }}
+                {{ e.text('products.hero.title', 'Our Products', tag='h1', cls='prod-hero__title') }}
+                {{ e.rich('products.hero.desc', 'From precision-stamped axles to intricate cabin assemblies, KBI delivers made-to-order sheet metal and tubular components that power the automotive, agricultural, and construction industries across the globe.', tag='p', cls='prod-hero__desc') }}
+            </div>
+            <div class="prod-hero__image-wrap">
+                {{ e.image('products.hero.image', url_for('static', filename='pics/range_of_products.png'), alt='KBI Products', cls='prod-hero__img') }}
             </div>
         </div>
     </section>
 
-    <!-- Filter Section -->
-    <section class="filter-section">
-        <div class="container">
-            <h2>Browse by Category</h2>
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-category="all">All Products</button>
-                <button class="filter-btn" data-category="axles">Axles</button>
-                <button class="filter-btn" data-category="cabin_assembly">Cabin Assembly</button>
-                <button class="filter-btn" data-category="pedals">Pedals</button>
-                <button class="filter-btn" data-category="tubular">Tubular</button>
-                <button class="filter-btn" data-category="towing_hooks">Towing Hooks</button>
-                <button class="filter-btn" data-category="car">Car Parts</button>
-                <button class="filter-btn" data-category="excavator">Excavator Parts</button>
-                <button class="filter-btn" data-category="tractor">Tractor Parts</button>
-                <button class="filter-btn" data-category="wires">Cable accessories</button>
+    <!-- Filter Bar -->
+    <section class="prod-filter">
+        <div class="prod-filter__inner">
+            <div class="prod-filter__pills">
+                <button class="prod-pill active" data-category="all">All</button>
+                <button class="prod-pill" data-category="axles">Axles</button>
+                <button class="prod-pill" data-category="cabin_assembly">Cabin Assembly</button>
+                <button class="prod-pill" data-category="pedals">Pedals</button>
+                <button class="prod-pill" data-category="tubular">Tubular</button>
+                <button class="prod-pill" data-category="towing_hooks">Towing Hooks</button>
+                <button class="prod-pill" data-category="car">Car Parts</button>
+                <button class="prod-pill" data-category="excavator">Excavator</button>
+                <button class="prod-pill" data-category="tractor">Tractor</button>
+                <button class="prod-pill" data-category="wires">Cable Accessories</button>
             </div>
         </div>
     </section>
 
-    <!-- Products Grid -->
-    <section class="products-section">
-        <div class="container">
-            <div class="products-grid" id="productsGrid">
-                <!-- Product 1 -->
-                <div class="product-card" data-category="axles,tractor" data-name="axles">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/products_axle.jpg') }}" alt="axles">
+    <!-- Products Carousel -->
+    <section class="prod-section">
+        {% if is_admin %}
+        <div class="admin-grid-actions" data-edit-only hidden style="padding:0 5vw 20px;">
+            <button type="button" class="admin-btn admin-btn--add" data-add-item
+              data-new-item='{"category":"car","category_label":"New Category","name":"New product","description":"Description goes here.","image":"/static/pics/range_of_products.png"}'>+ Add product</button>
+        </div>
+        {% endif %}
+        <div class="prod-track-wrap">
+            <div class="prod-track" id="productsGrid">
+                {% for p in products %}
+                <div class="prod-card" data-edit-card data-category="{{ p.category }}" data-name="{{ p.id }}" data-id="{{ p.id }}">
+                    <div class="prod-card__img-wrap img-slot" data-image-slot>
+                        <img src="{{ p.image }}" alt="{{ p.name }}" data-edit-image{% if not p.image %} hidden{% endif %}>
+                        {% if is_admin %}
+                        <button type="button" class="img-del" data-edit-only hidden title="Delete image">&times;</button>
+                        <button type="button" class="img-uploader"{% if p.image %} hidden{% endif %}>
+                          <span class="img-uploader__icon">&#43;</span>
+                          <span class="img-uploader__text">Upload image</span>
+                        </button>
+                        {% endif %}
                     </div>
-                    <div class="product-info">
-                        <h3>World Wide Axle</h3>
-                        <p class="product-category">axles</p>
-                        <p class="product-category">Tractors</p>
-                        <p class="product-description">World Wide axles have 2 sliders attached to them</p>
+                    <div class="prod-card__body">
+                        <p class="prod-card__cat" data-edit-field="category_label">{{ p.category_label }}</p>
+                        <h3 class="prod-card__name" data-edit-field="name">{{ p.name }}</h3>
+                        <div class="prod-card__desc-wrap">
+                            <p class="prod-card__desc" data-edit-field="description">{{ p.description }}</p>
+                        </div>
+                        {% if is_admin %}
+                        <div class="card-edit-toolbar" data-edit-only hidden>
+                            <label class="edit-cat-field">Filter tags
+                              <input type="text" data-edit-category value="{{ p.category }}" placeholder="e.g. car,tractor">
+                            </label>
+                            <div class="card-edit-toolbar__btns">
+                              <button type="button" class="admin-btn admin-btn--save" data-action="save">Save</button>
+                              <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
+                {% endfor %}
+            </div><!-- /prod-track -->
 
-                <!-- Product 2 -->
-                <div class="product-card" data-category="cabin_assembly,tractor" data-name="chassis">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/chassis.webp') }}" alt="chassis">
-                    </div>
-                    <div class="product-info">
-                        <h3>Chassis</h3>
-                        <p class="product-category">Cabin Assembly</p>
-                        <p class="product-category">Tractors</p>
-                        <p class="product-description">With a customer-focused approach, KBI provides customized chassis and cabin assembly 
-solutions, enabling OEMs in the commercial vehicle and construction sectors to achieve higher 
-efficiency, safety, and productivity</p>
-                    </div>
-                </div>
+            <button class="prod-arrow prod-arrow--left"  id="prodArrowLeft"  aria-label="Previous">&#8592;</button>
+            <button class="prod-arrow prod-arrow--right" id="prodArrowRight" aria-label="Next">&#8594;</button>
+        </div><!-- /prod-track-wrap -->
 
-                <!-- Product 3 -->
-                <div class="product-card" data-category="pedals,tractor,car" data-name="pedals">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/products_pedal.jpg') }}" alt="pedals">
-                    </div>
-                    <div class="product-info">
-                        <h3>Pedals</h3>
-                        <p class="product-category">Pedals</p>
-                        <p class="product-category">Tractors</p>
-                        <p class="product-category">Cars</p>
-                        <p class="product-description">We specialize in the fabrication of various pedals for numerous clients</p>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="product-card" data-category="wires" data-name="tapes">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/Galvanized_Steel_Tape.png') }}" alt="tapes">
-                    </div>
-                    <div class="product-info">
-                        <h3>Galvanised steel tapes</h3>
-                        <p class="product-category">Cable accessories</p>
-                        <p class="product-description">Tapes are widely used as protective covers for residential underground wiring</p>
-                    </div>
-                </div>
-
-                <!-- Product 5 -->
-                <div class="product-card" data-category="wires" data-name="strips">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/galvanized-wire-strips.png') }}" alt="strips">
-                    </div>
-                    <div class="product-info">
-                        <h3>Galvanised Wires and Strips</h3>
-                        <p class="product-category">Cable accessories</p>
-                        <p class="product-description">Wires and strips are used as shields for underground cables</p>
-                    </div>
-                </div>
-                <!-- Product 6 -->
-                <div class="product-card" data-category="cabin_assembly,tractor" data-name="steering_mounting">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/Bracket assembly steering mounting.webp') }}" alt="steering_mounting">
-                    </div>
-                    <div class="product-info">
-                        <h3>Bracket Assembly Steering Mounting</h3>
-                        <p class="product-category">Cabin Assembly</p><p class="product-category">Assembly</p>
-                        <p class="product-description">KBI is a trusted manufacturer of chassis and cabin assemblies for commercial vehicles and 
-construction equipment, delivering strength, safety, and durability as per OEM requirements. 
-Our assemblies are designed and manufactured to endure heavy-duty applications, ensuring 
-structural stability and long service life even in the most demanding environments.</p>
-                    </div>
-                </div>
-                <!-- Product 7 -->
-                <div class="product-card" data-category="car,cabin_assembly" data-name="strips">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/Bracket Seat Belt.webp') }}" alt="seat_belt">
-                    </div>
-                    <div class="product-info">
-                        <h3>Bracket Seat Belt</h3>
-                        <p class="product-category">Cars</p><p class="product-category">Cabin Assembly</p>
-                        <p class="product-description">For cabin assemblies, we ensure operator safety, comfort, and ergonomics by following global 
-standards in design and execution. Each product undergoes rigorous validation and testing to 
-guarantee performance under tough working conditions</p>
-                    </div>
-                </div>
-                <!-- Product 8 -->
-                <div class="product-card" data-category="car,cabin_assembly" data-name="dash_panel">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/Dash Panel.webp') }}" alt="dash_panel">
-                    </div>
-                    <div class="product-info">
-                        <h3>Dash Panel</h3>
-                        <p class="product-category">Cars</p><p class="product-category">Cabin Assembly</p>
-                        <p class="product-description">For cabin assemblies, we ensure operator safety, comfort, and ergonomics by following global 
-standards in design and execution. Each product undergoes rigorous validation and testing to 
-guarantee performance under tough working conditions</p>
-                    </div>
-                </div>
-                <!-- Product 9 -->
-                <div class="product-card" data-category="Excavator,tubular" data-name="elbow">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/Elbow.webp') }}" alt="strips">
-                    </div>
-                    <div class="product-info">
-                        <h3>Elbow</h3>
-                        <p class="product-category">Excavator Parts</p><p class="product-category">Tubular</p>
-                        <p class="product-description">KBI specializes in the manufacturing of tubular products for agricultural machinery and the 
-excavator segment, delivering components that combine strength, precision, and durability. 
-Designed for high performance under demanding operating conditions, our tubular parts like 
-Hydraulic Elbows, Exhaust and Tube Intake play a critical role in ensuring reliability and 
-efficiency of equipment in the field and at construction sites</p>
-                    </div>
-                </div>
-                <!-- Product 10 -->
-                <div class="product-card" data-category="excavator,heavy" data-name="exhaust">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/Tube Exhaust.webp') }}" alt="exhaust">
-                    </div>
-                    <div class="product-info">
-                        <h3>Tube Exhaust</h3>
-                        <p class="product-category">Excavator Parts</p>
-                        <p class="product-description">Wires and strips are used as shields for underground cables</p>
-                    </div>
-                </div>
-                <!-- Product 11 -->
-                <div class="product-card" data-category="car,light" data-name="bracket_wiper">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/Bracket Wiper.webp') }}" alt="bracket_wiper">
-                    </div>
-                    <div class="product-info">
-                        <h3>Bracket Wiper</h3>
-                        <p class="product-category">Cars</p><p class="product-category">Light</p>
-                        <p class="product-description">Wires and strips are used as shields for underground cables</p>
-                    </div>
-                </div>
-                <!-- Product 12 -->
-                <div class="product-card" data-category="tractor,light" data-name="running_board">
-                    <div class="product-image">
-                        <img src="{{ url_for('static', filename='pics/Running Board.webp') }}" alt="running_board">
-                    </div>
-                    <div class="product-info">
-                        <h3>Running Board</h3>
-                        <p class="product-category">Tractor</p>
-                        <p class="product-category">Light</p>
-                        <p class="product-description">Wires and strips are used as shields for underground cables</p>
-                    </div>
-                </div>
-            </div> <!-- /products-grid -->
-        </div> <!-- /container -->
+        <div class="prod-carousel-dots" id="prodDots"></div>
     </section>
 
     {% include 'footer.html' %}
-
+    {% set admin_collection = 'products' %}
+    {% include 'admin_bar.html' %}
     <script src="{{ url_for('static', filename='products.js') }}"></script>
 </body>
 </html>

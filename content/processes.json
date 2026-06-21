@@ -1,0 +1,93 @@
+[
+  {
+    "id": "tooling",
+    "num": "01",
+    "name": "Tooling",
+    "description": "Our tooling department creates precision dies, jigs, and fixtures using advanced CNC machines and skilled craftsmen. We manufacture custom tooling solutions for in-house component manufacturing across automotive and industrial sectors.",
+    "image": "/static/pics/process_Tooling.webp",
+    "features": [
+      "CNC Machining",
+      "Die Making",
+      "Jig & Fixtures"
+    ],
+    "equipment": [
+      "CNC Milling Machines",
+      "CNC Lathes",
+      "VMC Machines",
+      "CNC Wire Cut",
+      "Assembly Station",
+      "Surface Grinders"
+    ]
+  },
+  {
+    "id": "machining",
+    "num": "02",
+    "name": "Machining",
+    "description": "Our machining division specialises in precision turning, milling, and drilling operations. We produce high-quality components for automotive, agricultural, and industrial machinery with tight tolerances.",
+    "image": "/static/pics/process_Machining.webp",
+    "features": [
+      "CNC Turning",
+      "Milling",
+      "Boring"
+    ],
+    "equipment": [
+      "CNC Turning Centers",
+      "MNTR",
+      "VMC",
+      "Conventional Lathes",
+      "Drilling Machines"
+    ]
+  },
+  {
+    "id": "press-operations",
+    "num": "03",
+    "name": "Press Operations",
+    "description": "Our press shop is equipped with various capacity presses for stamping, forming, and deep drawing operations. We handle both high-volume production and prototype development with consistent precision.",
+    "image": "/static/pics/process_Pressing.webp",
+    "features": [
+      "Stamping",
+      "Forming",
+      "Deep Drawing"
+    ],
+    "equipment": [
+      "Pneumatic Presses (Up to 600 Ton)",
+      "Mechanical Presses",
+      "Hydraulic Presses",
+      "Transfer Presses"
+    ]
+  },
+  {
+    "id": "cutting",
+    "num": "04",
+    "name": "Cutting",
+    "description": "Our subtractive manufacturing process uses force or other techniques to divide a metal sheet into desired shapes or sizes with high accuracy and clean edges, readying components for the next stage.",
+    "image": "/static/pics/process_Cutting.webp",
+    "features": [
+      "Gas Cutting",
+      "Shearing"
+    ],
+    "equipment": [
+      "Oxyfuel Cutting Machines",
+      "Chopsaw",
+      "Shearing Machines"
+    ]
+  },
+  {
+    "id": "welding",
+    "num": "05",
+    "name": "Welding",
+    "description": "Our welding joins two or more metal pieces by melting them together to create a strong, fused bond. With multiple welding techniques and certified welders, we ensure structural integrity across all assemblies.",
+    "image": "/static/pics/process_Welding.webp",
+    "features": [
+      "Arc Welding",
+      "Gas Welding",
+      "Tacking"
+    ],
+    "equipment": [
+      "Projection Welding",
+      "Spot Welding",
+      "SMAW",
+      "MIG Welding"
+    ]
+  }
+]

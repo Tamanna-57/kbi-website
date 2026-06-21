@@ -1,57 +1,395 @@
+{% import 'editable.html' as e with context %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     {% include 'logo.html' %}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_kbi.css') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KBI</title>
-    
+    <title>KBI — Khandelwal Busar Industries</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_kbi.css') }}">
 </head>
 <body>
-        {% include 'navigation.html' %}
 
-    <section class="hero">
-        <div class="slider">
-            <div class="slide">
-                <img src="{{ url_for('static', filename='pics/real_front_2.png') }}" alt="Image 1">
-            </div>
-            <div class="slide">
-                <img src="{{ url_for('static', filename='pics/real_quality.png') }}" alt="Image 2">
-            </div>
-            <div class="slide">
-                <img src="{{ url_for('static', filename='pics/real_leadership.png') }}" alt="Image 3">
-            </div>
+    {% include 'navigation.html' %}
+
+    <!-- ══════════════════════════════════════
+         HERO
+    ══════════════════════════════════════ -->
+    <section class="hero" id="hero">
+        <div class="hero-slides">
+            <div class="hero-slide active" style="background-image:url('{{ url_for('static', filename='pics/real_front_2.png') }}')"></div>
+            <div class="hero-slide" style="background-image:url('{{ url_for('static', filename='pics/real_shop_floor.png') }}')"></div>
         </div>
+        <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1>Welcome to Khandelwal Busar Industries</h1>
-            <p>Building the Future of Manufacturing</p>
-            <a href="/processes" class="btn">Our Technology</a>
+            {{ e.rich('home.hero.title', 'Building the Future<br>of Manufacturing', tag='h1', cls='hero-title') }}
+            <div class="hero-line"></div>
+            {{ e.text('home.hero.subtitle', "Since 1981, KBI has powered India's automobiles, power and telecom infrastructure with precision sheet metal, fabrication and cable input solutions.", tag='p', cls='hero-subtitle') }}
+            <div class="hero-btns">
+                <a href="/about_us" class="hero-btn">About Us <span>→</span></a>
+                <a href="#technologies" class="hero-btn">Our Technologies <span>→</span></a>
+            </div>
+        </div>
+        <div class="hero-slider-controls">
+            <button class="slide-dot active" data-slide="0" aria-label="Slide 1"></button>
+            <button class="slide-dot" data-slide="1" aria-label="Slide 2"></button>
+        </div>
+        <div class="hero-scroll-hint">
+            <span>Scroll</span>
+            <div class="scroll-mouse"><span class="scroll-wheel"></span></div>
         </div>
     </section>
 
-    <section class="about">
-        <div class="about-content">
-            <h2>About Us</h2>
-            <p><b>Khandelwal Busar Industries</b> (Established in 1981) is a key manufacturer of  Sheet metal & Fabrication components for automobile industry and of power and telecom cable inputs. It has 2 plants. One in <b>Faridabad,Haryana</b> and the other in <b>Alwar,Rajasthan</b></p>
-        </div>
-    </section>
-
-    <section class="product-catalogue">
-        <div class="container">
-            <h2>Product Catalogue</h2>
-            <p>View or download our latest product catalogue to explore our extensive range of offerings.</p>
-            <a href="https://storage.googleapis.com/kbi-catalogues/product_catalogue.pdf" class="btn" target="_blank" rel="noopener noreferrer">View Catalogue (PDF)</a>
-            <div class="qr-code-container" style="margin-top: 20px;">
-                <p>Or scan this QR code to view on your mobile device:</p>
-                <img src="{{ url_for('static', filename='pics/product-catalogue-qr.png') }}" alt="Product Catalogue QR Code" style="width: 128px; height: 128px;">
+    <!-- ══════════════════════════════════════
+         WE CARE BANNER
+    ══════════════════════════════════════ -->
+    <section class="we-care-banner">
+        <div class="we-care-inner">
+            <div class="we-care-copy">
+                {{ e.text('home.wecare.kicker', 'We Care for Quality, People & Planet', tag='span', cls='we-care-kicker') }}
+                {{ e.rich('home.wecare.title', 'KBI is committed to responsible,<br>future-ready manufacturing.', tag='h2') }}
+                {{ e.text('home.wecare.body', 'From Faridabad to Alwar, we invest in safer workplaces, reliable supply chains and continuous improvement so that every component we ship strengthens the trust of OEMs and end-customers across India.', tag='p') }}
+            </div>
+            <div class="we-care-pills">
+                <a href="/certifications" class="we-care-pill active">
+                    {{ e.text('home.wecare.pill1.label', 'Sustainability', tag='span', cls='pill-label') }}
+                    {{ e.text('home.wecare.pill1.desc', 'Reducing waste & rework on every line.', tag='span', cls='pill-desc') }}
+                </a>
+                <a href="/processes" class="we-care-pill">
+                    {{ e.text('home.wecare.pill2.label', 'Innovation', tag='span', cls='pill-label') }}
+                    {{ e.text('home.wecare.pill2.desc', 'Investing in modern presses & CNCs.', tag='span', cls='pill-desc') }}
+                </a>
+                <a href="/about_us" class="we-care-pill">
+                    {{ e.text('home.wecare.pill3.label', 'Our Impact', tag='span', cls='pill-label') }}
+                    {{ e.text('home.wecare.pill3.desc', "Enabling India's mobility & connectivity.", tag='span', cls='pill-desc') }}
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Additional sections for services, products, and contact can be added here -->
+    <!-- ══════════════════════════════════════
+         OUR TECHNOLOGIES — exact RIL "Our Businesses" layout
+         • full-viewport dark section
+         • background image crossfades on hover
+         • left: label + giant title + description + read more
+         • right: vertical list with dividers (active item bright + gold line)
+         • scroll-in: text from LEFT, nav list from RIGHT
+    ══════════════════════════════════════ -->
+    <section class="tech-section" id="technologies">
+        <!-- Background slides (crossfade on hover) -->
+        <div class="tech-bg-slides" id="techBgSlides">
+            <div class="tech-bg-slide active" style="background-image:url('{{ url_for('static', filename='pics/process_Tooling.webp') }}')"></div>
+            <div class="tech-bg-slide" style="background-image:url('{{ url_for('static', filename='pics/process_Machining.webp') }}')"></div>
+            <div class="tech-bg-slide" style="background-image:url('{{ url_for('static', filename='pics/process_Pressing.webp') }}')"></div>
+            <div class="tech-bg-slide" style="background-image:url('{{ url_for('static', filename='pics/process_Welding.webp') }}')"></div>
+            <div class="tech-bg-slide" style="background-image:url('{{ url_for('static', filename='pics/process_Cutting.webp') }}')"></div>
+            <div class="tech-bg-slide" style="background-image:url('{{ url_for('static', filename='pics/galvanizing.webp') }}')"></div>
+        </div>
+        <div class="tech-overlay"></div>
+
+        <div class="tech-inner">
+            <!-- Left: content panel -->
+            <div class="tech-content-panel" id="techContentPanel">
+                <p class="tech-label" id="techLabel">⚙ OUR TECHNOLOGIES</p>
+                <h2 class="tech-title" id="techTitle">Tooling</h2>
+                <p class="tech-desc" id="techDesc">Our tooling department creates precision dies, jigs, and fixtures using advanced CNC machines and skilled craftsmen. We manufacture custom tooling solutions for in-house component manufacturing across automotive and industrial sectors.</p>
+                <a href="/processes" class="tech-read-more" id="techLink">
+                    <span>read more</span> <span class="tech-arrow">→</span>
+                </a>
+            </div>
+
+            <!-- Right: nav list -->
+            <div class="tech-nav-list" id="techNavList">
+                <div class="tech-nav-item active" data-tech="0">
+                    <span class="tech-nav-label">Tooling</span>
+                    <div class="tech-nav-divider"></div>
+                </div>
+                <div class="tech-nav-item" data-tech="1">
+                    <span class="tech-nav-label">Machining</span>
+                    <div class="tech-nav-divider"></div>
+                </div>
+                <div class="tech-nav-item" data-tech="2">
+                    <span class="tech-nav-label">Press Operations</span>
+                    <div class="tech-nav-divider"></div>
+                </div>
+                <div class="tech-nav-item" data-tech="3">
+                    <span class="tech-nav-label">Welding</span>
+                    <div class="tech-nav-divider"></div>
+                </div>
+                <div class="tech-nav-item" data-tech="4">
+                    <span class="tech-nav-label">Cutting</span>
+                    <div class="tech-nav-divider"></div>
+                </div>
+                <div class="tech-nav-item" data-tech="5">
+                    <span class="tech-nav-label">Fabrication &amp; Assembly</span>
+                    <div class="tech-nav-divider"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         KBI ABOUT INTRO — RIL Foundation style
+         • light card on dark bg
+         • left: KBI logo + title + description + read more
+         • right: auto-playing image carousel
+         • animation: both panels slide up from bottom on scroll
+    ══════════════════════════════════════ -->
+    <section class="kbi-intro-section" id="kbi-about">
+        <div class="kbi-intro-card">
+            <!-- Left text -->
+            <div class="kbi-intro-left slide-up-reveal">
+                <img src="{{ url_for('static', filename='pics/KBI_logo.png') }}" alt="KBI Logo" class="kbi-intro-logo">
+                {{ e.text('home.intro.title', 'Khandelwal Busar Industries', tag='h2', cls='kbi-intro-title') }}
+                {{ e.rich('home.intro.desc', "Established in 1981, KBI is a key manufacturer of sheet metal &amp; fabrication components for the automobile industry and of power and telecom cable inputs. With plants in <strong>Faridabad, Haryana</strong> and <strong>Alwar, Rajasthan</strong>, we serve India's leading OEMs with precision, consistency and commitment.", tag='p', cls='kbi-intro-desc') }}
+                <a href="/about_us" class="kbi-intro-link">
+                    <span>read more</span> <span class="kbi-intro-arrow">→</span>
+                </a>
+            </div>
+
+            <!-- Right carousel -->
+            <div class="kbi-intro-right slide-up-reveal">
+                <div class="kbi-carousel">
+                    <div class="kbi-carousel-slide active">
+                        {{ e.image('home.intro.img1', '/static/pics/real_front_2.png', alt='KBI Faridabad Plant') }}
+                    </div>
+                    <div class="kbi-carousel-slide">
+                        {{ e.image('home.intro.img2', '/static/pics/real_shop_floor.png', alt='KBI Shop Floor') }}
+                    </div>
+                    <div class="kbi-carousel-slide">
+                        {{ e.image('home.intro.img3', '/static/pics/real_leadership.png', alt='KBI Leadership') }}
+                    </div>
+                    <div class="kbi-carousel-slide">
+                        {{ e.image('home.intro.img4', '/static/pics/real_quality.png', alt='Quality Assurance') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         OUR PRODUCTS — Horizontal Scroll Showcase
+         • pinned track, scrolls horizontally via GSAP ScrollTrigger
+         • Lenis smooth scroll integration
+         • hover scale + reveal, entrance fade-up
+    ══════════════════════════════════════ -->
+    <section class="products-showcase" id="our-products">
+        <div class="products-showcase-header">
+            {{ e.text('home.products.kicker', '⚡ OUR PRODUCTS', tag='span', cls='products-showcase-kicker') }}
+            {{ e.rich('home.products.title', 'Engineered for<br>Excellence', tag='h2', cls='products-showcase-title') }}
+            {{ e.text('home.products.sub', "Precision components trusted by India's leading OEMs across automotive, telecom and power sectors.", tag='p', cls='products-showcase-sub') }}
+        </div>
+
+        <div class="products-track-wrap" id="productsTrackWrap">
+            <div class="products-track" id="productsTrack">
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/products_axle.jpg') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Axles · Tractor</span>
+                        <h3 class="psc-name">World Wide Axle</h3>
+                        <p class="psc-desc">Dual-slider axles for heavy-duty tractor and agricultural applications.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/chassis.webp') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Cabin Assembly · Tractor</span>
+                        <h3 class="psc-name">Chassis</h3>
+                        <p class="psc-desc">Custom chassis and cabin assembly solutions for commercial vehicles and construction equipment.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/products_pedal.jpg') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Pedals · Cars · Tractor</span>
+                        <h3 class="psc-name">Pedals</h3>
+                        <p class="psc-desc">Precision-fabricated pedal assemblies for automotive and tractor OEM clients.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/Galvanized_Steel_Tape.png') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Cable Accessories</span>
+                        <h3 class="psc-name">Galvanised Steel Tapes</h3>
+                        <p class="psc-desc">Armoring tapes providing protective covering for underground power and telecom cables.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/Bracket assembly steering mounting.webp') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Cabin Assembly</span>
+                        <h3 class="psc-name">Steering Bracket Assembly</h3>
+                        <p class="psc-desc">High-strength steering mounting brackets engineered for demanding OEM cabin assembly requirements.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+                <div class="psc-card">
+                    <div class="psc-img" style="background-image:url('{{ url_for('static', filename='pics/Bracket Seat Belt.webp') }}')"></div>
+                    <div class="psc-overlay"></div>
+                    <div class="psc-info">
+                        <span class="psc-cat">Cars · Cabin Assembly</span>
+                        <h3 class="psc-name">Bracket Seat Belt</h3>
+                        <p class="psc-desc">Safety-critical seat belt mounting brackets meeting global automotive standards.</p>
+                        <a href="/products" class="psc-link">View Product <span class="psc-arrow">→</span></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="products-showcase-footer">
+            <a href="/products" class="cta-btn primary">View All 12 Products →</a>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         OUR CUSTOMERS — Infinite Marquee Ticker
+         Pure CSS animation: right-to-left, seamless loop
+    ══════════════════════════════════════ -->
+    <section class="customers-marquee-section" id="customers-ticker">
+        <div class="customers-marquee-header">
+            {{ e.text('home.customers.kicker', 'Our Valuable Customers', tag='span', cls='customers-marquee-kicker') }}
+        </div>
+        <div class="marquee-outer">
+            <div class="marquee-track">
+                <!-- Set 1 -->
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/maruti_suzuki_img.png') }}" alt="Maruti Suzuki"><span>Maruti Suzuki</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/volvo_eicher.webp') }}" alt="Volvo Eicher"><span>Volvo Eicher</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/havells_img.png') }}" alt="Havells"><span>Havells</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/kobelco_img.png') }}" alt="Kobelco"><span>Kobelco</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/kubota_img.png') }}" alt="Kubota"><span>Kubota</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/eulermotors_img.jpg') }}" alt="Euler Motors"><span>Euler Motors</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/Mahindra_Defence_img.jpg') }}" alt="Mahindra Defence"><span>Mahindra Defence</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/New_Holland_img.png') }}" alt="New Holland"><span>New Holland</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/carraro_img.png') }}" alt="Carraro"><span>Carraro</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/caparo_img.png') }}" alt="Caparo"><span>Caparo</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/Delton Cables.png') }}" alt="Delton Cables"><span>Delton Cables</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/cords_cables.webp') }}" alt="Cords Cables"><span>Cords Cables</span></div>
+                <div class="marquee-divider"></div>
+                <!-- Set 2 — identical duplicate for seamless infinite loop -->
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/maruti_suzuki_img.png') }}" alt="Maruti Suzuki"><span>Maruti Suzuki</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/volvo_eicher.webp') }}" alt="Volvo Eicher"><span>Volvo Eicher</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/havells_img.png') }}" alt="Havells"><span>Havells</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/kobelco_img.png') }}" alt="Kobelco"><span>Kobelco</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/kubota_img.png') }}" alt="Kubota"><span>Kubota</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/eulermotors_img.jpg') }}" alt="Euler Motors"><span>Euler Motors</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/Mahindra_Defence_img.jpg') }}" alt="Mahindra Defence"><span>Mahindra Defence</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/New_Holland_img.png') }}" alt="New Holland"><span>New Holland</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/carraro_img.png') }}" alt="Carraro"><span>Carraro</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/caparo_img.png') }}" alt="Caparo"><span>Caparo</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/Delton Cables.png') }}" alt="Delton Cables"><span>Delton Cables</span></div>
+                <div class="marquee-divider"></div>
+                <div class="marquee-item"><img src="{{ url_for('static', filename='pics/cords_cables.webp') }}" alt="Cords Cables"><span>Cords Cables</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         UPDATES & NOTICES  (RIL-style)
+    ══════════════════════════════════════ -->
+    <section class="ril-updates" id="news">
+        <div class="ril-updates__inner">
+
+            <!-- Left: heading -->
+            <div class="ril-u-left">
+                {{ e.text('home.updates.eyebrow', 'Company', tag='p', cls='ril-u-eyebrow') }}
+                {{ e.rich('home.updates.title', 'Updates &amp;<br>Notices', tag='h2', cls='ril-u-title') }}
+            </div>
+
+            <!-- Vertical divider -->
+            <div></div>
+
+            <!-- Middle: Latest News notices (from the News collection — edit on About) -->
+            <div class="ril-u-col">
+                <h3 class="ril-u-col__heading">Latest News</h3>
+                {% for n in news %}
+                <div class="ril-u-divider"></div>
+                <div class="ril-notice">
+                    <span class="ril-notice__date">{{ n.date }}</span>
+                    <p class="ril-notice__title">{{ n.title }}</p>
+                </div>
+                {% endfor %}
+                <a href="/about_us" class="ril-u-btn">know more →</a>
+            </div>
+
+            <!-- Vertical divider -->
+            <div></div>
+
+            <!-- Right: Certifications (from the Certifications collection) -->
+            <div class="ril-u-col">
+                <h3 class="ril-u-col__heading">Certifications</h3>
+                {% for c in certifications %}
+                <div class="ril-u-divider"></div>
+                <div class="ril-doc">
+                    <div class="ril-doc__thumb">
+                        <img src="{{ c.image }}" alt="{{ c.badge }}">
+                    </div>
+                    <div>
+                        <p class="ril-doc__name">{{ c.badge }}</p>
+                        <span class="ril-doc__sub">{{ c.heading }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                <a href="/certifications" class="ril-u-btn">know more →</a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         CTA
+    ══════════════════════════════════════ -->
+    <section class="cta-section" id="contact">
+        {{ e.text('home.cta.label', '🤝 Work With Us', tag='span', cls='section-label centered') }}
+        {{ e.text('home.cta.title', 'Ready to Partner with KBI?', tag='h2', cls='section-title centered') }}
+        <p style="color:var(--color-text-muted);max-width:480px;margin:.75rem auto 0;font-size:.98rem;line-height:1.7;text-align:center;" data-block="home.cta.desc" data-block-text>{{ block_value('home.cta.desc', 'Join the many OEMs across India who trust KBI for precision components, on-time delivery and consistent quality.') }}</p>
+        <div class="cta-btns">
+            <a href="/contact_us" class="cta-btn primary">Get In Touch</a>
+            <a href="https://storage.googleapis.com/kbi-catalogues/product_catalogue.pdf" target="_blank" rel="noopener noreferrer" class="cta-btn outline">Download Catalogue</a>
+        </div>
+    </section>
 
     {% include 'footer.html' %}
+    {% include 'admin_bar.html' %}
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
