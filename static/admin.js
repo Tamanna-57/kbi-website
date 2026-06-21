@@ -153,13 +153,26 @@
 
   async function saveCard(card, opts) {
     const silent = opts && opts.silent;
-    const id = card.dataset.id;
     const data = collectCard(card);
     try {
-      const saved = await api('PUT', `/api/${cardCollection(card)}/${id}`, data);
+      if (!card.dataset.id) {
+        // Draft (added via "+ Add" but not yet published) → create it.
+        const created = await api('POST', `/api/${cardCollection(card)}`, data);
+        card.dataset.id = created.id;
+        if (dirtyCards) dirtyCards.delete(card);
+        if (!silent) {
+          toast('Added — reloading…', 'success');
+          sessionStorage.setItem(STORAGE_KEY, '1');
+          bypassUnloadWarning = true;
+          setTimeout(() => window.location.reload(), 500);
+        }
+        return true;
+      }
+      const saved = await api('PUT', `/api/${cardCollection(card)}/${card.dataset.id}`, data);
       card.dataset.name = saved.name || saved.title || '';
       if (saved.category) card.dataset.category = saved.category;
       pruneEmpty(card);
+      if (dirtyCards) dirtyCards.delete(card);
       if (!silent) toast('Saved “' + (saved.name || saved.title || 'item') + '”', 'success');
       return true;
     } catch (err) {
@@ -169,11 +182,19 @@
   }
 
   async function deleteCard(card) {
+    // Unsaved draft → just discard the DOM node, nothing on the server yet.
+    if (!card.dataset.id) {
+      dirtyCards.delete(card);
+      card.remove();
+      toast('Draft discarded', '');
+      return;
+    }
     const id = card.dataset.id;
     const name = card.dataset.name || 'this item';
     if (!confirm(`Delete “${name}”? This cannot be undone.`)) return;
     try {
       await api('DELETE', `/api/${cardCollection(card)}/${id}`);
+      dirtyCards.delete(card);
       card.remove();
       toast('Deleted', 'success');
     } catch (err) {
@@ -210,11 +231,13 @@
   // ════════════════════════════════════════════════════════════════
   const dirtyBlocks = new Map();        // block key -> text element
   const dirtyBlockImages = new Map();   // block key -> staged image url ('' = removed)
+  const dirtyCards = new Set();         // edited cards + new draft cards
   let dirty = false;
   let bypassUnloadWarning = false;
 
   function markDirty() { dirty = true; updateSaveBtn(); }
   function clearDirty() { dirty = false; updateSaveBtn(); }
+  function markCardDirty(card) { if (card) { dirtyCards.add(card); markDirty(); } }
   function updateSaveBtn() {
     const btn = document.getElementById('adminSaveAll');
     if (!btn) return;
@@ -234,13 +257,16 @@
     dirtyBlocks.delete(el.dataset.block);
   }
 
-  // Any edit just marks the page dirty (and remembers which block changed).
-  document.addEventListener('input', (e) => {
+  // Any edit just marks the page dirty (and remembers what changed).
+  function trackEdit(e) {
     if (!document.body.classList.contains('edit-mode')) return;
     const bel = blockEl(e.target);
     if (bel) { dirtyBlocks.set(bel.dataset.block, bel); markDirty(); return; }
-    if (e.target.closest && e.target.closest('[data-edit-card]')) markDirty();
-  });
+    const card = e.target.closest && e.target.closest('[data-edit-card]');
+    if (card) markCardDirty(card);
+  }
+  document.addEventListener('input', trackEdit);
+  document.addEventListener('change', trackEdit);  // <select> category etc.
 
   function showUploader(slot, show) {
     const img = slot.querySelector('[data-edit-image]');
@@ -263,8 +289,12 @@
       if (img) img.removeAttribute('src');
       showUploader(slot, true);
     }
-    if (slot.dataset.blockImage) dirtyBlockImages.set(slot.dataset.blockImage, url || '');
-    markDirty();
+    if (slot.dataset.blockImage) {
+      dirtyBlockImages.set(slot.dataset.blockImage, url || '');
+      markDirty();
+    } else {
+      markCardDirty(slot.closest('[data-edit-card]'));
+    }
   }
 
   function deleteImage(slot) {
@@ -294,7 +324,7 @@
   // ---- the one page-level Save -------------------------------------
   async function saveAll() {
     const btn = document.getElementById('adminSaveAll');
-    const cards = Array.from(document.querySelectorAll('[data-edit-card][data-id]'));
+    const cards = Array.from(dirtyCards);
     const blocks = Array.from(dirtyBlocks.values());
     const blockImgs = Array.from(dirtyBlockImages.entries());
     if (!cards.length && !blocks.length && !blockImgs.length) {
@@ -302,17 +332,28 @@
       return;
     }
     if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
-    let ok = 0, fail = 0;
-    for (const card of cards) { if (await saveCard(card, { silent: true })) ok++; else fail++; }
+    let ok = 0, fail = 0, publishedDraft = false;
+    for (const card of cards) {
+      const wasDraft = !card.dataset.id;
+      if (await saveCard(card, { silent: true })) { ok++; if (wasDraft) publishedDraft = true; }
+      else fail++;
+    }
     for (const el of blocks) { try { await saveBlock(el); ok++; } catch (e) { fail++; } }
     for (const [key, url] of blockImgs) {
       try { await api('POST', '/api/block', { key, value: url }); dirtyBlockImages.delete(key); ok++; }
       catch (e) { fail++; }
     }
-    if (btn) btn.disabled = false;
-    if (!fail) clearDirty(); else updateSaveBtn();
+    if (!fail) clearDirty();
     toast(`Saved ${ok} change${ok === 1 ? '' : 's'}` + (fail ? ` — ${fail} failed` : ''),
           fail ? 'error' : 'success');
+    // New items were created with server ids; reload so they render cleanly.
+    if (publishedDraft && !fail) {
+      sessionStorage.setItem(STORAGE_KEY, '1');
+      bypassUnloadWarning = true;
+      setTimeout(() => window.location.reload(), 700);
+    } else if (btn) {
+      btn.disabled = false;
+    }
   }
 
   fileInput.addEventListener('change', () => {
@@ -373,14 +414,60 @@
     }
   }, true);
 
-  // "Add" buttons declare their blank-item defaults in data-new-item (JSON)
-  // and optionally a target collection in data-collection.
-  document.querySelectorAll('[data-add-item]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      let blank = {};
-      try { blank = JSON.parse(btn.dataset.newItem || '{}'); } catch (e) {}
-      addItem(blank, btn.dataset.collection);
+  // "+ Add" → create a STAGED draft card (no server write yet). The admin
+  // fills it in / uploads an image, then publishes everything with Save.
+  function makeDraftCard(addBtn) {
+    const collection = addBtn.dataset.collection || COLLECTION;
+    let blank = {};
+    try { blank = JSON.parse(addBtn.dataset.newItem || '{}'); } catch (e) {}
+
+    // Clone an existing card of the same collection as the structural template.
+    const template = Array.from(document.querySelectorAll('[data-edit-card]'))
+      .find(c => c.dataset.id && (c.dataset.collection || COLLECTION) === collection);
+    if (!template) {            // nothing to clone (empty collection) → old flow
+      addItem(blank, collection);
+      return;
+    }
+
+    const draft = template.cloneNode(true);
+    draft.removeAttribute('data-id');
+    draft.dataset.collection = collection;
+    draft.dataset.name = 'New item';
+    draft.classList.remove('admin-flash');
+
+    // Seed text fields from the blank defaults (else empty).
+    draft.querySelectorAll('[data-edit-field]').forEach(el => {
+      const k = el.dataset.editField;
+      el.textContent = (blank[k] != null) ? blank[k] : '';
     });
+    // Empty all editable lists.
+    draft.querySelectorAll('[data-edit-list]').forEach(list => {
+      list.querySelectorAll(itemSelector(list)).forEach(li => li.remove());
+    });
+    const cat = draft.querySelector('[data-edit-category]');
+    if (cat && blank.category != null) cat.value = blank.category;
+    // Start with no image so the upload option is shown.
+    const slot = draft.querySelector('[data-image-slot]');
+    if (slot) {
+      const img = slot.querySelector('[data-edit-image]');
+      if (img) img.removeAttribute('src');
+    }
+
+    template.insertAdjacentElement('afterend', draft);
+    decorateCard(draft, true);
+    draft.querySelectorAll('[data-edit-only]').forEach(el => { el.hidden = false; });
+    if (slot) showUploader(slot, true);
+
+    dirtyCards.add(draft);
+    markDirty();
+    draft.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const first = draft.querySelector('[data-edit-field]');
+    if (first) first.focus();
+    toast('New draft added — fill it in / upload an image, then click Save', 'success');
+  }
+
+  document.querySelectorAll('[data-add-item]').forEach(btn => {
+    btn.addEventListener('click', () => makeDraftCard(btn));
   });
 
   if (toggle) {

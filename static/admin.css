@@ -105,6 +105,15 @@ body.edit-mode .machine-card .machine-details {
 }
 body.edit-mode .machine-card { cursor: default; }
 body.edit-mode .machine-card:hover { transform: none; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+/* Disable the navy hover-fill overlay in edit mode — it was covering the card
+   (and its Delete button), making cards impossible to delete. */
+body.edit-mode .machine-card::before { display: none !important; }
+body.edit-mode .machine-card:hover .machine-category,
+body.edit-mode .machine-card:hover .machine-info h3,
+body.edit-mode .machine-card:hover .machine-description { color: inherit !important; }
+body.edit-mode .machine-card:hover .machine-image img { transform: none !important; }
+/* Keep the edit toolbar above everything so Save/Delete are always clickable. */
+body.edit-mode .machine-edit-toolbar { position: relative; z-index: 3; }
 
 /* Editable image slot — delete (×) overlay + in-place uploader ------ */
 .img-slot { position: relative; }
