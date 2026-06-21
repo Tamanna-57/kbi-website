@@ -40,15 +40,27 @@ body.edit-mode [data-block-text],
 body.edit-mode [data-block-rich],
 body.edit-mode [data-edit-list] .feature-tag,
 body.edit-mode [data-edit-list] li {
-  outline: 1px dashed #1a4a7a; outline-offset: 3px; border-radius: 4px;
-  cursor: text; transition: background .15s;
+  outline: 1px dashed #f7c948; outline-offset: 3px; border-radius: 4px;
+  cursor: text; transition: outline-color .15s, box-shadow .15s;
 }
+/* On focus: keep the field's own background/text intact (so light text on a
+   dark section stays readable) — just brighten the outline and add a halo.
+   The previous light-green fill made white text invisible on dark panels. */
 body.edit-mode [data-edit-field]:focus,
 body.edit-mode [data-block-text]:focus,
 body.edit-mode [data-block-rich]:focus,
 body.edit-mode [data-edit-list] .feature-tag:focus,
 body.edit-mode [data-edit-list] li:focus {
-  outline: 2px solid #1a7a4a; background: #f0f8f3;
+  outline: 2px solid #f7c948;
+  box-shadow: 0 0 0 4px rgba(247, 201, 72, .18);
+  background: transparent;
+}
+/* High-contrast text selection so highlighted text never disappears. */
+body.edit-mode [data-edit-field]::selection,
+body.edit-mode [data-block-text]::selection,
+body.edit-mode [data-block-rich]::selection,
+body.edit-mode [data-edit-list] *::selection {
+  background: #f7c948; color: #1a1a1a;
 }
 /* Inline image slot used by the editable.image() macro. */
 .block-img-slot { display: inline-block; }
@@ -84,6 +96,10 @@ body.edit-mode .machine-card:hover { transform: none; box-shadow: 0 4px 16px rgb
 .img-uploader:hover, .img-uploader.dragover { background: #e2f1e9; border-color: #14613b; }
 /* The uploader is an edit-time affordance only. */
 body:not(.edit-mode) .img-uploader { display: none !important; }
+/* When a slot already has an image, JS marks the uploader [hidden]; honour
+   that even in edit mode so the existing image stays visible (with its × /
+   delete control) instead of the white upload box covering it. */
+.img-uploader[hidden] { display: none !important; }
 .img-uploader__icon { font-size: 2rem; line-height: 1; }
 .img-uploader__text { font-size: .9rem; }
 .img-uploader.busy { opacity: .6; pointer-events: none; }
