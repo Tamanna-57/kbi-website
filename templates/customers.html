@@ -33,9 +33,19 @@
                 </div>
                 {% endif %}
 
-                <div class="cust-grid">
+                <!-- Filter pills -->
+                <div class="cust-filter" id="custFilter">
+                    <button class="cust-pill active" data-sector="all">All</button>
+                    <button class="cust-pill" data-sector="passenger">Passenger Vehicles</button>
+                    <button class="cust-pill" data-sector="offroad">Offroad Vehicles</button>
+                    <button class="cust-pill" data-sector="commercial">Commercial Vehicles</button>
+                    <button class="cust-pill" data-sector="defence">Defence Vehicles</button>
+                    <button class="cust-pill" data-sector="power">Power Sector</button>
+                </div>
+
+                <div class="cust-grid" id="custGrid">
                     {% for c in customers %}
-                    <div class="cust-cell" data-edit-card data-collection="customers" data-id="{{ c.id }}" data-name="{{ c.name }}">
+                    <div class="cust-cell" data-edit-card data-collection="customers" data-id="{{ c.id }}" data-name="{{ c.name }}" data-sector="{{ c.sector }}">
                         <span class="img-slot cust-cell__img-slot" data-image-slot>
                             <img src="{{ c.image }}" alt="{{ c.name }}" data-edit-image{% if not c.image %} hidden{% endif %}>
                             {% if is_admin %}

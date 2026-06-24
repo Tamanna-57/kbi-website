@@ -98,6 +98,18 @@ document.addEventListener('DOMContentLoaded', () => {
     applyFilters();
   });
 
+  /* Auto-activate filter from URL: /products?cat=axles */
+  const urlCat = new URLSearchParams(window.location.search).get('cat');
+  if (urlCat) {
+    const match = [...pills].find(p => p.dataset.category === urlCat);
+    if (match) {
+      activeFilters = new Set([urlCat]);
+      pills.forEach(p => p.classList.toggle('active', p === match));
+      activeIndex = 0;
+      applyFilters();
+    }
+  }
+
   /* ============================================================
      DOTS
      ============================================================ */

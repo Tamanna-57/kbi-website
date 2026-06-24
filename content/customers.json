@@ -3,72 +3,84 @@
     "id": "maruti-suzuki",
     "name": "Maruti Suzuki",
     "tag": "India's Leading Carmaker",
-    "image": "/static/pics/maruti_suzuki_img.png"
+    "image": "/static/pics/maruti_suzuki_img.png",
+    "sector": "passenger"
   },
   {
     "id": "volvo-eicher",
     "name": "Volvo Eicher",
     "tag": "Commercial Vehicles Leader",
-    "image": "/static/pics/volvo_eicher.webp"
+    "image": "/static/pics/volvo_eicher.webp",
+    "sector": "commercial"
   },
   {
     "id": "havells",
     "name": "Havells",
     "tag": "Electrical Equipment Giant",
-    "image": "/static/pics/havells_img.png"
+    "image": "/static/pics/havells_img.png",
+    "sector": "power"
   },
   {
     "id": "kobelco",
     "name": "Kobelco",
     "tag": "Construction Excellence",
-    "image": "/static/pics/kobelco_img.png"
+    "image": "/static/pics/kobelco_img.png",
+    "sector": "offroad"
   },
   {
     "id": "escorts-kubota",
     "name": "Escorts Kubota",
     "tag": "Agricultural Innovation",
-    "image": "/static/pics/kubota_img.png"
+    "image": "/static/pics/kubota_img.png",
+    "sector": "offroad"
   },
   {
     "id": "new-holland",
     "name": "New Holland",
     "tag": "Global Agri Powerhouse",
-    "image": "/static/pics/New_Holland_img.png"
+    "image": "/static/pics/New_Holland_img.png",
+    "sector": "offroad"
   },
   {
     "id": "carraro",
     "name": "Carraro",
     "tag": "The Driveline Experts",
-    "image": "/static/pics/carraro_img.png"
+    "image": "/static/pics/carraro_img.png",
+    "sector": "offroad"
   },
   {
     "id": "mahindra-defence",
     "name": "Mahindra Defence",
     "tag": "Defence Solutions",
-    "image": "/static/pics/Mahindra_Defence_img.jpg"
+    "image": "/static/pics/Mahindra_Defence_img.jpg",
+    "sector": "defence"
   },
   {
     "id": "caparo-maruti",
     "name": "Caparo Maruti",
     "tag": "Automotive Precision",
-    "image": "/static/pics/caparo_img.png"
+    "image": "/static/pics/caparo_img.png",
+    "sector": "passenger"
   },
   {
     "id": "euler-motors",
     "name": "Euler Motors",
     "tag": "EV Mobility Pioneer",
-    "image": "/static/pics/eulermotors_img.jpg"
+    "image": "/static/pics/eulermotors_img.jpg",
+    "sector": "commercial"
   },
   {
     "id": "delton-cables",
     "name": "Delton Cables",
     "tag": "Power Cable Solutions",
-    "image": "/static/pics/Delton Cables.png"
+    "image": "/static/pics/Delton Cables.png",
+    "sector": "power"
   },
   {
     "id": "cords-cables",
     "name": "Cords Cables",
     "tag": "Power Connectivity",
-    "image": "/static/pics/cords_cables.webp"
+    "image": "/static/pics/cords_cables.webp",
+    "sector": "power"
   }
 ]
