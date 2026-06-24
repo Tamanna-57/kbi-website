@@ -68,8 +68,10 @@
         .forEach(el => setEditable(el, on));
 
     // Sync the category dropdown with the card's current category.
+    // The field name may differ per collection (machines use "category",
+    // customers use "sector"); [data-category-field] overrides the default.
     const sel = card.querySelector('[data-edit-category]');
-    if (sel) sel.value = card.dataset.category || '';
+    if (sel) sel.value = card.dataset[sel.dataset.categoryField || 'category'] || '';
 
     if (on) addListControls(card); else removeListControls(card);
   }
@@ -132,7 +134,9 @@
       data[list.dataset.editList] = items;
     });
     const sel = card.querySelector('[data-edit-category]');
-    if (sel) data.category = sel.value;
+    if (sel && sel.value && sel.value !== '__new__') {
+      data[sel.dataset.categoryField || 'category'] = sel.value;
+    }
     const img = card.querySelector('[data-edit-image]');
     if (img) data.image = img.getAttribute('src') || '';
     return data;
@@ -171,6 +175,7 @@
       const saved = await api('PUT', `/api/${cardCollection(card)}/${card.dataset.id}`, data);
       card.dataset.name = saved.name || saved.title || '';
       if (saved.category) card.dataset.category = saved.category;
+      if (saved.sector) card.dataset.sector = saved.sector;
       pruneEmpty(card);
       if (dirtyCards) dirtyCards.delete(card);
       if (!silent) toast('Saved “' + (saved.name || saved.title || 'item') + '”', 'success');
@@ -233,16 +238,19 @@
   const dirtyBlockImages = new Map();   // block key -> staged image url ('' = removed)
   const dirtyCards = new Set();         // edited cards + new draft cards
   let dirty = false;
+  let savedState = false;          // true right after a successful save, until the next edit
   let bypassUnloadWarning = false;
 
-  function markDirty() { dirty = true; updateSaveBtn(); }
+  // A new edit invalidates the "Saved" state and turns the button amber again.
+  function markDirty() { dirty = true; savedState = false; updateSaveBtn(); }
   function clearDirty() { dirty = false; updateSaveBtn(); }
   function markCardDirty(card) { if (card) { dirtyCards.add(card); markDirty(); } }
   function updateSaveBtn() {
     const btn = document.getElementById('adminSaveAll');
     if (!btn) return;
     btn.classList.toggle('has-changes', dirty);
-    btn.textContent = dirty ? '● Save changes' : 'Save changes';
+    btn.classList.toggle('is-saved', !dirty && savedState);
+    btn.textContent = dirty ? '● Save changes' : (savedState ? '✓ Saved' : 'Save changes');
   }
 
   // ---- editable text blocks: staged, saved on demand ----------------
@@ -267,6 +275,45 @@
   }
   document.addEventListener('input', trackEdit);
   document.addEventListener('change', trackEdit);  // <select> category etc.
+
+  // ---- "Add new category" via the per-card category <select> --------
+  // Remember the previous value so we can revert if the admin cancels.
+  document.addEventListener('focus', (e) => {
+    const sel = e.target.closest && e.target.closest('select[data-edit-category]');
+    if (sel) sel.dataset.prevValue = sel.value;
+  }, true);
+
+  document.addEventListener('change', (e) => {
+    const sel = e.target.closest && e.target.closest('select[data-edit-category]');
+    if (sel && sel.value === '__new__') addNewCategory(sel);
+  });
+
+  function addNewCategory(sel) {
+    const name = (prompt('New category name:') || '').trim();
+    if (!name) { sel.value = sel.dataset.prevValue || ''; return; }
+    // Slug for the stored value; label keeps the human text.
+    const value = name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') || name;
+
+    // Add the option to every category <select> on the page so the new
+    // category is reusable across cards in this editing session.
+    document.querySelectorAll('select[data-edit-category]').forEach(s => {
+      if ([...s.options].some(o => o.value === value)) return;
+      const opt = new Option(name, value);
+      const newOpt = [...s.options].find(o => o.value === '__new__');
+      newOpt ? s.insertBefore(opt, newOpt) : s.add(opt);
+    });
+    sel.value = value;
+
+    const card = sel.closest('[data-edit-card]');
+    if (card) {
+      // Machines show the category name from a separate "category_label"
+      // field — keep it in sync with the freshly typed category.
+      const lbl = card.querySelector('[data-edit-field="category_label"]');
+      if (lbl) lbl.textContent = name;
+      markCardDirty(card);
+    }
+    toast('Category “' + name + '” added — it’ll appear as a filter after you Save', 'success');
+  }
 
   function showUploader(slot, show) {
     const img = slot.querySelector('[data-edit-image]');
@@ -328,7 +375,8 @@
     const blocks = Array.from(dirtyBlocks.values());
     const blockImgs = Array.from(dirtyBlockImages.entries());
     if (!cards.length && !blocks.length && !blockImgs.length) {
-      toast('No changes to save yet', '');
+      // Clicking the green "Saved" button again — nothing new to write.
+      toast(savedState ? 'Already saved ✓' : 'No changes to save yet', '');
       return;
     }
     if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
@@ -343,7 +391,7 @@
       try { await api('POST', '/api/block', { key, value: url }); dirtyBlockImages.delete(key); ok++; }
       catch (e) { fail++; }
     }
-    if (!fail) clearDirty();
+    if (!fail) { savedState = true; clearDirty(); }
     toast(`Saved ${ok} change${ok === 1 ? '' : 's'}` + (fail ? ` — ${fail} failed` : ''),
           fail ? 'error' : 'success');
     // New items were created with server ids; reload so they render cleanly.
@@ -445,7 +493,10 @@
       list.querySelectorAll(itemSelector(list)).forEach(li => li.remove());
     });
     const cat = draft.querySelector('[data-edit-category]');
-    if (cat && blank.category != null) cat.value = blank.category;
+    if (cat) {
+      const cf = cat.dataset.categoryField || 'category';
+      if (blank[cf] != null) { cat.value = blank[cf]; draft.dataset[cf] = blank[cf]; }
+    }
     // Start with no image so the upload option is shown.
     const slot = draft.querySelector('[data-image-slot]');
     if (slot) {

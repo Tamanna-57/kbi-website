@@ -48,12 +48,9 @@
       <div class="mach-filter__row">
         <div class="filter-buttons">
           <button class="filter-btn active" data-category="all">All</button>
-          <button class="filter-btn" data-category="presses">Presses</button>
-          <button class="filter-btn" data-category="welding">Welding</button>
-          <button class="filter-btn" data-category="cutting">Cutting</button>
-          <button class="filter-btn" data-category="machining">Machining</button>
-          <button class="filter-btn" data-category="drilling">Drilling</button>
-          <button class="filter-btn" data-category="Finishing">Finishing</button>
+          {% for cat in categories %}
+          <button class="filter-btn" data-category="{{ cat.value }}">{{ cat.label }}</button>
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -107,12 +104,10 @@
           {% if is_admin %}
           <div class="machine-edit-toolbar" data-edit-only hidden>
             <select class="machine-cat-select" data-edit-category>
-              <option value="presses">Presses</option>
-              <option value="welding">Welding</option>
-              <option value="cutting">Cutting</option>
-              <option value="machining">Machining</option>
-              <option value="drilling">Drilling</option>
-              <option value="Finishing">Finishing</option>
+              {% for cat in categories %}
+              <option value="{{ cat.value }}"{% if m.category == cat.value %} selected{% endif %}>{{ cat.label }}</option>
+              {% endfor %}
+              <option value="__new__">+ Add new category…</option>
             </select>
             <button type="button" class="admin-btn admin-btn--del" data-action="delete">Delete</button>
           </div>

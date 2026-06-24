@@ -29,18 +29,16 @@
                 {% if is_admin %}
                 <div class="admin-grid-actions" data-edit-only hidden style="margin-bottom:18px;">
                     <button type="button" class="admin-btn admin-btn--add" data-add-item data-collection="customers"
-                      data-new-item='{"name":"New Client","tag":"Sector / description","image":"/static/pics/KBI_logo.png"}'>+ Add client</button>
+                      data-new-item='{"name":"New Client","tag":"Short description","sector":"passenger","image":""}'>+ Add client</button>
                 </div>
                 {% endif %}
 
                 <!-- Filter pills -->
                 <div class="cust-filter" id="custFilter">
                     <button class="cust-pill active" data-sector="all">All</button>
-                    <button class="cust-pill" data-sector="passenger">Passenger Vehicles</button>
-                    <button class="cust-pill" data-sector="offroad">Offroad Vehicles</button>
-                    <button class="cust-pill" data-sector="commercial">Commercial Vehicles</button>
-                    <button class="cust-pill" data-sector="defence">Defence Vehicles</button>
-                    <button class="cust-pill" data-sector="power">Power Sector</button>
+                    {% for s in sectors %}
+                    <button class="cust-pill" data-sector="{{ s.value }}">{{ s.label }}</button>
+                    {% endfor %}
                 </div>
 
                 <div class="cust-grid" id="custGrid">
@@ -59,7 +57,15 @@
                             <span class="cust-cell__fill-tag" data-edit-field="tag">{{ c.tag }}</span>
                         </div>
                         {% if is_admin %}
-                        <div class="card-edit-toolbar" data-edit-only hidden style="position:absolute;bottom:6px;left:6px;right:6px;z-index:5;">
+                        <div class="card-edit-toolbar cust-edit-toolbar" data-edit-only hidden>
+                            <label class="edit-cat-field">Category
+                              <select class="cust-cat-select" data-edit-category data-category-field="sector">
+                                {% for s in sectors %}
+                                <option value="{{ s.value }}"{% if c.sector == s.value %} selected{% endif %}>{{ s.label }}</option>
+                                {% endfor %}
+                                <option value="__new__">+ Add new category…</option>
+                              </select>
+                            </label>
                             <button type="button" class="admin-btn admin-btn--del" data-action="delete">Del</button>
                         </div>
                         {% endif %}
