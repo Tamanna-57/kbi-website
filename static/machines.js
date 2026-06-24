@@ -64,8 +64,10 @@ class GlobalTypingManager {
     }
 
     async animateGlobalElements() {
+        // Don't run the typing animation in admin edit mode — it clears text.
+        if (document.getElementById('adminBar')) return;
         const globalElements = document.querySelectorAll('.typing-element-global');
-        
+
         for (let element of globalElements) {
             const originalText = element.textContent;
             const animation = new TypingAnimation(element, originalText, 60);
@@ -168,6 +170,9 @@ class MachineCardManager {
     }
 
     async animateCardContent(card) {
+        // In admin edit mode the typing animation rewrites textContent and
+        // wipes whatever the admin is editing — skip it entirely.
+        if (document.getElementById('adminBar')) return;
         const typingElements = card.querySelectorAll('.machine-details .typing-element');
         
         for (let element of typingElements) {
@@ -302,9 +307,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize the hero slider
     new HeroSlider('.hero .slider');
 
+    // In admin edit mode, skip all typing animations and the 3s delay so cards
+    // render with their content intact and are editable immediately.
+    if (document.getElementById('adminBar')) {
+        new MachineCardManager();
+        return;
+    }
+
     // Initialize global typing animations first
     const globalTypingManager = new GlobalTypingManager();
-    
+
     // Wait a bit for global animations to complete, then initialize machine cards
     setTimeout(() => {
         new MachineCardManager();
