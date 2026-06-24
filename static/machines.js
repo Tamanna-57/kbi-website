@@ -279,8 +279,26 @@ class HeroSlider {
     }
 }
 
+// Apply a category filter coming from the URL (e.g. /machines?cat=presses)
+// immediately on load so nav-dropdown links land pre-filtered, without
+// waiting for the typing animation / card manager to initialise.
+function applyMachineUrlFilter() {
+    const cat = new URLSearchParams(window.location.search).get('cat');
+    if (!cat) return;
+    const buttons = document.querySelectorAll('.filter-btn');
+    const match = [...buttons].find(b => b.dataset.category === cat);
+    if (!match) return;
+    buttons.forEach(b => b.classList.toggle('active', b === match));
+    document.querySelectorAll('.machine-card').forEach(card => {
+        card.style.display = (card.dataset.category === cat) ? 'block' : 'none';
+    });
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
+    // Pre-filter from the URL right away (before the 3s animation delay).
+    applyMachineUrlFilter();
+
     // Initialize the hero slider
     new HeroSlider('.hero .slider');
 
