@@ -28,6 +28,11 @@
   background: #f7c948; color: #1a1a1a;
   box-shadow: 0 0 0 3px rgba(247, 201, 72, .35);
 }
+/* Saved confirmation — green with a halo, until the next edit. */
+.admin-bar__save.is-saved {
+  background: #1a7a4a; color: #fff;
+  box-shadow: 0 0 0 3px rgba(26, 122, 74, .4);
+}
 
 /* Products carousel → static grid in edit mode so add/delete are usable
    (the live ticker moves too violently to click individual cards). */

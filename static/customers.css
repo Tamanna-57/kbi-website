@@ -55,6 +55,81 @@
 }
 
 /* ══════════════════════════════════════════════════════
+   FILTER PILLS
+   ══════════════════════════════════════════════════════ */
+.cust-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1.5rem;
+}
+.cust-pill {
+  padding: .38rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--cu-border);
+  background: transparent;
+  color: var(--cu-muted);
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: background 150ms, color 150ms, border-color 150ms;
+}
+.cust-pill:hover {
+  border-color: var(--cu-amber);
+  color: var(--cu-amber);
+}
+.cust-pill.active {
+  background: var(--cu-amber);
+  border-color: var(--cu-amber);
+  color: #fff;
+}
+.cust-cell.hidden { display: none !important; }
+
+/* ── Edit mode: make each cell a simple, fully-visible editing card ──
+   The live page hides the name/description behind a navy hover-fill; in
+   edit mode that would cover the fields you're trying to type into, so we
+   flatten the cell: kill the fill animation and show everything inline. */
+body.edit-mode .cust-cell {
+  cursor: default;
+  overflow: visible;
+  justify-content: flex-start;
+}
+body.edit-mode .cust-cell::after { height: 0 !important; }     /* no navy slide-up */
+body.edit-mode .cust-cell:hover img { opacity: 1; transform: none; }
+body.edit-mode .cust-cell__fill {
+  position: static;
+  inset: auto;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  padding: 0;
+  margin-top: .4rem;
+  gap: .25rem;
+}
+body.edit-mode .cust-cell__fill-name { display: none; }        /* name shown above already */
+body.edit-mode .cust-cell__fill-tag { color: var(--cu-text); }
+body.edit-mode .cust-edit-toolbar {
+  position: static !important;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  margin-top: .7rem;
+}
+.cust-cat-select {
+  padding: 6px 8px;
+  border: 1px solid #ccd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: .85rem;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ══════════════════════════════════════════════════════
    WHITE FLOATING CARD
    ══════════════════════════════════════════════════════ */
 .cust-card {

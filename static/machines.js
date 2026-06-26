@@ -64,8 +64,10 @@ class GlobalTypingManager {
     }
 
     async animateGlobalElements() {
+        // Don't run the typing animation in admin edit mode — it clears text.
+        if (document.getElementById('adminBar')) return;
         const globalElements = document.querySelectorAll('.typing-element-global');
-        
+
         for (let element of globalElements) {
             const originalText = element.textContent;
             const animation = new TypingAnimation(element, originalText, 60);
@@ -168,6 +170,9 @@ class MachineCardManager {
     }
 
     async animateCardContent(card) {
+        // In admin edit mode the typing animation rewrites textContent and
+        // wipes whatever the admin is editing — skip it entirely.
+        if (document.getElementById('adminBar')) return;
         const typingElements = card.querySelectorAll('.machine-details .typing-element');
         
         for (let element of typingElements) {
@@ -279,14 +284,39 @@ class HeroSlider {
     }
 }
 
+// Apply a category filter coming from the URL (e.g. /machines?cat=presses)
+// immediately on load so nav-dropdown links land pre-filtered, without
+// waiting for the typing animation / card manager to initialise.
+function applyMachineUrlFilter() {
+    const cat = new URLSearchParams(window.location.search).get('cat');
+    if (!cat) return;
+    const buttons = document.querySelectorAll('.filter-btn');
+    const match = [...buttons].find(b => b.dataset.category === cat);
+    if (!match) return;
+    buttons.forEach(b => b.classList.toggle('active', b === match));
+    document.querySelectorAll('.machine-card').forEach(card => {
+        card.style.display = (card.dataset.category === cat) ? 'block' : 'none';
+    });
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', async () => {
+    // Pre-filter from the URL right away (before the 3s animation delay).
+    applyMachineUrlFilter();
+
     // Initialize the hero slider
     new HeroSlider('.hero .slider');
 
+    // In admin edit mode, skip all typing animations and the 3s delay so cards
+    // render with their content intact and are editable immediately.
+    if (document.getElementById('adminBar')) {
+        new MachineCardManager();
+        return;
+    }
+
     // Initialize global typing animations first
     const globalTypingManager = new GlobalTypingManager();
-    
+
     // Wait a bit for global animations to complete, then initialize machine cards
     setTimeout(() => {
         new MachineCardManager();

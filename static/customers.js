@@ -4,7 +4,33 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initCounters();
+  initFilter();
 });
+
+/* ─────────────────────────────────────────────────────
+   SECTOR FILTER
+───────────────────────────────────────────────────── */
+function initFilter() {
+  const pills = document.querySelectorAll('.cust-pill');
+  const cards = document.querySelectorAll('#custGrid .cust-cell');
+  if (!pills.length || !cards.length) return;
+
+  function applyFilter(sector) {
+    cards.forEach(card => {
+      const match = sector === 'all' || card.dataset.sector === sector;
+      card.classList.toggle('hidden', !match);
+    });
+    pills.forEach(p => p.classList.toggle('active', p.dataset.sector === sector));
+  }
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => applyFilter(pill.dataset.sector));
+  });
+
+  // Auto-activate from URL: /customers?sector=offroad
+  const param = new URLSearchParams(window.location.search).get('sector');
+  if (param) applyFilter(param);
+}
 
 /* ─────────────────────────────────────────────────────
    ANIMATED STAT COUNTERS

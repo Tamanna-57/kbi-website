@@ -130,10 +130,52 @@ def about_us():
                            team=get_store().list_items('team'),
                            news=get_store().list_items('news'))
 
+# --- Category helpers ---------------------------------------------------
+# Base (always-shown) categories per filterable page. Admins can add more
+# from the edit UI; any extra value present in the data is appended below.
+SECTOR_LABELS = {
+    'passenger':  'Passenger Vehicles',
+    'offroad':    'Offroad Vehicles',
+    'commercial': 'Commercial Vehicles',
+    'defence':    'Defence Vehicles',
+    'power':      'Power Sector',
+}
+MACHINE_LABELS = {
+    'presses':   'Presses',
+    'welding':   'Welding',
+    'cutting':   'Cutting',
+    'machining': 'Machining',
+    'drilling':  'Drilling',
+    'Finishing': 'Finishing',
+}
+
+
+def _prettify(value):
+    """Turn a raw category value (e.g. 'heat_treatment') into a label."""
+    return value.replace('_', ' ').replace('-', ' ').strip().title()
+
+
+def _build_categories(items, base, key, label_key=None):
+    """Ordered list of {value,label}: the base set first (always shown),
+    then any extra distinct values found in the data."""
+    out, seen = [], set()
+    for value, label in base.items():
+        out.append({'value': value, 'label': label})
+        seen.add(value)
+    for it in items:
+        value = (it.get(key) or '').strip()
+        if value and value not in seen:
+            label = (it.get(label_key) or '').strip() if label_key else ''
+            out.append({'value': value, 'label': label or _prettify(value)})
+            seen.add(value)
+    return out
+
+
 @app.route('/customers')
 def customers():
     items = get_store().list_items('customers')
-    return render_template('customers.html', active_page='customers', customers=items)
+    return render_template('customers.html', active_page='customers', customers=items,
+                           sectors=_build_categories(items, SECTOR_LABELS, 'sector'))
 
 @app.route('/products')
 def products():
@@ -143,7 +185,9 @@ def products():
 @app.route('/machines')
 def machines():
     items = get_store().list_items('machines')
-    return render_template('machines.html', active_page='machines', machines=items)
+    return render_template('machines.html', active_page='machines', machines=items,
+                           categories=_build_categories(items, MACHINE_LABELS,
+                                                        'category', 'category_label'))
 
 @app.route('/certifications')
 def certifications():
@@ -214,7 +258,7 @@ EDITABLE_FIELDS = {
     'processes': {'num', 'name', 'description', 'image', 'features', 'equipment'},
     'certifications': {'badge', 'heading', 'body', 'image', 'tags'},
     'awards': {'year', 'title', 'org', 'description'},
-    'customers': {'name', 'tag', 'image'},
+    'customers': {'name', 'tag', 'image', 'sector'},
     'team': {'name', 'role', 'image', 'bio'},
     'news': {'title', 'date', 'summary', 'image', 'body'},
 }
